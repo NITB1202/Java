@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ptg</groupId>
+    <artifactId>qltt</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>qltt</name>
+ 
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+        
+		<dependency>
+		    <groupId>com.toedter</groupId>
+		    <artifactId>jcalendar</artifactId>
+		    <version>1.4</version>
+		</dependency>
+
+
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>3.17</version>
+		</dependency>
+ 		
+ 		<dependency>
+   			 <groupId>com.aspose</groupId>
+   			 <artifactId>aspose-pdf</artifactId>
+   			 <version>20.11</version>
+  	 		 <classifier>jdk17</classifier>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		    <version>12.6.2.jre11</version>
+		</dependency>
+		
+    </dependencies>
+    
+ <repositories>
+    <repository>
+        <id>AsposeJavaAPI</id>
+        <name>Aspose Java API</name>
+        <url>https://releases.aspose.com/java/repo/</url>
+    </repository>
+</repositories>
+
+
+ 
+</project>

@@ -1,0 +1,6 @@
+/application/nbproject/private/
+/CNPM_Library/nbproject/private/
+/build/
+/test/
+/dist/
+/nbproject/private/
