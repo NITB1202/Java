@@ -96,6 +96,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     /**
      * Creates new form WareHouseImport_Dialog
      */
+	
+		 
+        
     public WareHouseImport_Dialog(java.awt.Frame parent, boolean modal) throws SQLException, IOException, ClassNotFoundException {
         super(parent, modal);
         try {
@@ -172,7 +175,6 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         txtTongChi = new javax.swing.JLabel();
         btnXacNhan = new MyDesign.MyButton();
         jLabel3 = new javax.swing.JLabel();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         panelBorder2.setPreferredSize(new java.awt.Dimension(217, 327));
 
@@ -181,6 +183,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         lbImageBook.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbImageBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/AddImage.png"))); // NOI18N
         lbImageBook.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
         
         lbImageBook.addMouseListener(new MouseAdapter() {
             @Override
@@ -220,6 +223,13 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                 }
             }
         });
+
+
+        ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
+        setIconImage(webIcon.getImage());
+        setTitle("Đơn nhập");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
 
         
         
@@ -869,53 +879,52 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			@Override
 			
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				edition = txtEdition.getText();
-				gia = txtGia.getText();
-				soluong = txtSoLuong.getText();
-				isbn = txtISBN.getText();
-				if(isTextFieldEmpty(txtEdition))
-				{
-					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-				}
-				else if(isComboBoxEmpty(cbSach))
-				{
-					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-				}
-				else if(isTextFieldEmpty(txtGia))
-				{
-					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-				}
-				else if(isTextFieldEmpty(txtSoLuong))
-				{
-					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-				}
-				else if(isComboBoxEmpty(cbTacGia)||isComboBoxEmpty(cbNXB)||isComboBoxEmpty(cbTheLoai)||isComboBoxEmpty(cbNhaCungCap))
-				{
-					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-				}else{
-					DefaultTableModel model = (DefaultTableModel) tbSachDuocNhap.getModel();
-					tensach = String.valueOf(cbSach.getSelectedItem());
-					tgia = String.valueOf(cbTacGia.getSelectedItem());
-					nxb = String.valueOf(cbNXB.getSelectedItem());
-					theloai = String.valueOf(cbTheLoai.getSelectedItem());
-					ncc = String.valueOf(cbNhaCungCap.getSelectedItem());
-					String[] rowData = {Integer.toString(model.getRowCount() + 1), isbn, tensach, tgia, edition, nxb, theloai, gia, soluong, anh};
-					model.addRow(rowData);
-					tongchi = tongchi + (Integer.parseInt(gia) * Integer.parseInt(soluong));
-					tongsoluong = tongsoluong + (Integer.parseInt(soluong));
-					txtTongChi.setText(String.valueOf(tongchi+"đ"));
-					lbImageBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/AddImage.png")));
-					txtISBN.setText("");
-					txtEdition.setText("");
-					txtGia.setText("");
-					txtSoLuong.setText("");
-					txtISBN.setEditable(true);
-					txtEdition.setEditable(true);
-					cbTacGia.setEnabled(true);
-					cbTheLoai.setEnabled(true);
-					cbNXB.setEnabled(true);
-				}
+			    // TODO: Kiểm tra các trường nhập liệu trước khi thêm vào bảng
+			    edition = txtEdition.getText();
+			    gia = txtGia.getText();
+			    soluong = txtSoLuong.getText();
+			    isbn = txtISBN.getText();
+
+			    if (isTextFieldEmpty(txtEdition) || isComboBoxEmpty(cbSach) || isTextFieldEmpty(txtGia) || isTextFieldEmpty(txtSoLuong) || isComboBoxEmpty(cbTacGia) || isComboBoxEmpty(cbNXB) || isComboBoxEmpty(cbTheLoai) || isComboBoxEmpty(cbNhaCungCap)) {
+			        JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			    } else {
+			        // Kiểm tra số lượng > 0
+			        if (Integer.parseInt(soluong) <= 0) {
+			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Số lượng phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			        } 
+			        // Kiểm tra phiên bản > 0
+			        else if (Integer.parseInt(edition) <= 0) {
+			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Phiên bản phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			        } 
+			        // Kiểm tra giá > 19000
+			        else if (Integer.parseInt(gia) <= 19000) {
+			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá phải lớn hơn 19000.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			        } 
+			        // Nếu các điều kiện đều đúng, thêm dữ liệu vào bảng
+			        else {
+			            DefaultTableModel model = (DefaultTableModel) tbSachDuocNhap.getModel();
+			            tensach = String.valueOf(cbSach.getSelectedItem());
+			            tgia = String.valueOf(cbTacGia.getSelectedItem());
+			            nxb = String.valueOf(cbNXB.getSelectedItem());
+			            theloai = String.valueOf(cbTheLoai.getSelectedItem());
+			            ncc = String.valueOf(cbNhaCungCap.getSelectedItem());
+			            String[] rowData = {Integer.toString(model.getRowCount() + 1), isbn, tensach, tgia, edition, nxb, theloai, gia, soluong, anh};
+			            model.addRow(rowData);
+			            tongchi = tongchi + (Integer.parseInt(gia) * Integer.parseInt(soluong));
+			            tongsoluong = tongsoluong + (Integer.parseInt(soluong));
+			            txtTongChi.setText(String.valueOf(tongchi+"đ"));
+			            lbImageBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/AddImage.png")));
+			            txtISBN.setText("");
+			            txtEdition.setText("");
+			            txtGia.setText("");
+			            txtSoLuong.setText("");
+			            txtISBN.setEditable(true);
+			            txtEdition.setEditable(true);
+			            cbTacGia.setEnabled(true);
+			            cbTheLoai.setEnabled(true);
+			            cbNXB.setEnabled(true);
+			        }
+			    }
 			}
         });
         
