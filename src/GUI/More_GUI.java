@@ -1,8 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
+
+import java.awt.Color;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.AuthorBUS;
 import BUS.CategoryBUS;
@@ -11,30 +19,17 @@ import BUS.RolePermissionBUS;
 import BUS.SupplierBUS;
 import BUS.SupplyCardBUS;
 import DTO.entities.Account;
-import MyDesign.ScrollBar;
-import java.awt.Color;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import DTO.entities.Author;
 import DTO.entities.Category;
 import DTO.entities.Publisher;
 import DTO.entities.Supplier;
-import DTO.entities.SupplyCard;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import MyDesign.ScrollBar;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class More_GUI extends javax.swing.JPanel {
-    private Account user;
+public class More_GUI extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
+	private Account user;
     private AuthorBUS authorBUS;
     private SupplyCardBUS supplyCardBUS;
     private CategoryBUS categoryBUS;
@@ -674,58 +669,68 @@ public class More_GUI extends javax.swing.JPanel {
     }
     
     
-    public void styles(){
+    public void styles() {
+        // Configuring spTable
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
         
+        // Configuring spTable1
         spTable1.setVerticalScrollBar(new ScrollBar());
         spTable1.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable1.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.WHITE);
+        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p2);
         
+        // Configuring spTable2
         spTable2.setVerticalScrollBar(new ScrollBar());
         spTable2.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable2.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p3 = new JPanel();
+        p3.setBackground(Color.WHITE);
+        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p3);
         
+        // Configuring spTable3
         spTable3.setVerticalScrollBar(new ScrollBar());
         spTable3.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable3.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable3.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p4 = new JPanel();
+        p4.setBackground(Color.WHITE);
+        spTable3.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p4);
+
         System.out.println(user.getRoleID());
-        if(rolePermissionBUS.hasPerCreate(user.getRoleID(), 8)){
+
+        // Checking and setting permissions for creating entities
+        if (rolePermissionBUS.hasPerCreate(user.getRoleID(), 8)) {
             lbThemNCC.setEnabled(true);
             lbThemNXB.setEnabled(true);
             lbThemTacGia.setEnabled(true);
             lbThemTheLoai.setEnabled(true);
-        }
-        else{
+        } else {
             lbThemNCC.setEnabled(false);
             lbThemNXB.setEnabled(false);
             lbThemTacGia.setEnabled(false);
             lbThemTheLoai.setEnabled(false);
         }
-        if(rolePermissionBUS.hasPerDelete(user.getRoleID(), 8)){
+
+        // Checking and setting permissions for deleting entities
+        if (rolePermissionBUS.hasPerDelete(user.getRoleID(), 8)) {
             lbXoaNCC.setEnabled(true);
             lbXoaNXB.setEnabled(true);
             lbXoaTacGia.setEnabled(true);
             lbXoaTheLoai.setEnabled(true);
-        }
-        else{
+        } else {
             lbXoaNCC.setEnabled(false);
             lbXoaNXB.setEnabled(false);
             lbXoaTacGia.setEnabled(false);
             lbXoaTheLoai.setEnabled(false);
         }
-        
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel5;

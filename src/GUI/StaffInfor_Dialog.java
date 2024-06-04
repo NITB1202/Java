@@ -1,33 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
 
-import BUS.RolePermissionBUS;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
 
+import BUS.RolePermissionBUS;
 import BUS.StaffBUS;
 import DTO.entities.Account;
-import DTO.entities.Reader;
 import DTO.entities.Staff;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class StaffInfor_Dialog extends javax.swing.JDialog {
+public class StaffInfor_Dialog extends JDialog {
+
+	private static final long serialVersionUID = 1L;
 	StaffBUS sBLL;
 	Account a;
         Staff s;
@@ -41,6 +40,8 @@ public class StaffInfor_Dialog extends javax.swing.JDialog {
      */
     public StaffInfor_Dialog(java.awt.Frame parent, boolean modal,int id,MyDesign.MyTable tab,String roleID,int userID) throws IOException {
         super(parent, modal);
+        setTitle("Thông tin chi tiết");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(StaffInfor_Dialog.class.getResource("/Images/logo.png")));
         try {
             sBLL =new StaffBUS();
             this.rolePermissionBUS = new RolePermissionBUS();
@@ -278,83 +279,84 @@ public class StaffInfor_Dialog extends javax.swing.JDialog {
         });
 
         javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
-        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
         panelBorder_Basic1Layout.setHorizontalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                                .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel23)
-                            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel10))
-                                .addGap(27, 27, 27)
-                                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSoDienThoai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtDiaChi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtTen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jLabel22)))
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnXoaNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSuaThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtMatKhau, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                            .addComponent(cbChucVu, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        	panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        					.addGap(7)
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING, false)
+        						.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        							.addComponent(jLabel11)
+        							.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+        							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
+        						.addComponent(jLabel23)
+        						.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        							.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(jLabel8)
+        								.addComponent(jLabel9)
+        								.addComponent(jLabel10))
+        							.addGap(27)
+        							.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(txtSoDienThoai, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        								.addComponent(txtDiaChi, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        								.addComponent(txtTen, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        						.addComponent(jLabel22)))
+        				.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        					.addContainerGap()
+        					.addComponent(btnXoaNhanVien, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(btnSuaThongTin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        				.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        					.addGap(7)
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.TRAILING)
+        						.addComponent(jLabel12)
+        						.addComponent(jLabel13))
+        					.addGap(63)
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING, false)
+        						.addComponent(txtMatKhau, GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+        						.addComponent(cbChucVu, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        					.addGap(0, 0, Short.MAX_VALUE)))
+        			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorder_Basic1Layout.setVerticalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
-                .addGap(18, 18, 18)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSuaThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXoaNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+        	panelBorder_Basic1Layout.createParallelGroup(Alignment.TRAILING)
+        		.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        			.addGap(11)
+        			.addComponent(jLabel22)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtTen, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel8))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtSoDienThoai, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel9))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtDiaChi, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel10))
+        			.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+        			.addComponent(jLabel23)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel11))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtMatKhau, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel12))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(cbChucVu, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel13))
+        			.addGap(18)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(btnSuaThongTin, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(btnXoaNhanVien, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
+        			.addGap(19))
         );
+        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -399,62 +401,58 @@ public class StaffInfor_Dialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSuaThongTinMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSuaThongTinMouseClicked
-        String name=txtTen.getText().trim();
-        String tel=txtSoDienThoai.getText().trim();
-        String address=txtDiaChi.getText().trim();
-        String username=txtUsername.getText().trim();
-        String password=txtMatKhau.getText();
-        try {
-            String role=sBLL.getRoleID((String) cbChucVu.getSelectedItem());
-            System.out.println(name+" "+tel+" "+address+" "+username+" "+password+" "+role);
-            System.out.println(s.getName()+" "+s.getTel()+" "+s.getAddress()+" "+a.getUsername()+" "+a.getPwd()+" "+a.getRoleID());  ;
-            if(!(s.compare(name, tel, address) && a.compare(username, password, role))) {
-                    if(!a.getRoleID().equals(roleID) || (a.getRoleID().equals(roleID) && a.getPersonID()==userID)) {
-                            int diaRS=JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn sửa thông tin nhân viên này?");
-                            if(diaRS==JOptionPane.YES_OPTION){
-                                    if(checkDataVal(name,tel,address,username,password)) {
-                                            s.setName(name);
-                                            s.setTel(tel);
-                                            s.setAddress(address);
-                                            a.setUsername(username);
-                                            a.setPwd(password);
-                                            a.setRoleID(role);
-                                            JOptionPane.showMessageDialog(null,sBLL.updateOneStaff(s,a));
-                                            addDefault(tab,roleID);
-                                            dispose();
-                                    }
-                            }
-                    }else {
-                            JOptionPane.showMessageDialog(null,"Bạn không có quyền sửa nhân viên này");
-                    }
-            }else{
-                JOptionPane.showMessageDialog(null,"Dữ liệu không thay đổi");
-            }
-        } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                JOptionPane.showMessageDialog(null,e1.getMessage());
-        }
-        	 
-    }//GEN-LAST:event_btnSuaThongTinMouseClicked
+    	 String name = txtTen.getText().trim();
+    	    String tel = txtSoDienThoai.getText().trim();
+    	    String address = txtDiaChi.getText().trim();
+    	    String username = txtUsername.getText().trim();
+    	    String password = txtMatKhau.getText();
+    	    try {
+    	        String role = sBLL.getRoleID((String) cbChucVu.getSelectedItem());
+    	        System.out.println(name + " " + tel + " " + address + " " + username + " " + password + " " + role);
+    	        System.out.println(s.getName() + " " + s.getTel() + " " + s.getAddress() + " " + a.getUsername() + " " + a.getPwd() + " " + a.getRoleID());
+    	        if (!(s.compare(name, tel, address) && a.compare(username, password, role))) {
+    	            if (!a.getRoleID().equals(roleID) || (a.getRoleID().equals(roleID) && a.getPersonID() == userID)) {
+    	                int diaRS = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn sửa thông tin nhân viên này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+    	                if (diaRS == JOptionPane.YES_OPTION) {
+    	                    if (checkDataVal(name, tel, address, username, password)) {
+    	                        s.setName(name);
+    	                        s.setTel(tel);
+    	                        s.setAddress(address);
+    	                        a.setUsername(username);
+    	                        a.setPwd(password);
+    	                        a.setRoleID(role);
+    	                        JOptionPane.showMessageDialog(null, sBLL.updateOneStaff(s, a));
+    	                        addDefault(tab, roleID);
+    	                        dispose();
+    	                    }
+    	                }
+    	            } else {
+    	                JOptionPane.showMessageDialog(null, "Bạn không có quyền sửa nhân viên này");
+    	            }
+    	        } else {
+    	            JOptionPane.showMessageDialog(null, "Dữ liệu không thay đổi");
+    	        }
+    	    } catch (Exception e1) {
+    	        JOptionPane.showMessageDialog(null, e1.getMessage());
+    	    }
+    	}//GEN-LAST:event_btnSuaThongTinMouseClicked
 
     private void btnXoaNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnXoaNhanVienMouseClicked
-        try {
-            if(!a.getRoleID().equals(roleID)) {
-                int diaRS=JOptionPane.showConfirmDialog(null,"Bạn có chắc xoá nhân viên này?");
-                            if(diaRS==JOptionPane.YES_OPTION){
-                                    JOptionPane.showConfirmDialog(null,sBLL.eraShowStaff(s));
-                                    addDefault(tab,roleID);
-                                    dispose();
-                            }
-            }else {
-                                    JOptionPane.showMessageDialog(null,"Bạn không có quyền xoá nhân viên này");
-                        }
-                } catch (Exception e1) {
-                        // TODO Auto-generated catch block
-                        JOptionPane.showMessageDialog(null,e1.getMessage());
-                }
-    }//GEN-LAST:event_btnXoaNhanVienMouseClicked
-
+    	 try {
+    	        if (!a.getRoleID().equals(roleID)) {
+    	            int diaRS = JOptionPane.showConfirmDialog(null, "Bạn có chắc xoá nhân viên này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+    	            if (diaRS == JOptionPane.YES_OPTION) {
+    	                JOptionPane.showMessageDialog(null, sBLL.eraShowStaff(s), "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
+    	                addDefault(tab, roleID);
+    	                dispose();
+    	            }
+    	        } else {
+    	            JOptionPane.showMessageDialog(null, "Bạn không có quyền xoá nhân viên này");
+    	        }
+    	    } catch (Exception e1) {
+    	        JOptionPane.showMessageDialog(null, e1.getMessage());
+    	    }//GEN-LAST:event_btnXoaNhanVienMouseClicked
+    }
     /**
      * @param args the command line arguments
      */

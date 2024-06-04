@@ -1,33 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
 
-import BUS.AccountBUS;
-import BUS.RolePermissionBUS;
-import MyDesign.ScrollBar;
 import java.awt.Color;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import BUS.RolePermissionBUS;
 import BUS.StaffBUS;
-import DTO.entities.Staff;
 import DTO.entities.Account;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import MyDesign.ScrollBar;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class Staff_GUI extends javax.swing.JPanel {
-    private StaffBUS staffBUS;
+public class Staff_GUI extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
+	private StaffBUS staffBUS;
     int userID;
     String roleID;
     private Account userLogin;
@@ -316,4 +309,5 @@ public class Staff_GUI extends javax.swing.JPanel {
     private MyDesign.MyTable tbDanhSachNhanVien;
     private MyDesign.SearchText txtTimKiem;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -1,8 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.PermissionBUS;
 import BUS.RoleBUS;
@@ -12,25 +27,12 @@ import DTO.entities.Account;
 import DTO.entities.Permission;
 import DTO.entities.Role;
 import MyDesign.ScrollBar;
-import java.awt.Color;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.table.DefaultTableModel;
+import java.awt.Toolkit;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class StaffRole_Dialog extends javax.swing.JDialog {
-    private DefaultTableModel permissionsModel;
+public class StaffRole_Dialog extends JDialog {
+
+	private static final long serialVersionUID = 1L;
+	private DefaultTableModel permissionsModel;
     private ArrayList<Permission> listPermisson;
     private ArrayList<Role> listRole;
     private RolePermissionBUS rolePermissionBUS;
@@ -42,9 +44,12 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
     javax.swing.JComboBox<String> cbChucVu;
     /**
      * Creates new form StaffRole_Dialog
+     * @wbp.parser.constructor
      */
     public StaffRole_Dialog(Account user,javax.swing.JComboBox<String> cbChucVu,java.awt.Frame parent, boolean modal) throws ClassNotFoundException, SQLException, IOException {
         super(parent, modal);
+        setTitle("Chức vụ");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(StaffRole_Dialog.class.getResource("/Images/logo.png")));
         initComponents();
         this.user = user;
         this.rolePermissionBUS = new RolePermissionBUS();

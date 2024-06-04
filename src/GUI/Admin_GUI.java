@@ -1,8 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
+
+import java.awt.Color;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.PermissionBUS;
 import BUS.RoleBUS;
@@ -12,25 +22,10 @@ import DTO.entities.Permission;
 import DTO.entities.Role;
 import DTO.entities.RolePermission;
 import MyDesign.ScrollBar;
-import java.awt.Color;
-import java.util.ArrayList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.table.DefaultTableModel;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class Admin_GUI extends javax.swing.JPanel {
-    private Role role;
+public class Admin_GUI extends JPanel {
+
+	private Role role;
     private Account user;
     private RoleBUS roleBUS;
     private Permission perrmission;
@@ -58,29 +53,38 @@ public class Admin_GUI extends javax.swing.JPanel {
         styles();
         initTableRoles();
     }
-    public void styles(){
+    public void styles() {
+        // Configuring spTable
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
+
+        // Configuring spTable1
         spTable1.setVerticalScrollBar(new ScrollBar());
         spTable1.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable1.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        if(rolePermissionBUS.hasPerEdit(this.user.getRoleID(), 9)){
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.WHITE);
+        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p2);
+
+        // Checking and setting permissions for editing
+        if (rolePermissionBUS.hasPerEdit(this.user.getRoleID(), 9)) {
             btnCapNhat.setEnabled(false);
+        } else {
+            btnCapNhat.setEnabled(true);
         }
-        else btnCapNhat.setEnabled(true);
-        if(rolePermissionBUS.hasPerDelete(this.user.getRoleID(), 9)){
+
+        // Checking and setting permissions for deleting
+        if (rolePermissionBUS.hasPerDelete(this.user.getRoleID(), 9)) {
             btnXoaChucVu.setEnabled(false);
+        } else {
+            btnXoaChucVu.setEnabled(true);
         }
-        else btnXoaChucVu.setEnabled(true);
-        
     }
+
     public void initTableRoles() throws ClassNotFoundException, SQLException, IOException, NoSuchAlgorithmException{
         listRole = null;
         RoleBUS roleBUS = new RoleBUS();
@@ -561,4 +565,5 @@ public class Admin_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel txtNguoiTao;
     private MyDesign.MyTextField_Basic txtTenChucVu;
     // End of variables declaration//GEN-END:variables
+
 }

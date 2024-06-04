@@ -1,8 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.HeadlessException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.border.EmptyBorder;
 
 import BUS.RoleBUS;
 import BUS.RolePermissionBUS;
@@ -10,26 +26,12 @@ import BUS.StaffBUS;
 import DTO.entities.Account;
 import DTO.entities.Role;
 import DTO.entities.Staff;
-import MyDesign.MyTable;
-import com.aspose.pdf.internal.l68v.l4h;
-import java.awt.Frame;
-import java.awt.HeadlessException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Toolkit;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
-/**
- *
- * @author QUANG DIEN
- */
-public class StaffAdd_Dialog extends javax.swing.JDialog {
-    private StaffBUS staffBUS;
+public class StaffAdd_Dialog extends JDialog {
+
+	private static final long serialVersionUID = 1L;
+	private StaffBUS staffBUS;
     private RoleBUS roleBUS;
     private Role role;
     private MyDesign.MyTable tab;
@@ -43,6 +45,8 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
      */
     public StaffAdd_Dialog(Account user, Frame parent, boolean modal,MyDesign.MyTable tab) throws IOException, ClassNotFoundException, SQLException {
         super(parent, modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(StaffAdd_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm nhân viên");
         this.user = user;
         this.tab = tab;
         personID = user.getPersonID();
@@ -395,15 +399,15 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBorder_Statistic_Blue1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addComponent(panelBorder_Statistic_Blue1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBorder_Statistic_Blue1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        	layout.createParallelGroup(Alignment.LEADING)
+        		.addComponent(panelBorder_Statistic_Blue1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
         );
+        getContentPane().setLayout(layout);
 
         pack();
         setLocationRelativeTo(null);
