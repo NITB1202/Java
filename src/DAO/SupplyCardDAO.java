@@ -24,7 +24,32 @@ import java.util.ArrayList;
  * @author WIN 10
  */
 public class SupplyCardDAO {
-    private ConnectDB connectDB;
+// Các phương thức hiện có không thay đổi
+    
+    // Thêm phương thức getProviderNameByID vào lớp SupplyCardDAO
+    public static String getProviderNameByID(int providerID) {
+        String providerName = ""; // Tên của nhà cung cấp
+
+        // Chuẩn bị câu lệnh SQL
+        String query = "SELECT name FROM supplier WHERE id = ?";
+
+        try {
+            Connection connection = connectDB.getConnection();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, providerID); // Thiết lập tham số cho câu lệnh SQL
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        providerName = resultSet.getString("name"); // Lấy tên của nhà cung cấp từ kết quả truy vấn
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return providerName;
+    }
+    private static ConnectDB connectDB;
     public SupplyCardDAO(ConnectDB connectDB) throws SQLException, IOException{
             try {
                     this.connectDB = new ConnectDB();
@@ -35,12 +60,14 @@ public class SupplyCardDAO {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
             }
+            
     }
     public SupplyCard getBySupDate(String supDate) {
         SupplyCard sc = null;
         String query = "SELECT supply_card.id, supply_card.supDate, supply_card.provider, supply_card.staffID, Staff.name " +
                      "FROM supply_card " +
-                     "INNER JOIN staff ON supply_card.staffID = staff.id " +
+                     "INNER JOIN staff ON supply_card.staffID = staff.id "+
+                     "INNER JOIN providers ON supply_card.provider = providers.id "+
                      "WHERE CAST(supply_card.supDate AS DATE) = ?";
 
         try {
@@ -82,6 +109,7 @@ public class SupplyCardDAO {
         } 
         return id;
     }
+    
 
 	public void saveInfo(SupplyCard supplyCard) {
         String query = "INSERT INTO supply_card (supDate, providerID, staffID, feePaid) VALUES (?, ?, 1004, ?)";

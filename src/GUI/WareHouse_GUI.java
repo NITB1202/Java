@@ -166,11 +166,18 @@ public class WareHouse_GUI extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel();
 
         for (SupplyCardWithStaff supplyCardWithStaff : supplyCardWithStaffList) {
+        	  int providerID = supplyCardWithStaff.getSupply_Card().getProvider();
+        	    
+        	    // Thực hiện truy vấn hoặc phương thức để lấy tên của nhà cung cấp từ ID
+        	    String providerName = ""; // Khởi tạo biến chứa tên của nhà cung cấp
+        	    // Thực hiện truy vấn hoặc phương thức để lấy tên của nhà cung cấp từ ID
+				providerName = SupplyCardDAO.getProviderNameByID(providerID);
+
             // Tạo một mảng các Object chứa thông tin cần hiển thị
             Object[] rowData = {
             	(Object)(model.getRowCount()+1),
                 supplyCardWithStaff.getSupply_Card().getSupDate(),
-                supplyCardWithStaff.getSupply_Card().getProvider(),
+                providerName, 
                 supplyCardWithStaff.getSupply_Card().getTongchi(),
                 supplyCardWithStaff.getStaff().getName()
             };
@@ -352,16 +359,23 @@ public class WareHouse_GUI extends javax.swing.JPanel {
                     	supplyCardWithStaffList = supplyCardDAO.getAllSupplyCardWithStaff();
                     	model.setRowCount(0);
                     	for (SupplyCardWithStaff supplyCardWithStaff : supplyCardWithStaffList) {
-                            // Tạo một mảng các Object chứa thông tin cần hiển thị
-                            Object[] rowData = {
-                            	(Object)(model.getRowCount()+1),
-                                supplyCardWithStaff.getSupply_Card().getSupDate(),
-                                supplyCardWithStaff.getSupply_Card().getProvider(),
-                                supplyCardWithStaff.getSupply_Card().getTongchi(),
-                                supplyCardWithStaff.getStaff().getName()
-                            };
-                            model.addRow(rowData);
-                        }
+                      	  int providerID = supplyCardWithStaff.getSupply_Card().getProvider();
+                      	    
+                      	    // Thực hiện truy vấn hoặc phương thức để lấy tên của nhà cung cấp từ ID
+                      	    String providerName = ""; // Khởi tạo biến chứa tên của nhà cung cấp
+                      	    // Thực hiện truy vấn hoặc phương thức để lấy tên của nhà cung cấp từ ID
+              				providerName = SupplyCardDAO.getProviderNameByID(providerID);
+
+                          // Tạo một mảng các Object chứa thông tin cần hiển thị
+                          Object[] rowData = {
+                          	(Object)(model.getRowCount()+1),
+                              supplyCardWithStaff.getSupply_Card().getSupDate(),
+                              providerName, 
+                              supplyCardWithStaff.getSupply_Card().getTongchi(),
+                              supplyCardWithStaff.getStaff().getName()
+                          };
+                          model.addRow(rowData);
+                      }
                     	
                     	DefaultTableModel model2 = (DefaultTableModel) tbSach.getModel();
                     	List<SupplyCardDetail> supplyCardDetail = new ArrayList<>();
