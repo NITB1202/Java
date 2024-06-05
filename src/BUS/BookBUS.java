@@ -136,4 +136,18 @@ public class BookBUS {
             return "Xoá sách không thành công";
         }
     }
+    public void addBook(Book1 book) throws ClassNotFoundException, SQLException, IOException {
+        // Check if the book already exists
+        if (getBookByISBN(book.getISBN()) != null) {
+            // Book already exists, you may choose to handle this case differently
+            // For example, by throwing an exception or displaying a message to the user
+            System.out.println("Book with ISBN " + book.getISBN() + " already exists.");
+            return;
+        }
+        
+        // Add the book to the database
+        bookDAO.saveInfo(book);
+        // Assuming saveInfo method handles the insertion of the book into the database
+    }
+
 }

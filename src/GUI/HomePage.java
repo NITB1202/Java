@@ -35,8 +35,9 @@ public class HomePage extends javax.swing.JFrame {
     private Account user;
     /**
      * Creates new form HomePage
+     * @throws Exception 
      */
-    public HomePage(Account user) throws ClassNotFoundException, SQLException, IOException {
+    public HomePage(Account user) throws Exception {
         initComponents();
         setBackground(new Color(0,0,0,0));
         initMoving(this);
@@ -165,7 +166,7 @@ public class HomePage extends javax.swing.JFrame {
                 throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         });
-        setForm(new Statistic_GUI(user));
+        setForm(new Book1_GUI(user));
 
     }
   
@@ -174,6 +175,7 @@ public class HomePage extends javax.swing.JFrame {
         mainPanel.add(com);
         mainPanel.repaint();
         mainPanel.revalidate();
+        
     }
 
     /**
@@ -325,7 +327,10 @@ public class HomePage extends javax.swing.JFrame {
                     Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
     }

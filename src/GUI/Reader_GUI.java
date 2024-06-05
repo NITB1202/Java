@@ -1,5 +1,4 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package GUI;
@@ -21,7 +20,7 @@ import javax.swing.JOptionPane;
  *
  * @author QUANG DIEN
  */
-public class Reader_GUI extends javax.swing.JPanel {
+public class Reader_GUI extends JPanel {
     ReaderBUS readerBUS;
     Account user;
     private RolePermissionBUS rolePermissionBUS ;
