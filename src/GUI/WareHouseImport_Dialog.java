@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -55,6 +56,9 @@ import BUS.PublisherBUS;
 import BUS.SupplierBUS;
 import BUS.SupplyCardBUS;
 import BUS.WarehouseBUS;
+import DAO.BookAuthorDAO;
+import DAO.BookCategoryDAO;
+import DAO.PublisherDAO;
 import DTO.entities.Account;
 import DTO.entities.Author;
 import DTO.entities.Book;
@@ -71,6 +75,7 @@ import DTO.entities.SupplyCardDetail;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -228,8 +233,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
         setIconImage(webIcon.getImage());
         setTitle("Đơn nhập");
-        setSize(300, 200);
+        setSize(200, 150);
         setLocationRelativeTo(null);
+        setLocation(100, -30); // Đặt cửa sổ ở vị trí cụ thể (x, y)
 
         
         
@@ -276,7 +282,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         }
         cbSach.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         cbSach.setOpaque(true);
-        
+        bookAuthorDao = new BookAuthorDAO(null); // Khởi tạo đối tượng BookAuthorDao
+        bookCategoryDao = new BookCategoryDAO(null);
+        publisherDao = new PublisherDAO(null);
         cbSach.addActionListener(new ActionListener() {
 			
 			@Override
@@ -285,6 +293,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 				String selectedValue = String.valueOf(cbSach.getSelectedItem());
                 if (selectedValue != null) {
 					String img = null, isbn = null, edition = null, cost = null, tacgia = null, theloai = null, nxb = null;
+					
 					try {
 						img = supplyCard.getByImg(selectedValue);
 						isbn = supplyCard.getByISBN(selectedValue);
@@ -293,6 +302,61 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 						tacgia = author.getByName(isbn);
 						theloai = category.getByName(isbn);
 						nxb = publisher.getByIDPubName(isbn);
+                        List<String> authors = bookAuthorDao.getAuthorsForBook(selectedValue);  // Gọi phương thức từ BookAuthorDao
+                        DefaultComboBoxModel<String> authorModel = new DefaultComboBoxModel<>();
+                     // Khởi tạo một HashSet để lưu trữ các tên tác giả đã được thêm vào JComboBox
+                        HashSet<String> addedAuthors = new HashSet<>();
+                     // Sau đó, trong phần xử lý sự kiện chọn sách, bạn kiểm tra tên tác giả trước khi thêm vào JComboBox
+                     for (String author : authors) {
+                         // Kiểm tra xem tên tác giả đã được thêm vào JComboBox chưa
+                         if (!addedAuthors.contains(author)) {
+                             // Nếu chưa, thêm vào JComboBox và cập nhật HashSet
+                             authorModel.addElement(author);
+                             addedAuthors.add(author);
+                         }
+                     }
+                        cbTacGia.setModel(authorModel);
+                        
+                       //Tự động điền thể loại
+                        List<String> categories = bookCategoryDao.getCategoriesForBook(selectedValue);  // Gọi phương thức từ BookAuthorDao
+                        
+                        // Khởi tạo một HashSet để lưu trữ các thể loại đã được thêm vào JComboBox
+                        HashSet<String> addedCategories = new HashSet<>();
+
+                        // Thêm các thể loại vào JComboBox
+                        DefaultComboBoxModel<String> categoryModel = new DefaultComboBoxModel<>();
+                        for (String category : categories) {
+                            // Kiểm tra xem thể loại đã được thêm vào JComboBox chưa
+                            if (!addedCategories.contains(category)) {
+                                // Nếu chưa, thêm vào JComboBox và cập nhật HashSet
+                                categoryModel.addElement(category);
+                                addedCategories.add(category);
+                            }
+                        }
+
+                        // Gán mô hình thể loại mới cho JComboBox
+                        cbTheLoai.setModel(categoryModel);
+                        
+                        //Tự động điền nhà xuất bản
+                        List<String> publishers = publisherDao.getPublisherForBook(selectedValue);  // Gọi phương thức từ BookAuthorDao
+                        
+                        // Khởi tạo một HashSet để lưu trữ các thể loại đã được thêm vào JComboBox
+                        HashSet<String> addedPublishers = new HashSet<>();
+
+                        // Thêm các thể loại vào JComboBox
+                        DefaultComboBoxModel<String> publisherModel = new DefaultComboBoxModel<>();
+                        for (String publisher : publishers) {
+                            // Kiểm tra xem thể loại đã được thêm vào JComboBox chưa
+                            if (!addedPublishers.contains(publisher)) {
+                                // Nếu chưa, thêm vào JComboBox và cập nhật HashSet
+                                publisherModel.addElement(publisher);
+                                addedPublishers.add(publisher);
+                            }
+                        }
+
+                        // Gán mô hình thể loại mới cho JComboBox
+                        cbNXB.setModel(publisherModel);
+						
 					} catch (SQLException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
@@ -360,119 +424,13 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         txtGia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         txtGia.setFont(new java.awt.Font("SansSerif", 1, 13));
         
-        //GÕ ENTER KIỂM TRA NỘI DUNG CỦA TEXTFIELD GIÁ
-        txtGia.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				final String g = txtGia.getText();
-				if(e.getKeyCode()==KeyEvent.VK_ENTER)
-				{
-					if(isAlpha(g))
-					{
-						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Nội dung là số không phải là chữ!","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-					}
-					if(isNumeric(g))
-					{
-						if(Integer.parseInt(g)<19000)
-						{
-							JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá không được thấp hơn 19k.","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-						}
-					}
-					else {
-						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Nội dung không thể chứa cả chữ và số. ","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-					}
-					if(g.isEmpty())
-					{
-						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá không được bỏ trống", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-					}
-				}
-			}
-		});
+     
         
         txtSoLuong.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         txtSoLuong.setFont(new java.awt.Font("SansSerif", 1, 13));
         
-        //GÕ ENTER KIỂM TRA TEXT SỐ LƯỢNG
-        txtSoLuong.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-        		final String sl = txtSoLuong.getText();
-        		if(e.getKeyCode()==KeyEvent.VK_ENTER)
-        		{
-        			if(isAlpha(sl))
-					{
-						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Nội dung là số không phải là chữ.","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-					}
-					if(isNumeric(sl))
-					{
-						if(Integer.parseInt(sl)<=0)
-						{
-							JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Số lượng không được nhỏ hơn bằng 0.","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-						}
-					}
-					else {
-						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Nội dung không thể chứa cả chữ và số. ","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-					}
-					if(sl.isEmpty())
-					{
-						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Số lượng không được bỏ trống","Cảnh báo",JOptionPane.WARNING_MESSAGE);
-					}
-        		}
-			}
-		});
+      
         
-        // KIỂM TRA TEXT GIÁ
-        txtSoLuong.addMouseListener(new MouseAdapter() {
-        	public void mouseClicked(MouseEvent e)
-        	{
-        		if(txtGia.getText()!=null)
-        		{
-        			if(isAlpha(txtGia.getText()))
-        			{
-        				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá phải là số không phải là chữ.","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-        			}
-        			else if(isNumeric(txtGia.getText()))
-        			{
-        				if(Integer.parseInt(txtGia.getText())<19000)
-        				{
-        					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá không dưới 19k.","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-        				}
-        			}
-        			else {
-        				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá không chứa chữ và số.","Cảnh Báo",JOptionPane.WARNING_MESSAGE);
-        			}
-        		}
-        	}
-        });
-   
         cbTacGia.setBackground(new java.awt.Color(246, 250, 255));
         cbTacGia.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 //        cbTacGia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tác giả" }));
@@ -483,12 +441,11 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         cbTacGia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         cbTacGia.setOpaque(true);
         cbTacGia.setPreferredSize(new java.awt.Dimension(77, 28));
-
         lbThemTacGia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbThemTacGia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add.png"))); // NOI18N
         lbThemTacGia.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
         lbThemTacGia.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
+		cbTacGia.setEditable(false);
         lbThemTacGia.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent e)
         	{
@@ -513,18 +470,19 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         		}
         	}
 		});
-
+        lbThemTacGia.setVisible(false);
         cbNXB.setBackground(new java.awt.Color(246, 250, 255));
         cbNXB.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-//        cbNXB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NXB" }));
-        for(Publisher item : publisherList)
-        {
-        	cbNXB.addItem(item.getName());
-        }
+//		cbNXB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NXB" }));
+//        for(Publisher item : publisherList)
+//        {
+//        	cbNXB.addItem(item.getName());
+//        }
+        
         cbNXB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         cbNXB.setOpaque(true);
         cbNXB.setPreferredSize(new java.awt.Dimension(77, 28));
-
+        cbNXB.setEditable(false);
         lbThemNXB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbThemNXB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add.png"))); // NOI18N
         lbThemNXB.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
@@ -554,6 +512,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         		}
         	}
 		});
+        lbThemNXB.setVisible(false);
         
         cbTheLoai.setBackground(new java.awt.Color(246, 250, 255));
         cbTheLoai.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
@@ -597,6 +556,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         		}
         	}
 		});
+        lbThemTheLoai.setVisible(false);
         
         jLabel8_1.setText("Edition");
         jLabel8_1.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
@@ -880,6 +840,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			
 			public void actionPerformed(ActionEvent e) {
 			    // TODO: Kiểm tra các trường nhập liệu trước khi thêm vào bảng
+				int errorCount = 0;
 			    edition = txtEdition.getText();
 			    gia = txtGia.getText();
 			    soluong = txtSoLuong.getText();
@@ -887,22 +848,27 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 
 			    if (isTextFieldEmpty(txtEdition) || isComboBoxEmpty(cbSach) || isTextFieldEmpty(txtGia) || isTextFieldEmpty(txtSoLuong) || isComboBoxEmpty(cbTacGia) || isComboBoxEmpty(cbNXB) || isComboBoxEmpty(cbTheLoai) || isComboBoxEmpty(cbNhaCungCap)) {
 			        JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			        errorCount++;
 			    } else {
 			        // Kiểm tra số lượng > 0
 			        if (Integer.parseInt(soluong) <= 0) {
 			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Số lượng phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			            errorCount++;
 			        } 
 			        // Kiểm tra phiên bản > 0
 			        else if (Integer.parseInt(edition) <= 0) {
 			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Phiên bản phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			            errorCount++;
 			        } 
 			        // Kiểm tra giá > 19000
 			        else if (Integer.parseInt(gia) <= 19000) {
 			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Giá phải lớn hơn 19000.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+			            errorCount++;
 			        } 
 			        // Nếu các điều kiện đều đúng, thêm dữ liệu vào bảng
 			        else {
-			            DefaultTableModel model = (DefaultTableModel) tbSachDuocNhap.getModel();
+			        	errorCount = 0;
+			        	DefaultTableModel model = (DefaultTableModel) tbSachDuocNhap.getModel();
 			            tensach = String.valueOf(cbSach.getSelectedItem());
 			            tgia = String.valueOf(cbTacGia.getSelectedItem());
 			            nxb = String.valueOf(cbNXB.getSelectedItem());
@@ -924,6 +890,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			            cbTheLoai.setEnabled(true);
 			            cbNXB.setEnabled(true);
 			        }
+			    }
+			    if (errorCount > 1) {
+			        errorCount = 0; // Đặt lại biến đếm lỗi
 			    }
 			}
         });
@@ -1153,6 +1122,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         		}
         	}
 		});
+        lbThemNhaCungCap.setVisible(false);
         
         btnThemSach.addActionListener(new ActionListener() {
 			
@@ -1170,6 +1140,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                 }
 			}
 		});
+        btnThemSach.setVisible(false);
         
         btnXoaTgia.addActionListener(new ActionListener() {
             @Override
@@ -1182,6 +1153,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                 }
             }
         });
+        btnXoaTgia.setVisible(false);
         
         btnXoaTL.addActionListener(new ActionListener() {
 			
@@ -1195,6 +1167,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                 }
             }
 		});
+        btnXoaTL.setVisible(false);
         
         jLabel11.setForeground(new java.awt.Color(51, 51, 51));
         jLabel11.setText("Tổng chi");
@@ -1601,6 +1574,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     private MyDesign.PanelBorder_Basic pnImageBook;
     private javax.swing.JScrollPane spTable;
     private MyDesign.MyTable tbSachDuocNhap;
+    private BookAuthorDAO bookAuthorDao;
+    private BookCategoryDAO bookCategoryDao;
+    private PublisherDAO publisherDao;
     protected MyDesign.MyTextField_Basic txtGia;
     protected MyDesign.MyTextField_Basic txtSoLuong;
     private javax.swing.JLabel txtTongChi;

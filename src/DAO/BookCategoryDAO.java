@@ -3,7 +3,10 @@ package DAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import DTO.entities.BookAuthor;
 import DTO.entities.BookCategory;
@@ -47,4 +50,25 @@ public class BookCategoryDAO {
             e.printStackTrace();
         }
 	}
+    
+    public List<String> getCategoriesForBook(String bookName) throws SQLException {
+        List<String> categories = new ArrayList<>();
+        String query = "SELECT c.name AS category_name " +
+                "FROM book_category bc " +
+                "JOIN category c ON bc.categoryID = c.id " +
+                "JOIN book_author ba ON ba.ISBN = bc.ISBN " +
+                "JOIN book b ON ba.authorID = b.id " +
+                "WHERE b.name = ?";
+        connectDB.connect();
+        try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, bookName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                categories.add(rs.getString("category_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
 }

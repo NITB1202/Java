@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import DTO.entities.BookAuthor;
 import DTO.entities.SupplyCard;
@@ -48,4 +50,23 @@ public class BookAuthorDAO {
             e.printStackTrace();
         }
 	}
+    public List<String> getAuthorsForBook(String bookTitle) throws SQLException {
+        List<String> authors = new ArrayList<>();
+        String query = "SELECT a.name AS author_name " +
+        		"FROM book_author ba " +
+        		"JOIN book b ON ba.authorID = b.id " +
+        		"JOIN author a ON ba.authorID = a.id " +
+        		"WHERE b.name = ?";
+        connectDB.connect();
+        try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, bookTitle);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                authors.add(rs.getString("author_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return authors;
+    }
 }
