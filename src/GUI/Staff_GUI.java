@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,10 +12,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import BUS.RoleBUS;
 import BUS.RolePermissionBUS;
 import BUS.StaffBUS;
 import DTO.entities.Account;
+import DTO.entities.Role;
+import DTO.entities.Staff;
 import MyDesign.ScrollBar;
+import javax.swing.JList;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Staff_GUI extends JPanel {
 
@@ -209,36 +221,38 @@ public class Staff_GUI extends JPanel {
                 btnNhanVienMoiActionPerformed(evt);
             }
         });
+        
+
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnNhanVienMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+        	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder1Layout.createSequentialGroup()
+        			.addGap(20)
+        			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
+        					.addGroup(panelBorder1Layout.createSequentialGroup()
+        						.addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
+        						.addPreferredGap(ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+        						.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        					.addComponent(spTable, GroupLayout.PREFERRED_SIZE, 688, GroupLayout.PREFERRED_SIZE))
+        				.addComponent(btnNhanVienMoi, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
+        			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNhanVienMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+        	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder1Layout.createSequentialGroup()
+        			.addContainerGap(61, Short.MAX_VALUE)
+        			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel5))
+        			.addGap(10)
+        			.addComponent(spTable, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.UNRELATED)
+        			.addComponent(btnNhanVienMoi, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+        			.addGap(14))
         );
+        panelBorder1.setLayout(panelBorder1Layout);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -258,7 +272,9 @@ public class Staff_GUI extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbDanhSachNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDanhSachNhanVienMouseClicked
+ 
+
+	private void tbDanhSachNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDanhSachNhanVienMouseClicked
        if (evt.getClickCount() == 2 && rolePermissionBUS.hasPerView(roleID, 7)) {
             int row = tbDanhSachNhanVien.getSelectedRow();
             if (row >= 0) {
@@ -298,7 +314,6 @@ public class Staff_GUI extends JPanel {
         }
     }//GEN-LAST:event_btnNhanVienMoiActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private MyDesign.MyButton btnNhanVienMoi;
     private javax.swing.JLabel jLabel5;
@@ -308,6 +323,4 @@ public class Staff_GUI extends JPanel {
     private javax.swing.JScrollPane spTable;
     private MyDesign.MyTable tbDanhSachNhanVien;
     private MyDesign.SearchText txtTimKiem;
-    // End of variables declaration//GEN-END:variables
-
 }

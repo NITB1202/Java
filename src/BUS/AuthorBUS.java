@@ -69,4 +69,7 @@ public class AuthorBUS {
     public void disconnect() {
         ad.disconnect();
     }
+	public boolean updateAuthorName(String tacGia, String newTacGia) throws SQLException {	
+		return ad.updateAuthorName(tacGia, newTacGia);
+	}
 }

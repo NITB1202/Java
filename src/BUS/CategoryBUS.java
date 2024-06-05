@@ -77,4 +77,7 @@ public class CategoryBUS {
     public void disconnect() {
             cdao.disconnect();
     }
+	public boolean updateCategoryName(String oldCategoryName, String newCategoryName) {
+		return cdao.updateCategoryName(oldCategoryName, newCategoryName);
+	}
 }

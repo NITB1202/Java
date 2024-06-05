@@ -1,12 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
-
-import BUS.RolePermissionBUS;
-import MyDesign.ScrollBar;
-import connection.ConnectDB;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -22,13 +14,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import BUS.RolePermissionBUS;
 import BUS.SupplyCardWithStaffBUS;
 import DAO.BookDAO;
 import DAO.PublisherDAO;
@@ -39,18 +34,17 @@ import DAO.WarehouseDAO;
 import DTO.entities.Account;
 import DTO.entities.SupplyCardDetail;
 import DTO.entities.SupplyCardWithStaff;
+import MyDesign.ScrollBar;
+import connection.ConnectDB;
 
+public class WareHouse_GUI extends JPanel {
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+	private static final long serialVersionUID = 1L;
 
-
-/**
- *
- * @author QUANG DIEN
- */
-public class WareHouse_GUI extends javax.swing.JPanel {
-    private SupplyCardDAO supplyCardDAO;
+	/**
+	 * Create the panel.
+	 */
+	private SupplyCardDAO supplyCardDAO;
     private Account user;
     private RolePermissionBUS rolePermissionBUS;
     private SupplyCardWithStaffBUS supplyCardWithStaffBUS;
@@ -78,25 +72,35 @@ public class WareHouse_GUI extends javax.swing.JPanel {
         p.setBackground(Color.WHITE);
         spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
-    public WareHouse_GUI() throws SQLException, SQLException, IOException, ClassNotFoundException {
+    public WareHouse_GUI() throws SQLException, IOException, ClassNotFoundException {
         initComponents();
+        
+        // Configure spTable
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
         spTable.setViewportView(tbLichSuNhapHang);
-        spTable2.setViewportView(tbSach);
+        
+        // Configure spTable2
         spTable2.setVerticalScrollBar(new ScrollBar());
         spTable2.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable2.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        if(rolePermissionBUS.hasPerCreate(this.user.getRoleID(), 4))
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.WHITE);
+        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p2);
+        spTable2.setViewportView(tbSach);
+        
+        // Set the button's enabled state based on role permissions
+        if (rolePermissionBUS.hasPerCreate(this.user.getRoleID(), 4)) {
             btnNhapSach.setEnabled(true);
-        else btnNhapSach.setEnabled(false);
+        } else {
+            btnNhapSach.setEnabled(false);
+        }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.

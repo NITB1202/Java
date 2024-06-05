@@ -1,33 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import BUS.AuthorBUS;
 import DTO.entities.Account;
 import DTO.entities.Author;
-import DTO.entities.Supplier;
+import java.awt.Toolkit;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+public class WareHouseAddNewReader_Dialog extends JDialog {
 
-
-/**
- *
- * @author QUANG DIEN
- */
-public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
-    String nameFrame;
+	String nameFrame;
     Account user;
     /**
      * Creates new form WareHouseAddReader_Dialog
@@ -37,6 +34,8 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
      */
     public WareHouseAddNewReader_Dialog(java.awt.Frame parent,String nameFrame,Account user,boolean modal) throws ClassNotFoundException, SQLException, IOException {
         super(parent,nameFrame, modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNewReader_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm tác giả");
         this.nameFrame = nameFrame;
         this.user= user;
         setLocationRelativeTo(null);
@@ -280,4 +279,5 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
     private AuthorBUS au = new AuthorBUS();
     private WareHouseAddReader_Dialog whrd = new WareHouseAddReader_Dialog(null, nameFrame, "add",rootPaneCheckingEnabled);
     // End of variables declaration//GEN-END:variables
+
 }

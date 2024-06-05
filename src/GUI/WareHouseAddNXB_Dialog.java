@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,21 +9,20 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import BUS.PublisherBUS;
 import DTO.entities.Account;
-import DTO.entities.Category;
 import DTO.entities.Publisher;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Toolkit;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
-    static String nameFrame;
+public class WareHouseAddNXB_Dialog extends JDialog {
+
+	static String nameFrame;
     static String action;
     static Account user;
     /**
@@ -33,6 +30,8 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
      */
     public WareHouseAddNXB_Dialog(java.awt.Frame parent, String nameFrame,Account user,boolean modal) throws SQLException, IOException, ClassNotFoundException {
         super(parent, modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNXB_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm nhà xuất bản");
         WareHouseAddNXB_Dialog.nameFrame = nameFrame;        
         WareHouseAddNXB_Dialog.user = user;
 
@@ -228,4 +227,5 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
     MyDesign.MyTextField_Basic txtNhaXuatBan;
     private PublisherBUS pub = new PublisherBUS();
     // End of variables declaration//GEN-END:variables
+
 }

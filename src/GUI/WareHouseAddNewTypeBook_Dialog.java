@@ -1,31 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
-import BUS.CategoryBUS;
-import DTO.entities.Account;
-import DTO.entities.Author;
-import DTO.entities.Category;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
-    static String nameFrame;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import BUS.CategoryBUS;
+import DTO.entities.Account;
+import DTO.entities.Category;
+import java.awt.Toolkit;
+
+public class WareHouseAddNewTypeBook_Dialog extends JDialog {
+
+	static String nameFrame;
     static Account user;
     /**
      * Creates new form WareHouseAddReader_Dialog
@@ -35,6 +34,8 @@ public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
      */
     public WareHouseAddNewTypeBook_Dialog(java.awt.Frame parent,String nameFrame,Account user ,boolean modal) throws ClassNotFoundException, SQLException, IOException {
         super(parent,nameFrame ,modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNewTypeBook_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm thể loại sách");
         WareHouseAddNewTypeBook_Dialog.nameFrame = nameFrame;
         WareHouseAddNewTypeBook_Dialog.user=user;
         setLocationRelativeTo(null);
@@ -287,4 +288,5 @@ public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
     private MyDesign.MyTextField_Basic txtTheLoaiSach;
     private CategoryBUS cate = new CategoryBUS();
     // End of variables declaration//GEN-END:variables
+
 }

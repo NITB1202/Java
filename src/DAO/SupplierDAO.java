@@ -153,4 +153,21 @@ public class SupplierDAO {
                  e.printStackTrace();
          }
     }
+    public boolean updateSupplierName(String oldName, String newName) throws SQLException {
+        String query = "UPDATE supplier SET name = ? WHERE name = ?";
+        try {
+        	connectDB.connect();
+        	if(ConnectDB.conn != null){
+        		PreparedStatement stmt = ConnectDB.conn.prepareStatement(query);
+        		stmt.setString(1, newName);
+                stmt.setString(2, oldName);
+                int rowsUpdated = stmt.executeUpdate();
+                return rowsUpdated > 0;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+        }
 }

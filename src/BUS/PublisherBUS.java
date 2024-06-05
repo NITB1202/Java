@@ -59,4 +59,7 @@ public class PublisherBUS {
     public void disconnect() {
             pdao.disconnect();
     }
+	public boolean updatePublisherName(String oldName, String newName) {
+		return pdao.updatePublisherName(oldName, newName);
+	}
 }

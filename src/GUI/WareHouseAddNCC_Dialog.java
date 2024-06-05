@@ -1,39 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package GUI;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
-import BUS.PublisherBUS;
 import BUS.SupplierBUS;
 import BUS.SupplyCardBUS;
 import DTO.entities.Account;
 import DTO.entities.Supplier;
-import DTO.entities.SupplyCard;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Toolkit;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class WareHouseAddNCC_Dialog extends javax.swing.JDialog {
-    static String nameFrame;
+public class WareHouseAddNCC_Dialog extends JDialog {
+
+	static String nameFrame;
     static Account user;
     /**
      * Creates new form WareHouseAddReader_Dialog
      */
     public WareHouseAddNCC_Dialog(java.awt.Frame parent,String nameFrame,Account user, boolean modal) throws SQLException, IOException, ClassNotFoundException {
         super(parent,nameFrame ,modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNCC_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm nhà cung cấp");
         WareHouseAddNCC_Dialog.nameFrame = nameFrame;        
         WareHouseAddNCC_Dialog.user = user;
 
@@ -234,4 +234,5 @@ public class WareHouseAddNCC_Dialog extends javax.swing.JDialog {
     private SupplyCardBUS scb = new SupplyCardBUS();
     private SupplierBUS pub = new SupplierBUS();
     // End of variables declaration//GEN-END:variables
+
 }
