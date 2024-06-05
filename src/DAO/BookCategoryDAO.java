@@ -71,4 +71,23 @@ public class BookCategoryDAO {
         }
         return categories;
     }
+    
+    public List<String> getEditionsForBook(String bookName) throws SQLException {
+        List<String> editions = new ArrayList<>();
+        String query = "SELECT cb.edition AS edition_name " +
+                       "FROM book b " +
+                       "JOIN cp_book cb ON cb.bookID = b.id " +
+                       "WHERE b.name = ?";
+        connectDB.connect();
+        try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, bookName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                editions.add(rs.getString("edition_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return editions;
+    }
 }
