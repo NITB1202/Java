@@ -268,7 +268,6 @@ public class Borrow_GUI extends javax.swing.JPanel {
 
         spTable2.setViewportView(tbSachDaChon);
 
-        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
         btnTimKiem.setBorder(javax.swing.BorderFactory.createMatteBorder(4, 4, 4, 4, new java.awt.Color(246, 250, 255)));
 
         btnTimKiem.setBorderColor(new java.awt.Color(246, 250, 255));

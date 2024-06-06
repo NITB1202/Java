@@ -4,13 +4,16 @@
  */
 package BUS;
 
+import DAO.BorrowCardDAO;
 import DAO.SupplyCardDAO;
 import DAO.WarehouseDAO;
+import DTO.entities.BorrowCard;
 import DTO.entities.SupplyCard;
 import connection.ConnectDB;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -25,7 +28,7 @@ public class SupplyCardBUS {
         this.connectDB = null;
         try {
             connectDB = new ConnectDB();
-            scd = new SupplyCardDAO(connectDB);
+            this.scd = new SupplyCardDAO(connectDB);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -56,6 +59,15 @@ public class SupplyCardBUS {
     		kdao = new WarehouseDAO(connectDB);
     		return kdao.getByCostFromISBN(name);
     }
+    public Vector<SupplyCard> getByCondition(String condition) throws ClassNotFoundException, SQLException, IOException{
+    	scd = new SupplyCardDAO(connectDB);
+        return scd.getByCondition(condition);
+    }
+    public Vector<SupplyCard> getAllTicket() throws ClassNotFoundException, SQLException, IOException{
+        scd = new SupplyCardDAO(connectDB);
+        return scd.getAll();
+    }
+    
     
     public String getByISBN(String name) throws SQLException, IOException
     {

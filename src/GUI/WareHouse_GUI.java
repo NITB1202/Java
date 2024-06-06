@@ -4,7 +4,9 @@
  */
 package GUI;
 
+import BUS.BorrowCardBUS;
 import BUS.RolePermissionBUS;
+import BUS.SupplyCardBUS;
 import MyDesign.ScrollBar;
 import connection.ConnectDB;
 
@@ -24,25 +26,35 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Vector;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.SupplyCardWithStaffBUS;
+import BUS.SupplyCardBUS;
 import DAO.BookDAO;
+import DAO.BorrowCardDAO;
 import DAO.PublisherDAO;
 import DAO.StaffDAO;
 import DAO.SupplyCardDAO;
 import DAO.SupplyCardDetailDAO;
 import DAO.WarehouseDAO;
 import DTO.entities.Account;
+import DTO.entities.BorrowCard;
+import DTO.entities.Staff;
+import DTO.entities.SupplyCard;
 import DTO.entities.SupplyCardDetail;
 import DTO.entities.SupplyCardWithStaff;
 
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
 
 
 /**
@@ -56,47 +68,90 @@ public class WareHouse_GUI extends javax.swing.JPanel {
     private SupplyCardWithStaffBUS supplyCardWithStaffBUS;
     private SupplyCardDetailDAO supplyCardDetailDAO;
     private WarehouseDAO warehouseDAO;
+    private WareHouseSearch_Dialog whSDialog ;
+    private StaffDAO staffDAO ;
+    SupplyCardBUS supplybll= new SupplyCardBUS();
+    Vector<SupplyCard> list;
+
     
 	/**
      * Creates new form WareHouse_GUI
      */
-    public WareHouse_GUI(Account user) throws SQLException, SQLException, IOException, ClassNotFoundException {
+    public WareHouse_GUI(Account user) throws SQLException, IOException, ClassNotFoundException {
         initComponents();
+        this.list = new Vector<>(supplybll.getAllTicket());
         this.user = user;
         this.rolePermissionBUS = new RolePermissionBUS();
+
+        // Setting up spTable
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
         spTable.setViewportView(tbLichSuNhapHang);
+
+        // Setting up spTable2
         spTable2.setVerticalScrollBar(new ScrollBar());
         spTable2.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable2.getViewport().setBackground(Color.WHITE);
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.WHITE);
+        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p2);
         spTable2.setViewportView(tbSach);
-        p.setBackground(Color.WHITE);
-        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
-    public WareHouse_GUI() throws SQLException, SQLException, IOException, ClassNotFoundException {
+
+    public WareHouse_GUI() throws SQLException, IOException, ClassNotFoundException {
         initComponents();
+
+        // Setting up spTable
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
         spTable.setViewportView(tbLichSuNhapHang);
-        spTable2.setViewportView(tbSach);
+
+        // Setting up spTable2
         spTable2.setVerticalScrollBar(new ScrollBar());
         spTable2.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable2.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        if(rolePermissionBUS.hasPerCreate(this.user.getRoleID(), 4))
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.WHITE);
+        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p2);
+        spTable2.setViewportView(tbSach);
+
+        // Setting button state based on permissions
+        if (rolePermissionBUS.hasPerCreate(this.user.getRoleID(), 4)) {
             btnNhapSach.setEnabled(true);
-        else btnNhapSach.setEnabled(false);
+        } else {
+            btnNhapSach.setEnabled(false);
+        }
     }
+    
+    public void loadSupplyCardList(Vector<SupplyCard> supplyCards) throws ClassNotFoundException, SQLException {
+        DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel();
+        model.setRowCount(0); // Xóa tất cả các hàng hiện có trong bảng
+
+        // Duyệt qua danh sách SupplyCard và thêm từng dòng vào bảng
+        for (SupplyCard supplyCard : supplyCards) {
+            int id = supplyCard.getId();
+            Timestamp supDate = supplyCard.getSupDate();
+            String providerName = supplyCard.getSuppliername(); // Lấy tên nhà cung cấp trực tiếp từ SupplyCard
+            long tongchi = supplyCard.getTongchi();
+            String staffname = supplyCard.getStaffname(); // Lấy tên nhân viên trực tiếp từ SupplyCard
+
+            // Tạo một mảng đối tượng để đại diện cho một dòng trong bảng
+            Object[] obj = {id, supDate, providerName, tongchi, staffname};
+            // Thêm dòng vào bảng
+            model.addRow(obj);
+        }
+    }
+
+  
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -133,8 +188,9 @@ public class WareHouse_GUI extends javax.swing.JPanel {
         spTable2 = new javax.swing.JScrollPane();
         panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
         jLabel8 = new javax.swing.JLabel();
-        txtTimKiem = new MyDesign.SearchText();
         btnNhapSach = new MyDesign.MyButton();
+        btnSearch = new MyDesign.MyButton();
+
 
         
         setBackground(new java.awt.Color(255, 255, 255));
@@ -259,79 +315,24 @@ public class WareHouse_GUI extends javax.swing.JPanel {
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
         
         
-        jLabel8.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1 || e.getClickCount() == 2) {
-                    DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel(); // Lấy model của JTable
-
-                    String searchInput = txtTimKiem.getText().trim();
-                    String key = "NXB";
-                    String keyDate = "2023-";
-                    if (!searchInput.isEmpty()) {
-                    	if(!isNumeric(searchInput))
-                    	{
-                    		if(containsString(searchInput, keyDate)) {
-                    			timkiemSupDate();
-                    		}
-                    		else {
-                    			timkiemNameStaff();
-                    		}
-                    	}
-                    }else {
-                    	loadAll();
-                    }
-                }
-            }
-        });        
         
-        txtTimKiem.addKeyListener(new KeyAdapter() {
-        	public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    // Xử lý khi người dùng nhấn Enter
-                    DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel(); // Lấy model của JTable
-
-                    String searchInput = txtTimKiem.getText().trim();
-                    String key = "NXB";
-                    String keyDate = "2023-";
-                    if (!searchInput.isEmpty()) {
-                    	if(!isNumeric(searchInput))
-                    	{
-                    		if(containsString(searchInput, keyDate)) {
-                    			timkiemSupDate();
-                    		}
-                    		else {
-                    			timkiemNameStaff();
-                    		}
-                    	}
-                    }else {
-                    	loadAll();
-                    }
-                }
-            }
-		});
         javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
-        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
         panelBorder_Basic1Layout.setHorizontalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+        	panelBorder_Basic1Layout.createParallelGroup(Alignment.TRAILING)
+        		.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        			.addContainerGap(166, Short.MAX_VALUE)
+        			.addComponent(jLabel8, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap())
         );
         panelBorder_Basic1Layout.setVerticalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+        	panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addComponent(jLabel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        			.addContainerGap())
         );
-
+        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
+        panelBorder_Basic1.setVisible(false);
         btnNhapSach.setBackground(new java.awt.Color(22, 113, 221));
         btnNhapSach.setForeground(new java.awt.Color(255, 255, 255));
         btnNhapSach.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/warehouse-white.png"))); // NOI18N
@@ -342,6 +343,7 @@ public class WareHouse_GUI extends javax.swing.JPanel {
         btnNhapSach.setColorClick(new java.awt.Color(153, 204, 255));
         btnNhapSach.setColorOver(new java.awt.Color(22, 113, 221));
         btnNhapSach.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        
         
         btnNhapSach.addActionListener(new ActionListener() {
 			
@@ -406,41 +408,70 @@ public class WareHouse_GUI extends javax.swing.JPanel {
 			}
 		});
         
-        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
+        
+        
+        btnSearch.setBackground(new Color(0, 255, 255));
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
+        btnSearch.setText("Search");
+        btnSearch.setToolTipText("");
+        btnSearch.setBorderColor(new java.awt.Color(22, 113, 221));
+        btnSearch.setColor(new java.awt.Color(22, 113, 221));
+        btnSearch.setColorClick(new java.awt.Color(153, 204, 255));
+        btnSearch.setColorOver(new java.awt.Color(22, 113, 221));
+        btnSearch.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	btnSearchActionPerformed(evt);
+            }
+        });
+
+       
+
+
+        
+        GroupLayout panelBorder1Layout = new GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnNhapSach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel7)
-                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
-                        .addComponent(spTable2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            panelBorder1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(panelBorder1Layout.createSequentialGroup()
+                    .addGap(20, 20, 20)
+                    .addGroup(panelBorder1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnNhapSach, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelBorder1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel7)
+                            .addGroup(panelBorder1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spTable, GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)
+                            .addComponent(spTable2)))
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap())
         );
         panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnNhapSach, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+            panelBorder1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(panelBorder1Layout.createSequentialGroup()
+                    .addContainerGap(17, Short.MAX_VALUE)
+                    .addGroup(panelBorder1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5, GroupLayout.Alignment.TRAILING)
+                        .addComponent(panelBorder_Basic1, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addGap(12, 12, 12)
+                    .addComponent(spTable, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel7)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(spTable2, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(btnNhapSach, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                    .addGap(20, 20, 20))
         );
+
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -473,102 +504,91 @@ public class WareHouse_GUI extends javax.swing.JPanel {
     public static boolean containsString(String text, String searchString) {
         return text.contains(searchString);
     }
-    public void timkiemNameStaff() {
-    	DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel(); // Lấy model của JTable
+   
+    
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
+        WareHouseSearch_Dialog dialog = new WareHouseSearch_Dialog(new javax.swing.JFrame(), true);
+            
+        dialog.getbtnTimKiem().addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                String condition = ""; // Chuỗi điều kiện tìm kiếm
 
-        String searchInput = txtTimKiem.getText().trim();
-        try {
-                        supplyCardDAO = new SupplyCardDAO(connectDB);
-			List<SupplyCardWithStaff> supplyCardWithStaffList = supplyCardDAO.searchByStaff(searchInput);
-			model.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
+                // Xây dựng điều kiện tìm kiếm từ các giá trị trong hộp thoại
+                if (dialog.getDate() != null) {
+                    condition = "supDate LIKE '%" + dialog.getDate() + "%'";
+                }
 
-			for (SupplyCardWithStaff supplyCardWithStaff : supplyCardWithStaffList) {
-			    // Tạo một mảng các Object chứa thông tin cần hiển thị
-			    Object[] rowData = {
-			        (model.getRowCount() + 1),
-			        supplyCardWithStaff.getSupply_Card().getSupDate(),
-			        supplyCardWithStaff.getSupply_Card().getProvider(),
-			        supplyCardWithStaff.getSupply_Card().getTongchi(),
-			        supplyCardWithStaff.getStaff().getName()
-			    };
-			    model.addRow(rowData);
-			}
-			if (supplyCardWithStaffList.isEmpty()) {
-				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Định dạng tìm kiếm không đúng (ghi rõ Họ Tên) hoặc dữ liệu đó không tồn tại.","Lỗi",JOptionPane.ERROR_MESSAGE);
+                if (!dialog.getSupplierName().isEmpty()) {
+                    if (!condition.isEmpty()) {
+                        condition += " AND ";
+                    }
+                    condition += "Supplier.name LIKE N'%" + dialog.getSupplierName() + "%'";
+                }
+
+                if (!dialog.getWarehouseStaff().isEmpty()) {
+                    if (!condition.isEmpty()) {
+                        condition += " AND ";
+                    }
+                    condition += "Staff.name LIKE N'%" + dialog.getWarehouseStaff() + "%'";
+                }
+
+                if (supplybll != null) {
+                    try {
+                        if (condition.isEmpty()) {
+                            supplybll.getAllTicket();
+                        } else {
+                            list = new Vector<SupplyCard>(supplybll.getByCondition(condition));
+                            loadSupplyCardList(list);
+                        }
+                        dialog.setVisible(false);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(new javax.swing.JFrame(), "Không thể tải dữ liệu !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
             }
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println(e);
-			JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Định dạng tìm kiếm không đúng (ghi rõ Họ Tên) hoặc dữ liệu đó không tồn tại.","Lỗi",JOptionPane.ERROR_MESSAGE);
+        });
+        dialog.setVisible(true);
+    }
+
+
+
+    
+    public void loadAll() {
+        DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel();
+		int selectedRow = tbLichSuNhapHang.getSelectedRow();
+		if (selectedRow >= 0) {
+		    Object ngayNhap = tbLichSuNhapHang.getValueAt(selectedRow, 1);
+
+		    // Chuyển đổi ngày nhập từ Object sang định dạng phù hợp để truy vấn cơ sở dữ liệu
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    String ngayNhapString = dateFormat.format(ngayNhap); // Định dạng ngày nhập
+
+		    // Gọi phương thức trong DAO để lấy danh sách chi tiết phiếu nhập dựa trên ngày nhập
+		    List<SupplyCardDetail> supplyCardDetails = supplyCardDetailDAO.getSupplyCardDetailsByDate(ngayNhapString);
+
+		    // Xóa các dòng hiện tại trong bảng tbChiTietPhieuNhap
+		    DefaultTableModel model2 = (DefaultTableModel) tbSach.getModel();
+		    model2.setRowCount(0);
+
+		    // Thêm các chi tiết phiếu nhập mới vào bảng tbChiTietPhieuNhap
+		    for (SupplyCardDetail detail : supplyCardDetails) {
+		        Object[] rowData = {
+		        		(Object)(model2.getRowCount()+1),
+		                detail.getScID(),
+		                detail.getISBN(),
+		                detail.getNum()
+		        };
+		        model2.addRow(rowData);
+		    }
 		}
     }
-    public void timkiemSupDate() {
-        DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel();
-        String searchInput = txtTimKiem.getText().trim();
-
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsedDate = sdf.parse(searchInput);
-            Timestamp selectedTimestamp = new Timestamp(parsedDate.getTime()); // Lấy thời gian từ ngày đã chọn
-            try {
-                supplyCardDAO = new SupplyCardDAO(connectDB);
-            } catch (SQLException ex) {
-                Logger.getLogger(WareHouse_GUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(WareHouse_GUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            List<SupplyCardWithStaff> supplyCardWithStaffList = supplyCardDAO.searchBySupDate(selectedTimestamp);
-            model.setRowCount(0);
-
-            for (SupplyCardWithStaff supplyCardWithStaff : supplyCardWithStaffList) {
-                Object[] rowData = {
-                    (model.getRowCount() + 1),
-                    supplyCardWithStaff.getSupply_Card().getSupDate(),
-                    supplyCardWithStaff.getSupply_Card().getProvider(),
-                    supplyCardWithStaff.getSupply_Card().getTongchi(),
-                    supplyCardWithStaff.getStaff().getName()
-                };
-                model.addRow(rowData);
-            }
-            // Kiểm tra nếu bảng trống rỗng
-            if (supplyCardWithStaffList.isEmpty()) {
-            	JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Định dạng tìm kiếm không đúng (ghi rõ yyyy-MM-dd) hoặc dữ liệu đó không tồn tại.","Lỗi",JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (ParseException e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Định dạng tìm kiếm không đúng (ghi rõ yyyy-MM-dd) hoặc dữ liệu đó không tồn tại.","Lỗi",JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-
-
-    public void loadAll() {
-        try {
-            DefaultTableModel model = (DefaultTableModel) tbLichSuNhapHang.getModel(); // Lấy model của JTable
-            supplyCardDAO = new SupplyCardDAO(connectDB);
-            String searchInput = txtTimKiem.getText().trim();
-            List<SupplyCardWithStaff> supplyCardWithStaffList = supplyCardDAO.getAllSupplyCardWithStaff();
-            model.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
-            
-            for (SupplyCardWithStaff supplyCardWithStaff : supplyCardWithStaffList) {
-                // Tạo một mảng các Object chứa thông tin cần hiển thị
-                Object[] rowData = {
-                    (model.getRowCount() + 1),
-                    supplyCardWithStaff.getSupply_Card().getSupDate(),
-                    supplyCardWithStaff.getSupply_Card().getProvider(),
-                    supplyCardWithStaff.getSupply_Card().getTongchi(),
-                    supplyCardWithStaff.getStaff().getName()
-                };
-                model.addRow(rowData);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(WareHouse_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(WareHouse_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private MyDesign.MyButton btnNhapSach;
+    private MyDesign.MyButton btnSearch;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -578,12 +598,13 @@ public class WareHouse_GUI extends javax.swing.JPanel {
     private javax.swing.JScrollPane spTable2;
     public MyDesign.MyTable tbSach;
     public MyDesign.MyTable tbLichSuNhapHang;
-    private MyDesign.SearchText txtTimKiem;
     private ConnectDB connectDB;
     // private SupplyCardDAO supplyCardDAO=new SupplyCardDAO(connectDB);
     private WareHouseImport_Dialog whid;
     private WareHouseSearch_Dialog whsdc;
     // private WareHouseScanner_Dialog whscd;
     private SupplyCardWithStaffBUS scws;
-    // End of variables declaration//GEN-END:variables
+    /**
+     * @wbp.nonvisual location=547,49
+     */
 }

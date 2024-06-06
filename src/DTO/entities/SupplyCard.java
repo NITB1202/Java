@@ -6,6 +6,9 @@ package DTO.entities;
 
 import java.sql.Timestamp;
 
+import DAO.StaffDAO;
+import DAO.SupplyCardDAO;
+
 /**
  *
  * @author WIN 10
@@ -16,13 +19,15 @@ public class SupplyCard {
 	private int provider;
 	private int staffID;
 	private long tongchi;
+	private String Suppliername;
+    private String Staffname;
 		
 	public SupplyCard(int id, Timestamp supDate, int provider, int staffID, long tongchi) {
 		super();
 		this.id = id;
 		this.supDate = supDate;
-		this.provider = provider;
-		this.staffID = staffID;
+		this.Suppliername = Suppliername;
+		this.Staffname = Staffname;
 		this.tongchi = tongchi;
 	}
 
@@ -30,6 +35,13 @@ public class SupplyCard {
 	{
 		super();
 	}
+	 public String getSuppliername() {
+	        return Suppliername;
+	    }
+
+	    public String getStaffname() {
+	        return Staffname;
+	    }
 	
 	public int getId() {
 		return id;
@@ -46,6 +58,8 @@ public class SupplyCard {
 	public void setSupDate(Timestamp supDate) {
 		this.supDate = supDate;
 	}
+	
+	
 
 	public int getProvider() {
 		return provider;
@@ -54,6 +68,15 @@ public class SupplyCard {
 	public void setProvider(int provider) {
 		this.provider = provider;
 	}
+	public void setSuppliername(String Suppliername) {
+        
+        this.Suppliername = Suppliername;
+    }
+
+    public void setStaffname(String Staffname) {
+        
+        this.Staffname = Staffname;
+    }
 
 	public int getStaffID() {
 		return staffID;

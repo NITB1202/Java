@@ -4,6 +4,9 @@
  */
 package DAO;
 
+import DTO.entities.SupplyCard;
+import DTO.entities.BorrowCard;
+import DTO.entities.SupplyCardDetail;
 import DTO.entities.Staff;
 import DTO.entities.SupplyCard;
 import DTO.entities.SupplyCardWithStaff;
@@ -17,7 +20,8 @@ import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Vector;
+import java.util.ArrayList;	
 
 /**
  *
@@ -25,6 +29,19 @@ import java.util.ArrayList;
  */
 public class SupplyCardDAO {
 // Các phương thức hiện có không thay đổi
+	 public static ConnectDB connectDB;
+	    public SupplyCardDAO(ConnectDB connectDB) throws SQLException, IOException{
+	            try {
+	                    this.connectDB = new ConnectDB();
+	            } catch (ClassNotFoundException e) {
+	                    // TODO Auto-generated catch block
+	                    e.printStackTrace();
+	            } catch (SQLException e) {
+	                    // TODO Auto-generated catch block
+	                    e.printStackTrace();
+	            }
+	            
+	    }
     
     // Thêm phương thức getProviderNameByID vào lớp SupplyCardDAO
     public static String getProviderNameByID(int providerID) {
@@ -49,19 +66,7 @@ public class SupplyCardDAO {
 
         return providerName;
     }
-    private static ConnectDB connectDB;
-    public SupplyCardDAO(ConnectDB connectDB) throws SQLException, IOException{
-            try {
-                    this.connectDB = new ConnectDB();
-            } catch (ClassNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-            } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-            }
-            
-    }
+   
     public SupplyCard getBySupDate(String supDate) {
         SupplyCard sc = null;
         String query = "SELECT supply_card.id, supply_card.supDate, supply_card.provider, supply_card.staffID, Staff.name " +
@@ -194,6 +199,29 @@ public class SupplyCardDAO {
         return result;
     }
     
+    public Vector<SupplyCard> getAll() throws SQLException {
+        Vector<SupplyCard> list = new Vector<>();
+        String query = "SELECT * FROM supply_card";
+
+        try (Connection connection = connectDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                SupplyCard sc = new SupplyCard();
+                sc.setId(resultSet.getInt("id"));
+                sc.setSupDate(resultSet.getTimestamp("supDate"));
+                sc.setProvider(resultSet.getInt("provider"));
+                sc.setStaffID(resultSet.getInt("staffID"));
+                sc.setTongchi(resultSet.getLong("feePaid"));
+                list.add(sc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
     public List<SupplyCardWithStaff> searchByStaff(String nameToSearch) {
         List<SupplyCardWithStaff> result = new ArrayList<>();
         
@@ -227,6 +255,36 @@ public class SupplyCardDAO {
 
         return list;
     }
+    
+    
+	    public Vector<SupplyCard> getByCondition(String condition) throws ClassNotFoundException, SQLException, IOException {
+	        Vector<SupplyCard> list = new Vector<>();
+	        connectDB.connect();
+	        if (connectDB.conn != null) {
+	            try {
+	            	String sql = "SELECT supply_card.*, supplier.name AS Suppliername, staff.name AS Staffname FROM supply_card, supplier, staff WHERE supply_card.providerID=supplier.id AND supply_card.staffID=staff.id AND " + condition;
+	                PreparedStatement stmt = connectDB.conn.prepareStatement(sql);
+	                ResultSet rs = stmt.executeQuery();
+	                while (rs.next()) {
+	                    SupplyCard obj = new SupplyCard();
+	                    obj.setId(rs.getInt("id"));
+	                    obj.setSupDate(rs.getTimestamp("supDate"));
+	                    obj.setSuppliername(rs.getNString("Suppliername"));
+	                    obj.setTongchi(rs.getInt("feePaid"));
+	                    obj.setStaffname(rs.getNString("Staffname"));
+	                    list.add(obj);
+	                }
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            } finally {
+	                connectDB.disconnect();
+	            }
+	        }
+	        return list;
+	    }
+
+
+
     public void disconnect() {
             try {
                  connectDB.disconnect();

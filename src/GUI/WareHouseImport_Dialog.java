@@ -58,6 +58,7 @@ import BUS.SupplyCardBUS;
 import BUS.WarehouseBUS;
 import DAO.BookAuthorDAO;
 import DAO.BookCategoryDAO;
+import DAO.BookDAO;
 import DAO.PublisherDAO;
 import DTO.entities.Account;
 import DTO.entities.Author;
@@ -148,7 +149,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         jLabel8_1 = new javax.swing.JLabel();
         jLabel8_2 = new javax.swing.JLabel();
         txtISBN = new MyDesign.MyTextField_Basic();
-        txtEdition = new MyDesign.MyTextField_Basic();
+        txtISBN.setEnabled(false);
+        txtISBN.setEditable(false);
         txtGia = new MyDesign.MyTextField_Basic();
         txtSoLuong = new MyDesign.MyTextField_Basic();
         author = new AuthorBUS();
@@ -158,6 +160,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         bB = new BookBUS();
         List<Book> bookList = bB.getAllName();
         cbSach = new javax.swing.JComboBox<>();
+        cbEdition = new JComboBox();
         publisher = new PublisherBUS();
         final List<Publisher> publisherList = publisher.getAllName();
         cbNXB = new javax.swing.JComboBox<>();
@@ -285,6 +288,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         bookAuthorDao = new BookAuthorDAO(null); // Khởi tạo đối tượng BookAuthorDao
         bookCategoryDao = new BookCategoryDAO(null);
         publisherDao = new PublisherDAO(null);
+        editionDao = new BookCategoryDAO(null);
+        isbnDao = new BookDAO(null);
         cbSach.addActionListener(new ActionListener() {
 			
 			@Override
@@ -340,13 +345,13 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                         //Tự động điền nhà xuất bản
                         List<String> publishers = publisherDao.getPublisherForBook(selectedValue);  // Gọi phương thức từ BookAuthorDao
                         
-                        // Khởi tạo một HashSet để lưu trữ các thể loại đã được thêm vào JComboBox
+                        // Khởi tạo một HashSet để lưu trữ các nhà xuất bản đã được thêm vào JComboBox
                         HashSet<String> addedPublishers = new HashSet<>();
 
-                        // Thêm các thể loại vào JComboBox
+                        // Thêm các nhà xuất bản vào JComboBox
                         DefaultComboBoxModel<String> publisherModel = new DefaultComboBoxModel<>();
                         for (String publisher : publishers) {
-                            // Kiểm tra xem thể loại đã được thêm vào JComboBox chưa
+                            // Kiểm tra xem nhà xuất bản đã được thêm vào JComboBox chưa
                             if (!addedPublishers.contains(publisher)) {
                                 // Nếu chưa, thêm vào JComboBox và cập nhật HashSet
                                 publisherModel.addElement(publisher);
@@ -354,8 +359,30 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                             }
                         }
 
-                        // Gán mô hình thể loại mới cho JComboBox
+                        // Gán mô hình nhà xuất bản mới cho JComboBox
                         cbNXB.setModel(publisherModel);
+                        
+                        
+                     // Tự động điền phiên bản
+                        List<String> editions = editionDao.getEditionsForBook(selectedValue);  // Gọi phương thức từ editionDao
+
+                        // Khởi tạo một HashSet để lưu trữ các phiên bản đã được thêm vào JComboBox
+                        HashSet<String> addedEditions = new HashSet<>();
+
+                        // Khởi tạo DefaultComboBoxModel
+                        DefaultComboBoxModel<String> editionModel = new DefaultComboBoxModel<>();
+
+                        // Thêm các phiên bản vào JComboBox
+                        for (String edition1 : editions) {
+                            if (!addedEditions.contains(edition1)) {
+                                editionModel.addElement(edition1);
+                                addedEditions.add(edition1);
+                            }
+                        }
+
+                        // Gán mô hình phiên bản mới cho JComboBox
+                        cbEdition.setModel(editionModel);
+                        
 						
 					} catch (SQLException e2) {
 						// TODO Auto-generated catch block
@@ -381,10 +408,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 					                // Gán ảnh đã thay đổi kích thước vào JLabel
 					                lbImageBook.setIcon(new javax.swing.ImageIcon(bufferedResizedImage));
 			                        txtISBN.setText(isbn);
-			                        txtEdition.setText(edition);
 			                        txtGia.setText(cost);
 			                        txtISBN.setEditable(false);
-			                        txtEdition.setEditable(false);
 			                        if(tacgia == null)
 			                        {
 			                        	JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Tác phẩm này bị thiếu phần tác giả","Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -400,6 +425,14 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			                        	addToComboBoxCheckTl(theloai);
 					                    cbTheLoai.setSelectedItem(theloai);
 					                    cbTheLoai.setEnabled(false);
+			                        }
+			                        if(edition == null)
+			                        {
+			                        	JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Tác phẩm này bị thiếu phần phiên bản","Thông báo", JOptionPane.INFORMATION_MESSAGE);
+			                        }else {
+			                        	addToComboBoxCheckTl(edition);
+					                    cbEdition.setSelectedItem(edition);
+					                    cbEdition.setEnabled(false);
 			                        }
 	 
 			                        cbNXB.setSelectedItem(nxb);
@@ -419,8 +452,33 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 					 }
                 }
 			}
-		});      
-        
+		});
+        JTextField txtISBNList = new JTextField(20); // Độ dài 20 ký tự, bạn có thể điều chỉnh tùy ý
+        cbEdition.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedValue = String.valueOf(cbEdition.getSelectedItem());
+                if (selectedValue != null) {
+                    try {
+                        // Lấy danh sách mã ISBN cho cuốn sách đã chọn từ cơ sở dữ liệu
+                        List<String> isbns = isbnDao.getISBNForBook(selectedValue);
+
+                        // Hiển thị danh sách mã ISBN trong JTextField
+                        StringBuilder isbnList = new StringBuilder();
+                        for (String isbn : isbns) {
+                            isbnList.append(isbn).append(", "); // Thêm mã ISBN vào chuỗi với dấu phân cách
+                        }
+                        // Loại bỏ dấu phân cách ở cuối và đặt giá trị vào JTextField
+                        txtISBN.setText(isbnList.toString().replaceAll(", $", ""));
+
+                        
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
         txtGia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         txtGia.setFont(new java.awt.Font("SansSerif", 1, 13));
         
@@ -429,7 +487,12 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         txtSoLuong.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         txtSoLuong.setFont(new java.awt.Font("SansSerif", 1, 13));
         
-      
+        cbEdition.setBackground(new java.awt.Color(246, 250, 255));
+        cbEdition.setFont(new java.awt.Font("SansSerif", 0, 14));
+        cbEdition.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+        cbEdition.setOpaque(true);
+        cbEdition.setPreferredSize(new java.awt.Dimension(77, 28));
+        
         
         cbTacGia.setBackground(new java.awt.Color(246, 250, 255));
         cbTacGia.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
@@ -559,10 +622,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         lbThemTheLoai.setVisible(false);
         
         jLabel8_1.setText("Edition");
-        jLabel8_1.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
-        
-        txtEdition.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
-        txtEdition.setFont(new java.awt.Font("SansSerif", 1, 13));
+        jLabel8_1.setFont(new java.awt.Font("SansSerif", 1, 13));
         
         jLabel8_2.setText("ISBN");
         jLabel8_2.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
@@ -594,7 +654,6 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 					{
 						String img = supplyCard.getByImgFromISBN(isbn);
 						String book = supplyCard.getNameBook(isbn);
-						String edition = supplyCard.getByEditionFromISBN(isbn);
 						String cost = String.valueOf(supplyCard.getByCostFromISBN(isbn));
 						String tacgia = author.getByName(isbn);
 						String theloai = category.getByName(isbn);
@@ -626,10 +685,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 						                // Gán ảnh đã thay đổi kích thước vào JLabel
 						                lbImageBook.setIcon(new javax.swing.ImageIcon(bufferedResizedImage));
 				                        txtISBN.setText(isbn);
-				                        txtEdition.setText(edition);
 				                        txtGia.setText(cost);
 				                        txtISBN.setEditable(false);
-				                        txtEdition.setEditable(false);
 				                        if(tacgia == null)
 				                        {
 				                        	JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Tác phẩm này bị thiếu phần tác giả","Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -637,6 +694,14 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 				                        	addToComboBoxCheckTg(tacgia);
 						                    cbTacGia.setSelectedItem(tacgia);
 						                    cbTacGia.setEnabled(false);
+				                        }
+				                        if(edition == null)
+				                        {
+				                        	JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Tác phẩm này bị thiếu phần phiên bản","Thông báo", JOptionPane.INFORMATION_MESSAGE);
+				                        }else {
+				                        	addToComboBoxCheckTg(edition);
+						                    cbEdition.setSelectedItem(edition);
+						                    cbEdition.setEnabled(false);
 				                        }
 				                        if(theloai == null)
 				                        {
@@ -682,6 +747,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 				}
 			}
 		});
+        
               
         
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
@@ -690,63 +756,60 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         		.addGroup(panelBorder2Layout.createSequentialGroup()
         			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
         				.addGroup(panelBorder2Layout.createSequentialGroup()
+        					.addContainerGap()
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
         						.addGroup(panelBorder2Layout.createSequentialGroup()
-        							.addContainerGap()
+        							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(jLabel2)
+        								.addComponent(jLabel4)
+        								.addComponent(jLabel5))
+        							.addGap(16)
+        							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING)
+        								.addComponent(txtGia, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+        								.addComponent(txtSoLuong, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+        								.addGroup(panelBorder2Layout.createSequentialGroup()
+        									.addComponent(cbTheLoai, 0, 149, Short.MAX_VALUE)
+        									.addPreferredGap(ComponentPlacement.RELATED)
+        									.addComponent(lbThemTheLoai, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
+        						.addGroup(panelBorder2Layout.createSequentialGroup()
+        							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(jLabel6)
+        								.addComponent(jLabel8)
+        								.addComponent(jLabel7))
+        							.addGap(18)
         							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
         								.addGroup(panelBorder2Layout.createSequentialGroup()
+        									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING, false)
+        										.addComponent(cbTacGia, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        										.addComponent(cbNXB, 0, 149, Short.MAX_VALUE))
+        									.addPreferredGap(ComponentPlacement.RELATED)
         									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        										.addComponent(jLabel2)
-        										.addComponent(jLabel4)
-        										.addComponent(jLabel5))
-        									.addGap(16)
-        									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        										.addComponent(txtGia, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-        										.addComponent(txtSoLuong, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-        										.addGroup(Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-        											.addComponent(cbTheLoai, 0, 149, Short.MAX_VALUE)
-        											.addPreferredGap(ComponentPlacement.RELATED)
-        											.addComponent(lbThemTheLoai, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))))
-        								.addGroup(panelBorder2Layout.createSequentialGroup()
-        									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        										.addComponent(jLabel6)
-        										.addComponent(jLabel8)
-        										.addComponent(jLabel7))
-        									.addGap(18)
-        									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        										.addGroup(panelBorder2Layout.createSequentialGroup()
-        											.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING, false)
-        												.addComponent(cbTacGia, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        												.addComponent(cbNXB, 0, 149, Short.MAX_VALUE))
-        											.addPreferredGap(ComponentPlacement.RELATED)
-        											.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        												.addComponent(lbThemTacGia, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-        												.addComponent(lbThemNXB, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
-        										.addComponent(cbSach, 0, 188, Short.MAX_VALUE)))))
+        										.addComponent(lbThemTacGia, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+        										.addComponent(lbThemNXB, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+        								.addComponent(cbSach, 0, 188, Short.MAX_VALUE)))
         						.addGroup(panelBorder2Layout.createSequentialGroup()
-        							.addContainerGap()
         							.addComponent(jLabel8_1, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
         							.addGap(18)
-        							.addComponent(txtEdition, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+        							.addComponent(cbEdition, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED, 112, Short.MAX_VALUE))
         						.addGroup(panelBorder2Layout.createSequentialGroup()
-        							.addContainerGap()
         							.addComponent(jLabel8_2, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
         							.addGap(18)
         							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
         								.addComponent(pnImageBook, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-        								.addComponent(txtISBN, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))))
+        								.addComponent(txtISBN, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE))))
         					.addPreferredGap(ComponentPlacement.RELATED)
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING)
-        						.addComponent(btnXoaTgia, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-        						.addComponent(btnXoaTL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-        						.addComponent(btnThemSach, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)))
+        						.addComponent(btnXoaTgia, GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+        						.addComponent(btnXoaTL, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+        						.addComponent(btnThemSach, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         				.addGroup(panelBorder2Layout.createSequentialGroup()
         					.addGap(25)
         					.addComponent(btnLuuThongTin, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)))
         			.addContainerGap())
         );
         panelBorder2Layout.setVerticalGroup(
-        	panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        	panelBorder2Layout.createParallelGroup(Alignment.TRAILING)
         		.addGroup(panelBorder2Layout.createSequentialGroup()
         			.addGap(14)
         			.addComponent(pnImageBook, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -759,15 +822,15 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         						.addComponent(jLabel8_2, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
         					.addPreferredGap(ComponentPlacement.UNRELATED)
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
-        						.addComponent(txtEdition, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-        						.addComponent(jLabel8_1, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)))
+        						.addComponent(jLabel8_1, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(cbEdition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
         				.addGroup(panelBorder2Layout.createSequentialGroup()
         					.addGap(102)
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
         						.addComponent(jLabel8)
         						.addComponent(btnThemSach, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
         						.addComponent(cbSach, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))))
-        			.addPreferredGap(ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+        			.addPreferredGap(ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
         			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING)
         				.addGroup(panelBorder2Layout.createSequentialGroup()
         					.addGap(36)
@@ -777,9 +840,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         							.addComponent(jLabel6))
         						.addComponent(lbThemNXB, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
         					.addGap(18)
-        					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        						.addComponent(lbThemTheLoai, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-        						.addGroup(Alignment.TRAILING, panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
+        					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING)
+        						.addComponent(lbThemTheLoai, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+        						.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
         							.addComponent(cbTheLoai, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
         							.addComponent(jLabel5))))
         				.addGroup(panelBorder2Layout.createSequentialGroup()
@@ -796,14 +859,14 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         			.addGap(47)
         			.addComponent(btnLuuThongTin, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         			.addGap(30))
-        		.addGroup(Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-        			.addContainerGap(372, Short.MAX_VALUE)
-        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING, false)
-        				.addComponent(btnXoaTgia, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        				.addGroup(Alignment.TRAILING, panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
+        		.addGroup(panelBorder2Layout.createSequentialGroup()
+        			.addContainerGap(370, Short.MAX_VALUE)
+        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING, false)
+        				.addComponent(btnXoaTgia, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
         					.addComponent(cbTacGia, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         					.addComponent(jLabel7))
-        				.addComponent(lbThemTacGia, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+        				.addComponent(lbThemTacGia, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
         			.addGap(289))
         );
         panelBorder2.setLayout(panelBorder2Layout);
@@ -819,7 +882,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "STT", "ISBN", "Tên sách", "Tác giả", "Tái Bản", "NXB", "Thể loại", "Giá", "Số lượng","Ảnh"
+                "STT", "ISBN", "Tên sách", "Tác giả", "Tái Bản", "NXB", "Thể loại", "Giá", "Số lượng"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -841,23 +904,17 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			public void actionPerformed(ActionEvent e) {
 			    // TODO: Kiểm tra các trường nhập liệu trước khi thêm vào bảng
 				int errorCount = 0;
-			    edition = txtEdition.getText();
 			    gia = txtGia.getText();
 			    soluong = txtSoLuong.getText();
 			    isbn = txtISBN.getText();
 
-			    if (isTextFieldEmpty(txtEdition) || isComboBoxEmpty(cbSach) || isTextFieldEmpty(txtGia) || isTextFieldEmpty(txtSoLuong) || isComboBoxEmpty(cbTacGia) || isComboBoxEmpty(cbNXB) || isComboBoxEmpty(cbTheLoai) || isComboBoxEmpty(cbNhaCungCap)) {
+			    if ( isComboBoxEmpty(cbSach) || isTextFieldEmpty(txtGia) || isTextFieldEmpty(txtSoLuong) || isComboBoxEmpty(cbTacGia) || isComboBoxEmpty(cbNXB) || isComboBoxEmpty(cbTheLoai) || isComboBoxEmpty(cbNhaCungCap)||isComboBoxEmpty(cbEdition)) {
 			        JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Vui lòng kiểm tra đầy đủ thông tin.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
 			        errorCount++;
 			    } else {
 			        // Kiểm tra số lượng > 0
 			        if (Integer.parseInt(soluong) <= 0) {
 			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Số lượng phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-			            errorCount++;
-			        } 
-			        // Kiểm tra phiên bản > 0
-			        else if (Integer.parseInt(edition) <= 0) {
-			            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Phiên bản phải lớn hơn 0.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
 			            errorCount++;
 			        } 
 			        // Kiểm tra giá > 19000
@@ -871,6 +928,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			        	DefaultTableModel model = (DefaultTableModel) tbSachDuocNhap.getModel();
 			            tensach = String.valueOf(cbSach.getSelectedItem());
 			            tgia = String.valueOf(cbTacGia.getSelectedItem());
+			            edition = String.valueOf(cbEdition.getSelectedItem());
 			            nxb = String.valueOf(cbNXB.getSelectedItem());
 			            theloai = String.valueOf(cbTheLoai.getSelectedItem());
 			            ncc = String.valueOf(cbNhaCungCap.getSelectedItem());
@@ -881,11 +939,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 			            txtTongChi.setText(String.valueOf(tongchi+"đ"));
 			            lbImageBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/AddImage.png")));
 			            txtISBN.setText("");
-			            txtEdition.setText("");
 			            txtGia.setText("");
 			            txtSoLuong.setText("");
 			            txtISBN.setEditable(true);
-			            txtEdition.setEditable(true);
 			            cbTacGia.setEnabled(true);
 			            cbTheLoai.setEnabled(true);
 			            cbNXB.setEnabled(true);
@@ -931,17 +987,16 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 					}
 					txtGia.setEditable(true);
 					txtSoLuong.setEditable(true);
-					txtEdition.setEditable(true);
 					txtISBN.setEditable(true);
 					cbNXB.setEnabled(true);
 					cbSach.setEnabled(true);
+					cbEdition.setEnabled(true);
 					cbTacGia.setEnabled(true);
 					cbTheLoai.setEnabled(true);
 					cbNhaCungCap.setEnabled(true);
 					cbSach.setEnabled(true);
 					txtGia.setText("");
 					txtSoLuong.setText("");
-					txtEdition.setText("");
 					txtISBN.setText("");
 				}
 			}
@@ -955,15 +1010,14 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 				cbSach.setEnabled(true);
 				txtGia.setEditable(true);
 				txtSoLuong.setEditable(true);
-				txtEdition.setEditable(true);
 				txtISBN.setEditable(true);
 				cbNXB.setEnabled(true);
 				cbNhaCungCap.setEnabled(true);
 				cbTacGia.setEnabled(true);
 				cbTheLoai.setEnabled(true);
+				cbEdition.setEnabled(true);
 				txtGia.setText("");
 				txtSoLuong.setText("");
-				txtEdition.setText("");
 				txtISBN.setText("");
 			}
 		});
@@ -1004,12 +1058,12 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     			            txtGia.setEditable(false);
     			            txtSoLuong.setText(String.valueOf(sl));
     			            txtSoLuong.setEditable(false);
-        					txtEdition.setText(String.valueOf(ed));
-        					txtEdition.setEditable(false);
         					txtISBN.setText(String.valueOf(isbn));
         					txtISBN.setEditable(false);
         					
         					cbSach.setSelectedItem(sach);
+        					cbSach.setEnabled(false);
+        					cbSach.setSelectedItem(ed);
         					cbSach.setEnabled(false);
         					cbTacGia.setSelectedItem(tg);
         					cbTacGia.setEnabled(false);
@@ -1288,9 +1342,9 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 					    txtTongChi.setText(tongchi+"đ");
 					    cbTacGia.removeAllItems();
 					    cbTheLoai.removeAllItems();
+					    cbEdition.removeAllItems();
 					    txtGia.setText("");
 						txtSoLuong.setText("");
-						txtEdition.setText("");
 						txtISBN.setText("");
 					} catch (ClassNotFoundException | SQLException | IOException | NumberFormatException e1) {
 						 boolean hasEmpty = hasEmptyCell(tbSachDuocNhap);
@@ -1549,6 +1603,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     protected javax.swing.JComboBox<String> cbTacGia;
     protected javax.swing.JComboBox<String> cbTheLoai;
     protected javax.swing.JComboBox<String> cbSach;
+    protected javax.swing.JComboBox<String> cbEdition;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -1577,6 +1632,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     private BookAuthorDAO bookAuthorDao;
     private BookCategoryDAO bookCategoryDao;
     private PublisherDAO publisherDao;
+    private BookCategoryDAO editionDao;
+    private BookDAO isbnDao;
     protected MyDesign.MyTextField_Basic txtGia;
     protected MyDesign.MyTextField_Basic txtSoLuong;
     private javax.swing.JLabel txtTongChi;
@@ -1595,7 +1652,6 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     protected String tgia, nxb, ncc, theloai, edition, isbn, anh;
     protected Icon img;
     private Date supDate;
-    protected MyDesign.MyTextField_Basic txtEdition;
     protected MyDesign.MyTextField_Basic txtISBN;
     protected WarehouseBUS cB = new WarehouseBUS();
     protected SupplyCardBUS scB = new SupplyCardBUS() ;
@@ -1604,5 +1660,5 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     protected SupplierBUS spB = new SupplierBUS();
     protected WareHouseScanner_Dialog whs;
     protected WareHouseAddReader_Dialog whr;
-    protected JButton btnThemSach = new JButton("+");;
+    protected JButton btnThemSach = new JButton("+");
 }
