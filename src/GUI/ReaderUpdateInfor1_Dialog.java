@@ -30,6 +30,7 @@ import DTO.entities.Account;
 import DTO.entities.Reader;
 import DTO.entities.BorrowCard;
 import java.util.ArrayList;
+import java.awt.Toolkit;
 
 public class ReaderUpdateInfor1_Dialog extends JDialog {
 
@@ -47,6 +48,7 @@ public class ReaderUpdateInfor1_Dialog extends JDialog {
      */
     public ReaderUpdateInfor1_Dialog(Account user, java.awt.Frame parent, boolean modal,int id,MyDesign.MyTable tab) throws ClassNotFoundException, SQLException, IOException {
         super(parent, modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ReaderUpdateInfor1_Dialog.class.getResource("/Images/logo.png")));
         readerBUS =new ReaderBUS();
         this.user = user;
         this.rolePermissionBUS = new RolePermissionBUS();
@@ -180,27 +182,29 @@ public class ReaderUpdateInfor1_Dialog extends JDialog {
         btnSuaThongTin.addActionListener(new ActionListener() {
           	 @Override
          	public void actionPerformed(ActionEvent e){
-           		String name=txtTen.getText().trim();
-      		    String tel=txtSoDienThoai.getText().trim();
-      		    String address=txtDiaChi.getText().trim();
-      		    try {
- 						if(!a.compare(name, tel, address)) {
- 							int diaRS=JOptionPane.showConfirmDialog(null,"Bạn có chắc muốn sửa thông tin độc giả này?");
- 							if(diaRS==JOptionPane.YES_OPTION){
- 	 		 					if(checkDataVal(name,tel,address,a.getPersonID())) {
- 		 							a.setName(name);
- 		 							a.setTel(tel);
- 		 							a.setAddress(address);
- 		 							JOptionPane.showMessageDialog(null,readerBUS.updateOneReader(a));
- 		 							addDefault(tab);
- 		 							dispose();
- 	 		 					}
- 							}
- 						}
- 				} catch (Exception e1) {
- 					// TODO Auto-generated catch block
- 					JOptionPane.showMessageDialog(null,e1.getMessage());
- 				}
+          		 String name = txtTen.getText().trim();
+                 String tel = txtSoDienThoai.getText().trim();
+                 String address = txtDiaChi.getText().trim();
+                 
+                 try {
+                     if (!a.compare(name, tel, address)) {
+                         Object[] options = { "Yes", "No" };
+                         int diaRS = JOptionPane.showOptionDialog(null, "Bạn có chắc muốn sửa thông tin độc giả này?", "Xác nhận", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+                         if (diaRS == JOptionPane.YES_OPTION) {
+                             if (checkDataVal(name, tel, address, a.getPersonID())) {
+                                 a.setName(name);
+                                 a.setTel(tel);
+                                 a.setAddress(address);
+                                 JOptionPane.showMessageDialog(null, readerBUS.updateOneReader(a));
+                                 addDefault(tab);
+                                 dispose();
+                             }
+                         }
+                     }
+                 } catch (Exception e1) {
+                     JOptionPane.showMessageDialog(null, e1.getMessage());
+                 }
         	 }
           });
 
@@ -308,7 +312,7 @@ public class ReaderUpdateInfor1_Dialog extends JDialog {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nav-reader.png"))); // NOI18N
-        jLabel3.setText("Thông tin chi tiết");
+        jLabel3.setText("Chi tiết độc giả");
 
         javax.swing.GroupLayout panelBorder_Statistic_Blue1Layout = new javax.swing.GroupLayout(panelBorder_Statistic_Blue1);
         panelBorder_Statistic_Blue1.setLayout(panelBorder_Statistic_Blue1Layout);
@@ -401,6 +405,4 @@ public class ReaderUpdateInfor1_Dialog extends JDialog {
     private MyDesign.MyTextField_Basic txtDiaChi;
     private MyDesign.MyTextField_Basic txtSoDienThoai;
     private MyDesign.MyTextField_Basic txtTen;
-    // End of variables declaration//GEN-END:variables
-
 }

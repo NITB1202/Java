@@ -34,6 +34,8 @@ public class WareHouseAddSach_Dialog extends javax.swing.JDialog {
         WareHouseAddSach_Dialog.nameFrame = nameFrame;
         initComponents();
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

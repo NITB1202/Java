@@ -249,7 +249,7 @@ public class Reader1_GUI extends JPanel {
 	                String cellValue = tbDanhSachDocGia.getValueAt(row, 1).toString();
 	                int cellVal = Integer.parseInt(cellValue);
 	                try {
-	                    ReaderUpdateInfor_Dialog ruid = new ReaderUpdateInfor_Dialog(this.user, new javax.swing.JFrame(), true, cellVal, tbDanhSachDocGia);
+	                    ReaderUpdateInfor1_Dialog ruid = new ReaderUpdateInfor1_Dialog(this.user, new javax.swing.JFrame(), true, cellVal, tbDanhSachDocGia);
 	                    ruid.setVisible(true);
 	                } catch (Exception ex) {
 	                    JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -269,7 +269,7 @@ public class Reader1_GUI extends JPanel {
 
 	    private void btnDocGiaMoiActionPerformed(java.awt.event.ActionEvent evt) {
 	        try {
-	            ReaderAdd_Dialog rad = new ReaderAdd_Dialog(new javax.swing.JFrame(), true, tbDanhSachDocGia);
+	            ReaderAdd1_Dialog rad = new ReaderAdd1_Dialog(new javax.swing.JFrame(), true, tbDanhSachDocGia);
 	            rad.setVisible(true);
 	        } catch (Exception ex) {
 	            JOptionPane.showMessageDialog(null, ex.getMessage());

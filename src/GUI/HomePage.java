@@ -106,14 +106,14 @@ public class HomePage extends javax.swing.JFrame {
                 } 
                 else if (index == 6 && homePageBUS.hasPerAccess(user.getRoleID(), 6)) {
                     try {
-                        setForm(new Reader_GUI(user));
+                        setForm(new Reader1_GUI(user));
                     } catch (Exception ex) {
                         Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } 
                 else if (index == 5 && homePageBUS.hasPerAccess(user.getRoleID(), 5)) {
                     try {
-                        setForm(new Book_GUI(user));
+                        setForm(new Book1_GUI(user));
                     } catch (SQLException ex) {
                         Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -166,7 +166,7 @@ public class HomePage extends javax.swing.JFrame {
                 throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         });
-        setForm(new Book1_GUI(user));
+        setForm(new Reader1_GUI(user));
 
     }
   

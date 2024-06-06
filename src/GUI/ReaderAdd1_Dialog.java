@@ -18,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
+import java.awt.Toolkit;
 
 public class ReaderAdd1_Dialog extends JDialog {
 
@@ -26,91 +27,46 @@ public class ReaderAdd1_Dialog extends JDialog {
 
 	 ReaderBUS readerBUS;    
 	 MyDesign.MyTable tab;
-	 
-	  public ReaderAdd1_Dialog(JFrame parent, boolean modal, MyDesign.MyTable tab) throws ClassNotFoundException, SQLException {
+	 public ReaderAdd1_Dialog(java.awt.Frame parent, boolean modal,MyDesign.MyTable tab) throws ClassNotFoundException, SQLException {
 	        super(parent, modal);
+	        setIconImage(Toolkit.getDefaultToolkit().getImage(ReaderAdd1_Dialog.class.getResource("/Images/logo.png")));
 	        readerBUS = new ReaderBUS();
 	        this.tab = tab;
 	        initComponents();
 	    }
-	  
-	  public void addDefault(MyDesign.MyTable tab) throws Exception {
-	        tab.setRowCount(0);
-	        Vector<Reader> arr = readerBUS.getAll();
-	        for (int i = 0; i < arr.size(); i++) {
-	            Reader acc = arr.get(i);
-	            int id = acc.getPersonID();
-	            String name = acc.getName();
-	            String tel = acc.getTel();
-	            String address = acc.getAddress();
-	            LocalDate fineDate = acc.getFineDate();
-	            Integer isLocked = acc.getStatus();
-	            String isL = "Mở";
-	            if (isLocked == 1) {
-	                isL = "Khoá";
+	    public void addDefault(MyDesign.MyTable tab) throws Exception{
+	    	tab.setRowCount(0);
+	        Vector<Reader> arr=readerBUS.getAll();
+	        for(int i=0;i<arr.size();i++){
+	            Reader acc=arr.get(i);
+	            int id=acc.getPersonID();
+	            String name=acc.getName();
+	            String tel=acc.getTel();
+	            String address=acc.getAddress();
+	            LocalDate fineDate=acc.getFineDate();
+	            Integer isLocked= acc.getStatus();
+	            String isL="Mở";
+	            if(isLocked == 1){
+	                isL="Khoá";
 	            }
-	            long daysBetween = 0; 
-	            if (fineDate != null) {
-	                LocalDate cuDate = LocalDate.now();
-	                daysBetween = ChronoUnit.DAYS.between(cuDate, fineDate);
+	            long daysBetween=0; 
+	            if(fineDate!=null) {
+		            LocalDate cuDate=LocalDate.now();
+		            daysBetween = ChronoUnit.DAYS.between(cuDate, fineDate);
 	            }        
-	            Object row[] = {i + 1, id, name, tel, address, daysBetween, isL};
+	            Object row[] = {i+1,id,name,tel,address,daysBetween,isL};
 	            tab.addRow(row);
 	        }
 	    }
-
-	    public boolean checkDataVal(String name, String tel, String address) throws HeadlessException, FileNotFoundException, ClassNotFoundException, IOException, SQLException {
-	        if (name.equals("")) {
-	            JOptionPane.showMessageDialog(null, "Họ và tên không được để trống");
-	            txtTen.requestFocus();
-	            return false;
-	        }
-	        String nameReg = "^[\\p{L} \\.'\\-]+$";
-	        if (!name.matches(nameReg)) {
-	            JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ");
-	            txtTen.requestFocus();
-	            return false;
-	        }
-	        if (tel.equals("")) {
-	            JOptionPane.showMessageDialog(null, "Số điện thoại không được để trống");
-	            txtSoDienThoai.requestFocus();
-	            return false;
-	        }
-	        if (!readerBUS.checkTel(tel)) {
-	            JOptionPane.showMessageDialog(null, "Số điện thoại đã có trong dữ liệu");
-	            txtSoDienThoai.requestFocus();
-	            return false;
-	        }
-	        String telReg = "^0[1-9][0-9]{8}$";
-	        if (!tel.matches(telReg)) {
-	            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-	            txtSoDienThoai.requestFocus();
-	            return false;
-	        }
-	        if (address.equals("")) {
-	            JOptionPane.showMessageDialog(null, "Địa chỉ không được để trống");
-	            txtDiaChi.requestFocus();
-	            return false;
-	        }
-	        return true;
-	    }
-
-	    private void btnThemDocGiaActionPerformed(java.awt.event.ActionEvent evt) {
-	        String name = txtTen.getText().trim();
-	        String tel = txtSoDienThoai.getText().trim();
-	        String address = txtDiaChi.getText().trim();
-	        try {
-	            if (checkDataVal(name, tel, address)) {
-	                JOptionPane.showMessageDialog(null, readerBUS.addReader(new Reader(name, tel, address)));
-	                addDefault(tab);
-	                dispose();
-	            }
-	        } catch (Exception e1) {
-	            JOptionPane.showMessageDialog(null, e1.getMessage());
-	        }
-	    }
-
+	    /**
+	     * This method is called from within the constructor to initialize the form.
+	     * WARNING: Do NOT modify this code. The content of this method is always
+	     * regenerated by the Form Editor.
+	     */
+	    @SuppressWarnings("unchecked")
+	    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
 	    private void initComponents() {
+
 	        panelBorder_Statistic_Blue1 = new MyDesign.PanelBorder_Statistic_Blue();
 	        panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
 	        jLabel8 = new javax.swing.JLabel();
@@ -234,55 +190,106 @@ public class ReaderAdd1_Dialog extends JDialog {
 
 	        pack();
 	        setLocationRelativeTo(null);
+	    }// </editor-fold>//GEN-END:initComponents
+	    public boolean checkDataVal(String name,String tel,String address) throws HeadlessException, FileNotFoundException, ClassNotFoundException, IOException, SQLException {
+	    	if(name.equals("")) {
+	    		JOptionPane.showMessageDialog(null,"Họ và tên không được để trống");
+	    		txtTen.requestFocus();
+	    		return false;
+	    	}
+	    	String nameReg = "^[\\p{L} \\.'\\-]+$";
+	    	if(!name.matches(nameReg)) {
+	    		JOptionPane.showMessageDialog(null,"Họ tên không hợp lệ");
+	    		txtTen.requestFocus();
+	    		return false;
+	    	}
+	    	if(tel.equals("")) {
+	    		JOptionPane.showMessageDialog(null,"Số điện thoại không được để trống");
+	    		txtSoDienThoai.requestFocus();
+	    		return false;
+	    	}
+	    	if(!readerBUS.checkTel(tel)) {
+	    		JOptionPane.showMessageDialog(null,"Số điện thoại đã có trong dữ liệu");
+	    		txtSoDienThoai.requestFocus();
+	    		return false;
+	    	}
+	    	String telReg = "^0[1-9][0-9]{8}$";
+	    	if(!tel.matches(telReg)) {
+	    		JOptionPane.showMessageDialog(null,"Số điện thoại không hợp lệ");
+	    		txtSoDienThoai.requestFocus();
+	    		return false;
+	    	}
+	    	if(address.equals("")) {
+	    		JOptionPane.showMessageDialog(null,"Địa chỉ không được để trống");
+	    		txtDiaChi.requestFocus();
+	    		return false;
+	    	}
+	    	return true;
+	    }
+	    private void btnThemDocGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemDocGiaActionPerformed
+	        String name=txtTen.getText().trim();
+	        String tel=txtSoDienThoai.getText().trim();
+	        String address=txtDiaChi.getText().trim();
+	        try {
+	            if(checkDataVal(name,tel,address)) {
+	                    JOptionPane.showMessageDialog(null,readerBUS.addReader(new Reader(name,tel,address)));
+	                    addDefault(tab);
+	                    dispose();
+	            }
+	        } catch (Exception e1) {
+	                // TODO Auto-generated catch block
+	                JOptionPane.showMessageDialog(null,e1.getMessage());
+	        }
+	    }//GEN-LAST:event_btnThemDocGiaActionPerformed
+
+	    /**
+	     * @param args the command line arguments
+	     */
+	    public static void main(String args[]) {
+	        /* Set the Nimbus look and feel */
+	        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+	         */
+	        try {
+	            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+	                if ("Nimbus".equals(info.getName())) {
+	                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+	                    break;
+	                }
+	            }
+	        } catch (ClassNotFoundException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (InstantiationException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (IllegalAccessException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        }
+	        //</editor-fold>
+	        //</editor-fold>
+	        /* Create and display the dialog */
+	        try {
+	            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+	                if ("Nimbus".equals(info.getName())) {
+	                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+	                    break;
+	                }
+	            }
+	        } catch (ClassNotFoundException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (InstantiationException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (IllegalAccessException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+	            java.util.logging.Logger.getLogger(ReaderAdd_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        }
 	    }
 
-	    
-	public static void main(String[] args) {
-		java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    ReaderAdd_Dialog dialog = new ReaderAdd_Dialog(new javax.swing.JFrame(), true, new MyDesign.MyTable());
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                } catch (ClassNotFoundException | SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public ReaderAdd1_Dialog() {
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
-	}
-	 private MyDesign.MyButton btnThemDocGia;
+	    // Variables declaration - do not modify//GEN-BEGIN:variables
+	    private MyDesign.MyButton btnThemDocGia;
 	    private javax.swing.JLabel jLabel10;
 	    private javax.swing.JLabel jLabel3;
 	    private javax.swing.JLabel jLabel8;

@@ -21,6 +21,12 @@ import MyDesign.ScrollBar;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import MyDesign.MyButton;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 public class Book1_GUI extends JPanel {
 
@@ -76,11 +82,11 @@ public class Book1_GUI extends JPanel {
 
             },
             new String [] {
-                "STT", "Mã sách", "Tên sách", "Nhà xuất bản", "Phiên bản", "Số lương"
+                "STT", "Tên sách", "Tác giả", "Phiên bản", "Số lương tồn"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -122,24 +128,64 @@ public class Book1_GUI extends JPanel {
         			.addContainerGap())
         );
         panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
+        
+        
+        MyButton btnThemSach = new MyButton();
+        btnThemSach.setIcon(new ImageIcon(Book1_GUI.class.getResource("/Images/action-add-white.png")));
+        btnThemSach.addActionListener(new ActionListener() {
+        	
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        	    try {
+        	        BookImport_Dialog rad = new BookImport_Dialog(new javax.swing.JFrame(), true);
+        	        rad.setVisible(true);
+        	    } catch (IOException ex) {
+        	        // Xử lý ngoại lệ IOException
+        	        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra trong quá trình nhập dữ liệu: " + ex.getMessage(), "Lỗi IO", JOptionPane.ERROR_MESSAGE);
+        	    } catch (SQLException ex) {
+        	        // Xử lý ngoại lệ SQLException
+        	        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi truy cập cơ sở dữ liệu: " + ex.getMessage(), "Lỗi Cơ Sở Dữ Liệu", JOptionPane.ERROR_MESSAGE);
+        	    } catch (ClassNotFoundException ex) {
+        	        // Xử lý ngoại lệ ClassNotFoundException
+        	        JOptionPane.showMessageDialog(null, "Không tìm thấy lớp: " + ex.getMessage(), "Lỗi Lớp", JOptionPane.ERROR_MESSAGE);
+        	    } catch (Exception ex) {
+        	        // Xử lý các ngoại lệ khác
+        	        JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        	    }
+        	}
+
+        });
+        btnThemSach.setToolTipText("");
+        btnThemSach.setText("Thêm sách");
+        btnThemSach.setForeground(Color.WHITE);
+        btnThemSach.setFont(new Font("SansSerif", Font.BOLD, 12));
+        btnThemSach.setColorOver(new Color(22, 113, 221));
+        btnThemSach.setColorClick(new Color(153, 204, 255));
+        btnThemSach.setColor(new Color(22, 113, 221));
+        btnThemSach.setBorderColor(new Color(22, 113, 221));
+        btnThemSach.setBackground(new Color(22, 113, 221));
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1Layout.setHorizontalGroup(
-        	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
+        	panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
         		.addGroup(panelBorder1Layout.createSequentialGroup()
+        			.addContainerGap(589, Short.MAX_VALUE)
+        			.addComponent(btnThemSach, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+        			.addGap(27))
+        		.addGroup(Alignment.LEADING, panelBorder1Layout.createSequentialGroup()
         			.addGap(20)
         			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(spTable, GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+        				.addComponent(spTable, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         				.addGroup(panelBorder1Layout.createSequentialGroup()
         					.addComponent(jLabel5)
-        					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        					.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
-        					.addContainerGap())))
+        					.addPreferredGap(ComponentPlacement.RELATED, 371, Short.MAX_VALUE)
+        					.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap())
         );
         panelBorder1Layout.setVerticalGroup(
         	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
         		.addGroup(panelBorder1Layout.createSequentialGroup()
-        			.addContainerGap(19, Short.MAX_VALUE)
+        			.addContainerGap(12, Short.MAX_VALUE)
         			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
         				.addGroup(panelBorder1Layout.createSequentialGroup()
         					.addComponent(jLabel5)
@@ -147,9 +193,11 @@ public class Book1_GUI extends JPanel {
         				.addGroup(panelBorder1Layout.createSequentialGroup()
         					.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         					.addGap(18)))
-        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGap(5)
         			.addComponent(spTable, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)
-        			.addGap(66))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(btnThemSach, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+        			.addGap(19))
         );
         panelBorder1.setLayout(panelBorder1Layout);
 
@@ -172,7 +220,7 @@ public class Book1_GUI extends JPanel {
            int row = tbSach.getSelectedRow();
             if (row >= 0) {
                 try{
-                    BookInfo_Dialog bookDia=new BookInfo_Dialog(new java.awt.Frame(),true,tbSach,bookList.get(row));
+                    BookInfo1_Dialog bookDia=new BookInfo1_Dialog(new java.awt.Frame(),true,tbSach,bookList.get(row));
                     bookDia.setVisible(true);
                 }catch(Exception ex){
                     Logger.getLogger(Book_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,12 +240,12 @@ public class Book1_GUI extends JPanel {
                     tbSach.setRowCount(0);
                     for(int i=0;i<bookList.size();i++){
                     Book1 book=bookList.get(i);
-                    String id=book.getISBN();
+                    //String id=book.getISBN();
                     String name=book.getTenSach();
                     String pulisher=book.getPublisher();
                     String version=book.getVersion();
                     int num=book.getStoreNum();
-                    Object row[] = {i+1,id,name,pulisher,version,num};
+                    Object row[] = {i+1,name,pulisher,version,num};
                     tbSach.addRow(row);
                     }
                 }
@@ -215,12 +263,12 @@ public class Book1_GUI extends JPanel {
             bookList = bookBUS.getAllIncludeVersion();
             for(int i=0;i<bookList.size();i++){
             Book1 book=bookList.get(i);
-            String id=book.getISBN();
+           // String id=book.getISBN();
             String name=book.getTenSach();
             String pulisher=book.getPublisher();
             String version=book.getVersion();
             int num=book.getStoreNum();
-            Object row[] = {i+1,id,name,pulisher,version,num};
+            Object row[] = {i+1,name,pulisher,version,num};
             tbSach.addRow(row);
         }
         } catch (IOException | ClassNotFoundException | SQLException ex) {
@@ -235,6 +283,4 @@ public class Book1_GUI extends JPanel {
     private javax.swing.JScrollPane spTable;
     private MyDesign.MyTable tbSach;
     private MyDesign.SearchText txtTimKiem;
-    
-
 }
