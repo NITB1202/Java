@@ -64,6 +64,8 @@ public class Staff_GUI extends JPanel {
         JPanel p = new JPanel();
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        SelectedRole = "Tất cả";
+        loadRole(userLogin.getRoleID());
         if(rolePermissionBUS.hasPerCreate(roleID, 8))
             btnNhanVienMoi.setEnabled(true);
         else  btnNhanVienMoi.setEnabled(false);
@@ -88,8 +90,9 @@ public class Staff_GUI extends JPanel {
     
     public void addDefaultQL() throws Exception{
         Vector<Account> arr= staffBUS.getAllQL();
+        System.out.println(arr);
         for(int i=0;i<arr.size();i++){
-            Account acc=arr.get(i);
+            Account acc = arr.get(i);
             int id=acc.getPersonID();
             String name=acc.getName();
             String tel=acc.getTel();
@@ -97,8 +100,7 @@ public class Staff_GUI extends JPanel {
             String username=acc.getUsername();
             String role=acc.getRoleID();
             Object row[] = {i+1,id,name,username,role,tel,address};
-            tbDanhSachNhanVien.addRow(row);
-        }
+            tbDanhSachNhanVien.addRow(row);}
     }
     
     public void findVal(String str,String roleID) throws Exception {
@@ -143,7 +145,6 @@ public class Staff_GUI extends JPanel {
         jLabel8 = new javax.swing.JLabel();
         txtTimKiem = new MyDesign.SearchText();
         btnNhanVienMoi = new MyDesign.MyButton();
-
         setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
@@ -182,6 +183,23 @@ public class Staff_GUI extends JPanel {
                 txtTimKiemActionPerformed(evt);
             }
         });
+        CbFilter = new JComboBox<String>();
+        CbFilter.setModel(new DefaultComboBoxModel<>(new String[] {"Tất cả"}));
+        CbFilter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                	SelectedRole = (String) CbFilter.getSelectedItem();
+                	if (SelectedRole == null) {
+                		SelectedRole = "Tất cả";
+                	}
+                    filterStaffByRole(roleID, SelectedRole);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+        });
+        
 
         javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
         panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
@@ -222,6 +240,9 @@ public class Staff_GUI extends JPanel {
             }
         });
         
+        
+        
+        
 
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
@@ -230,10 +251,12 @@ public class Staff_GUI extends JPanel {
         		.addGroup(panelBorder1Layout.createSequentialGroup()
         			.addGap(20)
         			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
-        				.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING, false)
         					.addGroup(panelBorder1Layout.createSequentialGroup()
         						.addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
-        						.addPreferredGap(ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+        						.addGap(158)
+        						.addComponent(CbFilter, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+        						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         						.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         					.addComponent(spTable, GroupLayout.PREFERRED_SIZE, 688, GroupLayout.PREFERRED_SIZE))
         				.addComponent(btnNhanVienMoi, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
@@ -243,9 +266,10 @@ public class Staff_GUI extends JPanel {
         	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
         		.addGroup(panelBorder1Layout.createSequentialGroup()
         			.addContainerGap(61, Short.MAX_VALUE)
-        			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
-        				.addComponent(panelBorder_Basic1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(jLabel5))
+        			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.LEADING, false)
+        				.addComponent(CbFilter)
+        				.addComponent(panelBorder_Basic1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addComponent(jLabel5, Alignment.TRAILING))
         			.addGap(10)
         			.addComponent(spTable, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
         			.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -272,7 +296,45 @@ public class Staff_GUI extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
- 
+    private void filterStaffByRole(String roleID, String selectedRole) {
+        try {
+            Vector<Account> arr = staffBUS.getAllQL();
+            tbDanhSachNhanVien.setRowCount(0);
+
+            for (int i = 0; i < arr.size(); i++) {
+                Account acc = arr.get(i);
+                int id = acc.getPersonID();
+                String name = acc.getName();
+                String tel = acc.getTel();
+                String address = acc.getAddress();
+                String username = acc.getUsername();
+                String role = acc.getRoleID();
+
+                if (selectedRole.equals(role) || selectedRole.equals("Tất cả")) {
+                    Object row[] = {i + 1, id, name, username, role, tel, address};
+                    tbDanhSachNhanVien.addRow(row);
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+	private void loadRole(String roleID) {
+	        DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) CbFilter.getModel();
+	        try {
+                model = (DefaultComboBoxModel<String>) CbFilter.getModel();
+                model.removeAllElements();
+                model.addElement("Tất cả");
+            	model.addAll(staffBUS.getRoleAD());
+            } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    JOptionPane.showMessageDialog(null,e.getMessage());
+            }
+            CbFilter.revalidate();
+            CbFilter.repaint();
+	}
 
 	private void tbDanhSachNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDanhSachNhanVienMouseClicked
        if (evt.getClickCount() == 2 && rolePermissionBUS.hasPerView(roleID, 7)) {
@@ -301,7 +363,6 @@ public class Staff_GUI extends JPanel {
     }//GEN-LAST:event_txtTimKiemActionPerformed
 
     private void btnNhanVienMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhanVienMoiActionPerformed
-        
         try {
             StaffAdd_Dialog sad=new StaffAdd_Dialog(this.userLogin ,new javax.swing.JFrame(), true,tbDanhSachNhanVien);
             sad.setVisible(true);
@@ -314,7 +375,7 @@ public class Staff_GUI extends JPanel {
         }
     }//GEN-LAST:event_btnNhanVienMoiActionPerformed
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    	// Variables declaration - do not modify//GEN-BEGIN:variables
     private MyDesign.MyButton btnNhanVienMoi;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
@@ -323,4 +384,6 @@ public class Staff_GUI extends JPanel {
     private javax.swing.JScrollPane spTable;
     private MyDesign.MyTable tbDanhSachNhanVien;
     private MyDesign.SearchText txtTimKiem;
+    private JComboBox<String> CbFilter;
+    private String SelectedRole;
 }
