@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/CNPM_Library.jar"/>
-	<classpathentry kind="lib" path="lib/common-image-3.9.4.jar"/>
-	<classpathentry kind="lib" path="lib/core-3.5.2.jar"/>
-	<classpathentry kind="lib" path="lib/javase-3.5.2.jar"/>
-	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/sqljdbc42.jar"/>
-	<classpathentry kind="lib" path="lib/timingframework-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/aspose-pdf-20.11-jdk17.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/commons-codec-1.10.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/commons-collections4-4.1.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/curvesapi-1.04.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/poi-3.17.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/poi-ooxml-3.17.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/poi-ooxml-schemas-3.17.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/Warehouse/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/bridj-0.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/opencv-455.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/slf4j-api-1.7.2.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/slf4j-api-2.0.9.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/slf4j-simple-2.0.9.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/sqljdbc4-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/Webcam.jar"/>
-	<classpathentry kind="lib" path="lib/Webcam/webcam-capture-0.3.12.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis-1.0.b2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/CNPM_Library.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/common-image-3.9.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/core-3.5.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javase-3.5.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jcalendar-1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sqljdbc42.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/timingframework-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/aspose-pdf-20.11-jdk17.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/commons-codec-1.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/commons-collections4-4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/curvesapi-1.04.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/poi-3.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/poi-ooxml-3.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/poi-ooxml-schemas-3.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/stax-api-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Warehouse/xmlbeans-2.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/bridj-0.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/opencv-455.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/slf4j-api-1.7.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/slf4j-api-2.0.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/slf4j-simple-2.0.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/sqljdbc4-3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/Webcam.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Webcam/webcam-capture-0.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xml-apis-1.0.b2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
