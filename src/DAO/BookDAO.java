@@ -70,8 +70,9 @@ public class BookDAO extends ConnectDB {
                     String author=rs.getString(14);
                     long Cost=rs.getLong("Cost");
                     String img=rs.getString("img");
+                    String edition = rs.getString("edition");
                     
-                    Book1 book=new Book1(ISBN,tenSach,storeNum,borrowNum,publisher,Cost,img);
+                    Book1 book=new Book1(ISBN,tenSach,edition,storeNum,borrowNum,publisher,Cost,img);
                     book.setAuthor(author);
                     result.add(book);
                     }

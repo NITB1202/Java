@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
 
 import DTO.entities.Person;
@@ -16,13 +12,11 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-/**
- *
- * @author WIN 10
- */
+
+
 public class AccountDAO {
-    protected ArrayList<Person> list = new ArrayList<>();
-    protected Person user = new Account();
+	
+    protected ArrayList<Account> listAccount = new ArrayList<>();
     private ConnectDB connectDB;
 
     public AccountDAO() throws ClassNotFoundException, SQLException, IOException {
@@ -30,15 +24,11 @@ public class AccountDAO {
         read();
     }
 
-    public ArrayList<Person> getList() {
-        return list;
+    public ArrayList<Account> getList() {
+        return listAccount;
     }
 
-    public Account getUser() {
-        return (Account)user;
-    }
-
-    public ArrayList<Person> read() throws IOException, ClassNotFoundException, SQLException{
+    public void read() throws IOException, ClassNotFoundException, SQLException{
         String context = this.getClass().getName();
         connectDB.connect(context);
         try {
@@ -53,13 +43,12 @@ public class AccountDAO {
                 user.setRoleID(rs.getString(4));
                 user.setDayCreate(rs.getDate(5));
                 user.setStatus(rs.getInt(6));
-                list.add(user);
+                listAccount.add(user);
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         connectDB.disconnect(context);
-        return list;
     }
     
     public boolean create(Account user) throws ClassNotFoundException, SQLException {
@@ -77,7 +66,7 @@ public class AccountDAO {
             pstmt.setTimestamp(5, dayCreate);   
             pstmt.setInt(6, user.getStatus());
             pstmt.executeUpdate();
-            list.add(user);
+            listAccount.add(user);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);

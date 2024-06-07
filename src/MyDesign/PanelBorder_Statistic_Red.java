@@ -13,11 +13,9 @@ public class PanelBorder_Statistic_Red extends javax.swing.JPanel {
         setOpaque(false);
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(246, 250, 255));
+        setBackground(new Color(255, 204, 204));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -35,7 +33,7 @@ public class PanelBorder_Statistic_Red extends javax.swing.JPanel {
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(new Color(255,241,241));
+        g2.setColor(new Color(255, 204, 204));
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         super.paintComponent(grphcs);
     }

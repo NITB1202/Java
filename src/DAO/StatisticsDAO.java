@@ -109,15 +109,15 @@ public Vector<StatisticDTO> getAll() throws ClassNotFoundException, SQLException
         connectDB.connect();
         if(ConnectDB.conn != null){
             try {
-                String sql = "SELECT b.name AS bName, a.name AS aName, p.name AS pName, COUNT(dBC.ISBN)*dBC.num AS TongSoLuotMuon\n" +
-                                "FROM borrow_card bc\n" +
-                                "JOIN detail_borrow_card dBC ON dBC.bcID = bc.id\n" +
-                                "JOIN cp_book cpB ON  cpB.ISBN = dBC.ISBN\n" +
-                                "JOIN book b ON b.id = cpB.bookID\n" +
-                                "JOIN author a ON a.id = b.id\n" +
-                                "JOIN publisher p ON p.id = cpB.publisherID\n" +
-                                "GROUP BY b.name, a.name, p.name, dBC.ISBN, dBC.num\n" +
-                                "ORDER BY TongSoLuotMuon DESC";
+                String sql = "SELECT book.name AS TenSach, author.name AS TenTacGia, publisher.name AS TenNXB, SUM(dt.num) AS SLMuon\n"
+                		+ "FROM book,cp_book, detail_borrow_card dt, publisher, book_author,author\n"
+                		+ "WHERE book.id = cp_book.bookID\n"
+                		+ "AND dt.ISBN = cp_book.ISBN\n"
+                		+ "AND cp_book.publisherID = publisher.id\n"
+                		+ "AND book_author.ISBN = cp_book.ISBN\n"
+                		+ "AND authorID = author.id\n"
+                		+ "GROUP BY book.name, publisher.name,authorID, author.name\n"
+                		+ "ORDER BY SLMuon DESC";
                 PreparedStatement pst = ConnectDB.conn.prepareStatement(sql);
                 ResultSet rs = pst.executeQuery();
                 while(rs.next()){

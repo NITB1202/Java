@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -105,5 +106,17 @@ public class ReaderBUS {
     public Vector<Reader> getReaderById(String infoID) throws ClassNotFoundException, SQLException, IOException {
         readerDAO = new ReaderDAO();
         return readerDAO.getReaderById(infoID);
+    }
+    
+    public int getNumOfBorrowBook(String readerName) throws ClassNotFoundException, SQLException, IOException
+    {
+        readerDAO = new ReaderDAO();
+    	return readerDAO.getNumOfBorrowBook(readerName);
+    }
+    
+    public int getPenalty(String readerName) throws ClassNotFoundException, SQLException, IOException
+    {
+        readerDAO = new ReaderDAO();
+    	return readerDAO.getPenalty(readerName);
     }
 }

@@ -126,7 +126,7 @@ public class ReaderDAO extends ConnectDB {
         if (connectDB.conn != null) {
             
             try {
-                String sql = "SELECT reader.* FROM reader where isActive =1 and fineDate is null AND name LIKE N'%"+Name+"%'";
+                String sql = "SELECT reader.* FROM reader where isActive =1 AND name LIKE N'%"+Name+"%'";
                 
                 //Bước 2: tạo đối tượng preparedStatement
                 PreparedStatement stmt = connectDB.conn.prepareStatement(sql);  
@@ -141,6 +141,7 @@ public class ReaderDAO extends ConnectDB {
                     reader.setTel(rs.getString(3));
                     reader.setAddress(rs.getString(4));
                     Date lDate = rs.getDate(5);
+                    reader.setFineDate(lDate.toLocalDate());
                     result.add(reader);
                 }
             } catch (SQLException ex) {
@@ -339,4 +340,69 @@ public class ReaderDAO extends ConnectDB {
         }
         return arr;
     }
+    
+    public int getNumOfBorrowBook(String readerName) throws SQLException
+    {
+        int numOfBorrowedBooks = 0;
+        connectDB.connect();
+        if(connectDB.conn!=null)
+        {
+        	String query = "SELECT SUM(num) as SLDangMuon\r\n"
+        			+ "FROM borrow_card bc, reader, detail_borrow_card\r\n"
+        			+ "WHERE bc.isActive = 1\r\n"
+        			+ "AND bc.readerID = reader.id\r\n"
+        			+ "AND bc.id = bcID\r\n"
+        			+ "AND name COLLATE Latin1_General_CI_AI = ?\r\n"
+        			+ "GROUP BY name";
+        	PreparedStatement preparedStatement = connectDB.conn.prepareStatement(query);
+            preparedStatement.setString(1,readerName);
+            ResultSet rs = preparedStatement.executeQuery();
+            if(rs.next())
+            	numOfBorrowedBooks = rs.getInt("SLDangMuon");
+            rs.close();
+            preparedStatement.close();
+            connectDB.disconnect();
+        }
+        return numOfBorrowedBooks;
+    }
+    
+    public int getPenalty(String readerName) throws SQLException
+    {
+    	int penalty = -1;
+    	connectDB.connect();
+        if(connectDB.conn!=null)
+        {
+        	String query = "SELECT penalty FROM reader WHERE name COLLATE Latin1_General_CI_AI = ?";
+        	PreparedStatement preparedStatement = connectDB.conn.prepareStatement(query);
+            preparedStatement.setString(1,readerName);
+            ResultSet rs = preparedStatement.executeQuery();
+            if(rs.next())
+            	penalty = rs.getInt("penalty");
+            rs.close();
+            preparedStatement.close();
+            connectDB.disconnect();
+        }
+        return penalty;
+    }
+    
+//    public LocalDate getFineDate(String readerName)
+//    {
+//    	connectDB.connect();
+//        if(connectDB.conn!=null)
+//        {
+//        	String query = "SELECT fineDate FROM reader WHERE name COLLATE Latin1_General_CI_AI = ?";
+//        	PreparedStatement preparedStatement = connectDB.conn.prepareStatement(query);
+//            preparedStatement.setString(1,readerName);
+//            ResultSet rs = preparedStatement.executeQuery();
+//            if(rs.next())
+//            {
+//            	String dateString = rs.getString("fineDate");
+//                // Chuyển đổi chuỗi ngày sang LocalDate
+//                LocalDate localDate = LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+//            }
+//            rs.close();
+//            preparedStatement.close();
+//            connectDB.disconnect();
+//        }
+//    }
 }

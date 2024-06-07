@@ -64,7 +64,7 @@ public class Menu extends javax.swing.JPanel {
 
         list_Menu1 = new MyDesign.List_Menu<>();
 
-        setBackground(new java.awt.Color(246, 250, 255));
+        setBackground(new Color(172, 226, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -82,7 +82,7 @@ public class Menu extends javax.swing.JPanel {
     protected void paintChildren(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Color c = new Color(246,250,255);
+        Color c = new Color(172, 226, 255);
         g2.setPaint(c);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());

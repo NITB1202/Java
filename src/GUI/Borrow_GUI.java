@@ -1,180 +1,152 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package GUI;
-import MyDesign.ScrollBar;
-import java.awt.Color;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.Frame;
-import java.awt.Image;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
-import BUS.BookBUS;
-import BUS.DetailBCBUS;
-import BUS.ReaderBUS;
-import BUS.BorrowCardBUS;
-import BUS.RolePermissionBUS;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import javax.swing.JFormattedTextField;
-import javax.swing.text.NumberFormatter;
 
-import com.toedter.calendar.IDateEditor;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Image;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.border.LineBorder;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.border.TitledBorder;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
+
+import BUS.BookBUS;
+import BUS.BorrowCardBUS;
+import BUS.DetailBCBUS;
+import BUS.ReaderBUS;
+import BUS.RolePermissionBUS;
+import DTO.entities.Account;
+import DTO.entities.Book1;
+import DTO.entities.Reader;
+import MyDesign.MyButton;
+import MyDesign.ScrollBar;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ScrollPaneConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import DTO.entities.Book1;
-import DTO.entities.Account;
-import java.util.Locale;
+import java.util.Vector;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import MyDesign.MyTable;
+
 import javax.swing.BorderFactory;
-/**
- *
- * @author QUANG DIEN
- */
-public class Borrow_GUI extends javax.swing.JPanel {
-    BookBUS bookBLL=new BookBUS();
-    ReaderBUS readerBLL= new ReaderBUS();
-    BorrowCardBUS ticketBLL=new BorrowCardBUS();
-    DetailBCBUS detailBCBLL= new DetailBCBUS();
-    private BorrowSearch_Dialog brSDialog ;
-    private BorrowAddReader_Dialog BAReaderDialog;
-    private ArrayList<Book1> bookList;
-    private int staffID;
-    private Account user;
-    private RolePermissionBUS rolePermissionBUS;
-    
-    
-    /**
-     * Creates new form Borrow_GUI
-     */
-    public Borrow_GUI(Account user) throws ClassNotFoundException, SQLException, ParseException, IOException {
-        getAllBookIntoList(bookBLL.getAll());
-        initComponents();
-        staffID=user.getPersonID();
-        this.user = user;
-        this.rolePermissionBUS = new RolePermissionBUS();
-        showAvalableBooks();
-        spTable.setVerticalScrollBar(new ScrollBar());
-        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
-        spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+import javax.swing.BoxLayout;
+import MyDesign.SearchText;
 
-        spTable2.setVerticalScrollBar(new ScrollBar());
-        spTable2.getVerticalScrollBar().setBackground(Color.WHITE);
-        spTable2.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        if(rolePermissionBUS.hasPerEdit(user.getRoleID(), 3)){
-            btnChoMuon.setEnabled(true);
-            btnThem.setEnabled(true);
-            btnTruSoLuong.setEnabled(true);
-        }
-        else{
-            btnChoMuon.setEnabled(false);
-            btnThem.setEnabled(false);
-            btnTruSoLuong.setEnabled(false);
-        }
-        if(rolePermissionBUS.hasPerView(user.getRoleID(), 3))
-            btnThemDocGia.setEnabled(true);
-        else btnThemDocGia.setEnabled(false);
-    }
+public class Borrow_GUI extends JPanel {
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-   
-    private void initComponents() throws ClassNotFoundException, SQLException, ParseException {
+	private static final long serialVersionUID = 1L;
+	private MyButton btnAdd;
+	private MyButton btnSubtract;
+	private MyButton btnAddBook;
+	private MyButton btnBorrow;
+	private MyDesign.MyTable tbSachKhaDung;
+	private JScrollPane scrollPane_kd;
+	private JTextField textField_num;
+	
+	private int sl = 0;
+	private int max = 0;
+	private int tiencoc = 0 ;
+	private BookBUS bookBUS;
+	private ReaderBUS readerBUS;
+	private ArrayList<Book1> bookList;
+	private MyTable tbSachDaChon;
+	private JLabel bookImage;
+	private JLabel info;
+	private JComboBox comboBox_reader;
+	private JDateChooser dateChooser;
+	private JLabel tiencocTxt;
+	private SearchText searchTxt;
+	private Date expMinDate;
+	private Date expMaxDate;
+	private Account user;
+	private int readerBorrowNum = 0;
 
-        textField2 = new java.awt.TextField();
-        panelBorder1 = new MyDesign.PanelBorder();
-        jLabel5 = new javax.swing.JLabel();
-        spTable = new javax.swing.JScrollPane();
-        tbSachKhaDung = new MyDesign.MyTable();
-        jLabel7 = new javax.swing.JLabel();
-        spTable2 = new javax.swing.JScrollPane();
-        tbSachDaChon = new MyDesign.MyTable();
-        panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
-
-        btnTimKiem = new MyDesign.MyButton();
-
-        panelBorder2 = new MyDesign.PanelBorder();
-        pnImageBook = new MyDesign.PanelBorder_Basic();
-        lbImageBook = new javax.swing.JLabel();
-
-        lbLine = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-
-        btnThem = new MyDesign.MyButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        cbDocGia = new javax.swing.JComboBox<>();
-        btnThemDocGia = new MyDesign.MyButton();
-        btnChoMuon = new MyDesign.MyButton();
-        idDocGia = -1;
-
-        NumberFormat format = NumberFormat.getInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0);
-        formatter.setMaximum(Integer.MAX_VALUE);
-        formatter.setAllowsInvalid(false);
-        formatter.setCommitsOnValidEdit(true);
-
-        txtTienCoc = new JFormattedTextField(formatter);
-        txtTienCoc.setColumns(9);
-        txtTienCoc.setEditable(false);
-        txtTienCoc.setValue(0);
-
-        jLabel6 = new javax.swing.JLabel();
-        txtNgayTra = new MyDesign.MyTextField_Basic();
-        tANameBook = new JTextArea(1, 10);
-        tANameAuthor = new JTextArea(1, 10);
-        panelDetailBC = new MyDesign.PanelBorder();
-        tASoLuong = new JTextArea(1, 3);
-        btnSoLuong = new MyDesign.MyButton();
-        btnTruSoLuong = new MyDesign.MyButton();
-      
-        lbNameAuthor = new javax.swing.JLabel();
-        lbISBN = new javax.swing.JLabel();
-        tAISBN = new JTextArea(1, 7);
-        lbPublisher = new javax.swing.JLabel();
-        tAPublisher = new JTextArea(1, 7);
-        jCalendarComboBox1 = new JDateChooser();
-        textField2.setText("textField2");
-        setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(732, 532));
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(127, 127, 127));
-        jLabel5.setText("Sách khả dụng");
-        spTable.setBorder(null);
-        tbSachKhaDung.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "STT", "ISBN", "Tên sách", "Tác giả", "Nhà xuất bản", "Còn lại"
-                }
-        ) {
+	/**
+	 * Create the panel.
+	 * @throws IOException 
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
+	 */
+	@SuppressWarnings("serial")
+	public Borrow_GUI(Account user) throws ClassNotFoundException, SQLException, IOException {
+		this.user = user;
+		setBackground(new Color(255, 255, 255));
+		
+		JLabel lb_book1 = new JLabel("Sách khả dụng");
+		lb_book1.setBounds(24, 25, 156, 36);
+		lb_book1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		
+		JLabel lbl_book2 = new JLabel("Sách đã chọn");
+		lbl_book2.setBounds(24, 330, 127, 23);
+		lbl_book2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		
+		JScrollPane scrollPane_dc = new JScrollPane();
+		scrollPane_dc.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		scrollPane_dc.setBounds(24, 364, 490, 215);
+		
+		scrollPane_kd = new JScrollPane();
+		scrollPane_kd.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		scrollPane_kd.setBorder(null);
+		scrollPane_kd.setBackground(new Color(255, 255, 255));
+		scrollPane_kd.setBounds(24, 72, 490, 245);
+		setLayout(null);
+		add(lb_book1);
+		add(scrollPane_kd);
+		
+		tbSachKhaDung = new MyDesign.MyTable();
+		tbSachKhaDung.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					chooseBook();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		tbSachKhaDung.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"STT", "ISBN", "T\u00EAn s\u00E1ch", "T\u00E1c gi\u1EA3", "NXB", "C\u00F2n l\u1EA1i"
+			})
+		{
             boolean[] canEdit = new boolean[]{
                 false, false, false, false, false, false
             };
@@ -184,845 +156,604 @@ public class Borrow_GUI extends javax.swing.JPanel {
             }
 
         });
-        spTable.setViewportView(tbSachKhaDung);
+		tbSachKhaDung.getColumnModel().getColumn(0).setPreferredWidth(35);
+		tbSachKhaDung.getColumnModel().getColumn(0).setMinWidth(35);
+		tbSachKhaDung.getColumnModel().getColumn(1).setPreferredWidth(100);
+		tbSachKhaDung.getColumnModel().getColumn(1).setMinWidth(100);
+		tbSachKhaDung.getColumnModel().getColumn(2).setPreferredWidth(125);
+		tbSachKhaDung.getColumnModel().getColumn(2).setMinWidth(125);
+		tbSachKhaDung.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tbSachKhaDung.getColumnModel().getColumn(3).setMinWidth(100);
+		tbSachKhaDung.getColumnModel().getColumn(4).setPreferredWidth(70);
+		tbSachKhaDung.getColumnModel().getColumn(4).setMinWidth(70);
+		tbSachKhaDung.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		scrollPane_kd.setViewportView(tbSachKhaDung);
+		add(lbl_book2);
+		add(scrollPane_dc);
+		
+		tbSachDaChon = new MyDesign.MyTable();
+		tbSachDaChon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					modifyBook();
+				} catch (ClassNotFoundException | SQLException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		tbSachDaChon.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"STT", "ISBN", "T\u00EAn s\u00E1ch", "T\u00E1c gi\u1EA3", "NXB", "SL"
+			})
+			{
+	            boolean[] canEdit = new boolean[]{
+	                false, false, false, false, false, false
+	            };
 
-        jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(127, 127, 127));
-        jLabel7.setText("Sách đã chọn");
+	            public boolean isCellEditable(int rowIndex, int columnIndex) {
+	                return canEdit[columnIndex];
+	            }
 
-        spTable2.setBorder(null);
-
-        tbSachKhaDung.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tbSachKhaDung.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent evt) {
-                try {
-                    tbSachKhaDungSelected();
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+	        });
+		tbSachDaChon.getColumnModel().getColumn(0).setPreferredWidth(35);
+		tbSachDaChon.getColumnModel().getColumn(0).setMinWidth(35);
+		tbSachDaChon.getColumnModel().getColumn(1).setPreferredWidth(100);
+		tbSachDaChon.getColumnModel().getColumn(1).setMinWidth(100);
+		tbSachDaChon.getColumnModel().getColumn(2).setPreferredWidth(125);
+		tbSachDaChon.getColumnModel().getColumn(2).setMinWidth(125);
+		tbSachDaChon.getColumnModel().getColumn(3).setPreferredWidth(100);
+		tbSachDaChon.getColumnModel().getColumn(3).setMinWidth(100);
+		tbSachDaChon.getColumnModel().getColumn(4).setPreferredWidth(70);
+		tbSachDaChon.getColumnModel().getColumn(4).setMinWidth(70);
+		tbSachDaChon.getColumnModel().getColumn(5).setPreferredWidth(55);
+		tbSachDaChon.getColumnModel().getColumn(5).setMinWidth(55);
+		tbSachDaChon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		scrollPane_dc.setViewportView(tbSachDaChon);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(566, 340, 224, 257);
+		add(panel);
+		panel.setLayout(null);
+		
+		btnAddBook = new MyDesign.MyButton();
+		btnAddBook.setColorClick(new Color(166, 202, 255));
+		btnAddBook.setBorderColor(new Color(215, 231, 255));
+		btnAddBook.setColorOver(new Color(215, 231, 255));
+		btnAddBook.setColor(new Color(215, 231, 255));
+		btnAddBook.setText("Thêm");
+		btnAddBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(btnAddBook.getText().equals("Thêm"))
+						addBook();
+					else
+						updateBook();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnAddBook.setBounds(10, 43, 214, 36);
+		panel.add(btnAddBook);
+		btnAddBook.setBorder(null);
+		btnAddBook.setBackground(new Color(215, 231, 255));
+		btnAddBook.setForeground(new Color(22, 113, 221));
+		btnAddBook.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnAddBook.setIcon(new ImageIcon(Borrow_GUI.class.getResource("/Images/nav-warehouse.png")));
+		btnAddBook.setActionCommand("");
+		
+		JLabel lbl_reader = new JLabel("Độc giả");
+		lbl_reader.setBounds(10, 100, 71, 23);
+		panel.add(lbl_reader);
+		lbl_reader.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		comboBox_reader = new JComboBox();
+		comboBox_reader.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					readerBorrowNum = readerBUS.getNumOfBorrowBook(comboBox_reader.getSelectedItem().toString());
+					//Reset value
+					DefaultTableModel model = (DefaultTableModel)tbSachDaChon.getModel();
+					model.setRowCount(0);
+					tiencoc = 0;
+					tiencocTxt.setText(String.valueOf(tiencoc));
+				} catch (ClassNotFoundException | SQLException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		comboBox_reader.setBounds(79, 100, 145, 24);
+		panel.add(comboBox_reader);
+		comboBox_reader.setBackground(new Color(255, 255, 255));
+		comboBox_reader.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		comboBox_reader.setBorder(null);
+		
+		tiencocTxt = new JLabel("");
+		tiencocTxt.setBounds(79, 134, 145, 23);
+		panel.add(tiencocTxt);
+		tiencocTxt.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 13));
+		tiencocTxt.setBorder(new LineBorder(new Color(128, 128, 128)));
+		tiencocTxt.setBackground(new Color(255, 255, 255));
+		
+		JLabel lbl_reader_1 = new JLabel("Tiền cọc");
+		lbl_reader_1.setBounds(10, 134, 71, 23);
+		panel.add(lbl_reader_1);
+		lbl_reader_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		JLabel lbl_reader_1_1 = new JLabel("Ngày trả");
+		lbl_reader_1_1.setBounds(10, 168, 59, 23);
+		panel.add(lbl_reader_1_1);
+		lbl_reader_1_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		dateChooser = new JDateChooser();
+		dateChooser.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		dateChooser.getCalendarButton().setBackground(new Color(255, 255, 255));
+		dateChooser.setBorder(null);
+		dateChooser.setBounds(79, 168, 145, 23);
+		panel.add(dateChooser);
+		dateChooser.setDateFormatString("y-MM-d");
+		dateChooser.setBackground(new Color(255, 255, 255));
+		
+		btnBorrow = new MyDesign.MyButton();
+		btnBorrow.setColorOver(new Color(22, 113, 221));
+		btnBorrow.setColor(new Color(22, 113, 221));
+		btnBorrow.setBorderColor(new Color(22, 113, 221));
+		btnBorrow.setText("Cho mượn");
+		btnBorrow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					borrowBook();
+				} catch (ClassNotFoundException | SQLException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnBorrow.setBorder(null);
+		btnBorrow.setBackground(new Color(22, 113, 221));
+		btnBorrow.setForeground(new Color(255, 255, 255));
+		btnBorrow.setIcon(new ImageIcon(Borrow_GUI.class.getResource("/Images/borrow-white.png")));
+		btnBorrow.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		btnBorrow.setBounds(10, 203, 214, 43);
+		panel.add(btnBorrow);
+		
+		textField_num = new JTextField();
+		textField_num.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				handleInput(e.getKeyChar());
+			}
+		});
+		
+		textField_num.setText(String.valueOf(sl));
+		textField_num.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		textField_num.setBorder(new LineBorder(new Color(128, 128, 128)));
+		textField_num.setBounds(87, 0, 49, 20);
+		panel.add(textField_num);
+		textField_num.setColumns(3);
+		
+		btnSubtract = new MyDesign.MyButton();
+		btnSubtract.setBounds(196, 0, 28, 23);
+		panel.add(btnSubtract);
+		btnSubtract.setColorClick(new Color(166, 202, 255));
+		btnSubtract.setColorOver(new Color(215, 231, 255));
+		btnSubtract.setColor(new Color(215, 231, 255));
+		btnSubtract.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subtractNum();
+			}
+		});
+		btnSubtract.setIcon(new ImageIcon(Borrow_GUI.class.getResource("/Images/tru.png")));
+		btnSubtract.setForeground(new Color(215, 231, 255));
+		btnSubtract.setBorder(null);
+		btnSubtract.setBackground(new Color(215, 231, 255));
+		
+		btnAdd = new MyDesign.MyButton();
+		btnAdd.setBounds(158, 0, 28, 23);
+		panel.add(btnAdd);
+		btnAdd.setColorClick(new Color(166, 202, 255));
+		btnAdd.setColorOver(new Color(215, 231, 255));
+		btnAdd.setColor(new Color(215, 231, 255));
+		btnAdd.setBorderColor(new Color(215, 231, 255));
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addNum();
+			}
+		});
+		btnAdd.setBorder(null);
+		btnAdd.setBackground(new Color(215, 231, 255));
+		btnAdd.setForeground(new Color(215, 231, 255));
+		btnAdd.setIcon(new ImageIcon(Borrow_GUI.class.getResource("/Images/add.png")));
+		
+		JLabel lbl_sl = new JLabel("Số lượng:");
+		lbl_sl.setBounds(10, 0, 71, 23);
+		panel.add(lbl_sl);
+		lbl_sl.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		JLabel lb_book1_1 = new JLabel("Thông tin sách");
+		lb_book1_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		lb_book1_1.setBounds(609, 25, 141, 36);
+		add(lb_book1_1);
+		
+		scrollPane_kd.setVerticalScrollBar(new ScrollBar());
+		scrollPane_kd.getVerticalScrollBar().setBackground(Color.WHITE);
+		scrollPane_kd.getViewport().setBackground(Color.WHITE);
+        
+		scrollPane_dc.setVerticalScrollBar(new ScrollBar());
+		scrollPane_dc.getVerticalScrollBar().setBackground(Color.WHITE);
+		scrollPane_dc.getViewport().setBackground(Color.WHITE);
+        
+        JPanel panel_search = new JPanel();
+        panel_search.setBackground(new Color(255, 255, 255));
+        panel_search.setBorder(new LineBorder(new Color(128, 128, 128)));
+        panel_search.setBounds(246, 25, 268, 30);
+        add(panel_search);
+        panel_search.setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("");
+        lblNewLabel.setIcon(new ImageIcon(Borrow_GUI.class.getResource("/Images/search.png")));
+        lblNewLabel.setBounds(238, 3, 24, 25);
+        panel_search.add(lblNewLabel);
+        
+        searchTxt = new MyDesign.SearchText();
+        searchTxt.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        		searchBook();
+        	}
         });
-        tbSachKhaDung.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                try {
-                    tbSachKhaDungSelected();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        tbSachDaChon.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "STT", "ISBN", "Tên sách", "Tác giả", "Nhà xuất bản", "Số lượng"
-                }
-        ) {
-            boolean[] canEdit = new boolean[]{
-                false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-
-        });
-        tbSachDaChon.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tbSachDaChon.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent evt) {
-                try {
-                    tbSachDaChonSelected();
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        tbSachDaChon.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                try {
-                    tbSachDaChonSelected();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        spTable2.setViewportView(tbSachDaChon);
-
-        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
-        btnTimKiem.setBorder(javax.swing.BorderFactory.createMatteBorder(4, 4, 4, 4, new java.awt.Color(246, 250, 255)));
-
-        btnTimKiem.setBorderColor(new java.awt.Color(246, 250, 255));
-        btnTimKiem.setColor(new java.awt.Color(246, 250, 255));
-        btnTimKiem.setColorClick(new java.awt.Color(246, 250, 255));
-        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnTimKiemActionPerformed(evt);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
-        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
-        panelBorder_Basic1Layout.setHorizontalGroup(
-                panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        )
-        );
-        panelBorder_Basic1Layout.setVerticalGroup(
-                panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(btnTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        )
-        );
-
-        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
-        panelBorder1Layout.setHorizontalGroup(
-                panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                                                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel7)
-                                                        .addComponent(spTable2, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelBorder1Layout.setVerticalGroup(
-                panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                                                .addGap(13, 13, 13)
-                                                .addComponent(jLabel5))
-                                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(spTable2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-        );
-
-        panelBorder2.setPreferredSize(new java.awt.Dimension(217, 327));
-        pnImageBook.setPreferredSize(new java.awt.Dimension(137, 192));
-
-        javax.swing.GroupLayout pnImageBookLayout = new javax.swing.GroupLayout(pnImageBook);
-        pnImageBook.setLayout(pnImageBookLayout);
-        pnImageBookLayout.setAutoCreateGaps(true);
-        pnImageBookLayout.setAutoCreateContainerGaps(true);
-        pnImageBookLayout.setHorizontalGroup(
-                pnImageBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnImageBookLayout.createSequentialGroup()
-                                .addComponent(lbImageBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
-                                .addContainerGap()
-                        )
-        );
-        pnImageBookLayout.setVerticalGroup(
-                pnImageBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnImageBookLayout.createSequentialGroup()
-                                .addComponent(lbImageBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap()
-                        )
-        );
-
-        tANameBook.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        tANameBook.setEditable(false);
-        tANameBook.setBackground(new java.awt.Color(246, 250, 255));
-        tANameBook.setText("");
-        tANameBook.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-
-        lbNameAuthor.setFont(new java.awt.Font("SansSerif", 0, 14));
-        lbNameAuthor.setBackground(new java.awt.Color(246, 250, 255));
-        lbNameAuthor.setText("Tác giả :");
-        tANameAuthor.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        tANameAuthor.setBackground(new java.awt.Color(246, 250, 255));
-        tANameAuthor.setEditable(false);
-        tANameAuthor.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-
-        lbPublisher.setFont(new java.awt.Font("SansSerif", 0, 14));
-        lbPublisher.setBackground(new java.awt.Color(246, 250, 255));
-        lbPublisher.setText("Nhà xuất bản :");
-        tAPublisher.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        tAPublisher.setBackground(new java.awt.Color(246, 250, 255));
-        tAPublisher.setEditable(false);
-        tAPublisher.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-
-        lbISBN.setFont(new java.awt.Font("SansSerif", 0, 14));
-        lbISBN.setBackground(new java.awt.Color(246, 250, 255));
-        lbISBN.setText("ISBN :");
-        tAISBN.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        tAISBN.setBackground(new java.awt.Color(246, 250, 255));
-        tAISBN.setEditable(false);
-        tAISBN.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-
-        tANameBook.setLineWrap(true);
-        tANameBook.setWrapStyleWord(true);
-        tANameAuthor.setLineWrap(true);
-        tANameAuthor.setWrapStyleWord(true);
-        tAPublisher.setLineWrap(true);
-        tAPublisher.setWrapStyleWord(true);
-        tAISBN.setLineWrap(true);
-
-        lbLine.setForeground(new java.awt.Color(204, 204, 204));
-        lbLine.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(204, 204, 204)));
-
-        jLabel2.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
-        jLabel2.setText("Số lượng");
-
-        tASoLuong.setText("");
-        tASoLuong.setFont(new java.awt.Font("SansSerif", 1, 13));
-        tASoLuong.setText("0");
-        tASoLuong.setEditable(false);
-
-        btnSoLuong.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnSoLuong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add.png"))); // NOI18N
-        btnSoLuong.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
-        btnSoLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnSoLuongActionPerformed(evt);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        btnTruSoLuong.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnTruSoLuong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/tru.png"))); // NOI18N
-        btnTruSoLuong.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
-        btnTruSoLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnTruSoLuongActionPerformed(evt);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        btnThem.setForeground(new java.awt.Color(44, 137, 247));
-        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nav-warehouse.png"))); // NOI18N
-        btnThem.setText("Thêm");
-        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnThem.setPreferredSize(new java.awt.Dimension(177, 36));
-        btnThem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThemActionPerformed(evt);
-            }
-        });
-        panelDetailBC.setBorder(null);
-        GroupLayout panelDetailBCLayout = new GroupLayout(panelDetailBC);
-        panelDetailBCLayout.setAutoCreateGaps(true);
-        panelDetailBCLayout.setAutoCreateContainerGaps(true);
-        JScrollPane scrollPane = new JScrollPane(panelDetailBC);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        scrollPane.setVerticalScrollBar(new ScrollBar());
-        scrollPane.getVerticalScrollBar().setBackground(Color.WHITE);
-        scrollPane.getViewport().setBackground(Color.WHITE);
-        JPanel p1 = new JPanel();
-        p1.setBackground(Color.WHITE);
-        scrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
-
-        scrollPane.setViewportView(panelDetailBC);
-        panelDetailBCLayout.setHorizontalGroup(panelDetailBCLayout.createSequentialGroup()
-                .addGroup(panelDetailBCLayout.createSequentialGroup()
-                        .addGroup(panelDetailBCLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addComponent(pnImageBook)
-                                .addComponent(tANameBook)
-                                .addGroup(panelDetailBCLayout.createSequentialGroup()
-                                        .addComponent(lbNameAuthor)
-                                        .addComponent(tANameAuthor))
-                                .addGroup(panelDetailBCLayout.createSequentialGroup()
-                                        .addComponent(lbPublisher)
-                                        .addComponent(tAPublisher))
-                                .addGroup(panelDetailBCLayout.createSequentialGroup()
-                                        .addComponent(lbISBN)
-                                        .addComponent(tAISBN)))));
-        panelDetailBCLayout.setVerticalGroup(panelDetailBCLayout.createSequentialGroup()
-                .addComponent(pnImageBook)
-                .addComponent(tANameBook)
-                .addGroup((panelDetailBCLayout.createParallelGroup())
-                        .addComponent(lbNameAuthor)
-                        .addComponent(tANameAuthor))
-                .addGroup((panelDetailBCLayout.createParallelGroup())
-                        .addComponent(lbPublisher)
-                        .addComponent(tAPublisher))
-                .addGroup((panelDetailBCLayout.createParallelGroup())
-                        .addComponent(lbISBN)
-                        .addComponent(tAISBN))
-        );
-        panelDetailBC.setLayout(panelDetailBCLayout);
-
-        javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
-        panelBorder2.setLayout(panelBorder2Layout);
-        panelBorder2Layout.setHorizontalGroup(
-                panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-                                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(scrollPane)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-                                                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBorder2Layout.createSequentialGroup()
-                                                                .addComponent(jLabel2)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(tASoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(btnSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(btnTruSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addComponent(lbLine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(btnThem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGap(21, 21, 21))))
-        );
-        panelBorder2Layout.setVerticalGroup(
-                panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelBorder2Layout.createSequentialGroup()
-                                .addComponent(scrollPane)
-                                .addComponent(lbLine)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel2)
-                                        .addComponent(tASoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnTruSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(21, 21, 21)
-                                .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
-        jLabel3.setText("Độc giả");
-
-        jLabel4.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
-        jLabel4.setText("Tiền cọc");
-
-        cbDocGia.setBackground(new java.awt.Color(246, 250, 255));
-        cbDocGia.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
-        cbDocGia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Chọn độc giả"}));
-        cbDocGia.setBorder(null);
-        cbDocGia.setOpaque(true);
-        cbDocGia.setPreferredSize(new java.awt.Dimension(100, 28));
-
-
-        btnThemDocGia.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        btnThemDocGia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add.png"))); // NOI18N
-        btnThemDocGia.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
-        btnThemDocGia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnThemDocGia();
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        btnChoMuon.setBackground(new java.awt.Color(22, 113, 221));
-        btnChoMuon.setForeground(new java.awt.Color(255, 255, 255));
-        btnChoMuon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/borrow-white.png"))); // NOI18N
-        btnChoMuon.setText("Cho mượn");
-        btnChoMuon.setBorderColor(new java.awt.Color(22, 113, 221));
-        btnChoMuon.setColor(new java.awt.Color(22, 113, 221));
-        btnChoMuon.setColorOver(new java.awt.Color(22, 113, 221));
-        btnChoMuon.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnChoMuon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    btnChoMuonActionPerformed(evt);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        txtTienCoc.setBackground(new java.awt.Color(246, 250, 255));
-        txtTienCoc.setOpaque(true);
-        txtTienCoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTienCocActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
-        jLabel6.setText("Ngày trả");
-
-        jCalendarComboBox1.setBackground(new java.awt.Color(255, 255, 255));
-        jCalendarComboBox1.setForeground(new java.awt.Color(255, 255, 255));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date expMinDate = new Date();
+        searchTxt.setHint("Tìm tên sách...");
+        searchTxt.setBorder(null);
+        searchTxt.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        searchTxt.setBounds(10, 5, 218, 20);
+        panel_search.add(searchTxt);
+        searchTxt.setColumns(10);
+        
+        JScrollPane scrollPane_info = new JScrollPane();
+        scrollPane_info.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane_info.getVerticalScrollBar().setBackground(Color.WHITE);
+        scrollPane_info.setBounds(566, 72, 224, 245);
+        add(scrollPane_info);
+        
+        JPanel panel_info = new JPanel();
+        scrollPane_info.setViewportView(panel_info);
+        panel_info.setBorder( BorderFactory.createEmptyBorder(5,5,5,5) );
+        panel_info.setBackground(new Color(255, 255, 255));
+        panel_info.setLayout(new BoxLayout(panel_info, BoxLayout.Y_AXIS));
+        
+        bookImage = new JLabel("");
+        bookImage.setMinimumSize(new Dimension(200,250));
+        bookImage.setPreferredSize(new Dimension(200,250));
+        panel_info.add(bookImage);
+        
+        info = new JLabel("");
+        info.setVerticalAlignment(SwingConstants.TOP);
+        info.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        info.setMinimumSize(new Dimension(200,250));
+        info.setPreferredSize(new Dimension(200,250));
+        panel_info.add(info);
+        
+		scrollPane_info.setVerticalScrollBar(new ScrollBar());
+		scrollPane_info.getVerticalScrollBar().setBackground(Color.WHITE);
+		
+		dateChooser.setBackground(new java.awt.Color(255, 255, 255));
+		dateChooser.setForeground(new java.awt.Color(255, 255, 255));
+		
+        expMinDate = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(expMinDate);
         cal.add(Calendar.DATE, 1);
         expMinDate = cal.getTime();
-        cal.add(Calendar.DATE, 14);
-        Date expMaxDate = new Date();
+        cal.add(Calendar.DATE, 30);
+        expMaxDate = new Date();
         expMaxDate = cal.getTime();
-        jCalendarComboBox1.setDateFormatString("yyyy-MM-dd");
-        jCalendarComboBox1.setDate(expMinDate);
-        jCalendarComboBox1.setMinSelectableDate(expMinDate);
-        jCalendarComboBox1.setMaxSelectableDate(expMaxDate);
-        JTextFieldDateEditor editor = (JTextFieldDateEditor) jCalendarComboBox1.getDateEditor();
+        
+        dateChooser.setDateFormatString("yyyy-MM-dd");
+        dateChooser.setDate(expMinDate);
+        dateChooser.setMinSelectableDate(expMinDate);
+        dateChooser.setMaxSelectableDate(expMaxDate);
+        JTextFieldDateEditor editor = (JTextFieldDateEditor) dateChooser.getDateEditor();
         editor.setEditable(false);
         
-        jCalendarComboBox1.setPreferredSize(new java.awt.Dimension(100, 28));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(panelBorder2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(5, 5, 5)
-                                                .addComponent(cbDocGia, javax.swing.GroupLayout.PREFERRED_SIZE, 112, Short.MAX_VALUE)
-                                                .addGap(5, 5, 5)
-                                                .addComponent(btnThemDocGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel4)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtTienCoc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addComponent(btnChoMuon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel6)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jCalendarComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, Short.MAX_VALUE)))
-                                .addContainerGap(15, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(panelBorder2, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(btnThemDocGia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                .addComponent(jLabel3)
-                                                                .addComponent(cbDocGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(txtTienCoc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel4))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jCalendarComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel6))
-                                                .addGap(9, 9, 9)
-                                                .addComponent(btnChoMuon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addContainerGap())))
-        );
-    }
-
-    private void txtSoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoLuongActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSoLuongActionPerformed
-
-    private void txtNgayTraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNgayTraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgayTraActionPerformed
-
-    private void txtTienCocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienCocActionPerformed
+        tiencocTxt.setText(String.valueOf(tiencoc));
         
-    }//GEN-LAST:event_txtTienCocActionPerformed
-  private void getAllBookIntoList(ArrayList<Book1> bookBLL) throws ClassNotFoundException, SQLException
-    {
-        bookList=bookBLL;
-    }  
-    private void btnChoMuonActionPerformed(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException, IOException
-    {
-         if (idDocGia==-1) {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn độc giả mượn sách !");
-        } else if (tbSachDaChon.getRowCount() <= 0) {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn sách cần mượn !");
-        } 
-        else {
-            long tienCoc=Long.parseLong(txtTienCoc.getValue().toString());
-//            if (tienCoc%1000!=0)
-//             {
-//                 JOptionPane.showMessageDialog(null, "Tiền cọc phải là bội số của 1000 VND");
-//             }
-//            else if (tienCoc<tinhTienCoc()||(tienCoc>tinhTongTienSach()))
-//             {
-//                 NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-//                 String tinhTienCoc =numberFormat.format(tinhTienCoc());
-//                String tongTienSach =numberFormat.format(tinhTongTienSach());
-//                 JOptionPane.showMessageDialog(null, "Tiền cọc phải >= " + tinhTienCoc + " VNĐ và <= " +tongTienSach+" VNĐ!");
-//             }
-//                        
-//             else
-//             {
-            Date startDate = new Date();
-            String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(startDate).trim();
-            String expReDateStr = new SimpleDateFormat("yyyy-MM-dd").format(jCalendarComboBox1.getDate()).trim();
-            int idBC = ticketBLL.addTicket(startDateStr, expReDateStr, tienCoc, idDocGia, staffID);
-            AddDetailBC_SQL(idBC);
-            getAllBookIntoList(bookBLL.getAll());
-            resetDetailBC();
-            resetBC();
-            JOptionPane.showMessageDialog(null, "Phiếu mượn đã được tạo thành công !");
-//             }
-        }
-    }
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        try {
-            // TODO add your handling code here:
-            int soLuong = Integer.parseInt(tASoLuong.getText());
-
-            int i = tbSachKhaDung.getSelectedRow();
-            int j = tbSachDaChon.getSelectedRow();
-
-            if (soLuong == 0) {
-                if (tANameBook.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 sách khả dụng để thêm");
-                } else if (!btnThem.getText().equals("Thêm")) {
-
-                    ((DefaultTableModel) tbSachDaChon.getModel()).removeRow(j);
-                    int rowCount = tbSachDaChon.getRowCount();
-                    for (int k = 0; k < rowCount; k++) {
-                        tbSachDaChon.setValueAt(k + 1, k, 0);
-
-                    }
-                   txtTienCoc.setValue(tinhTienCoc()
-                   );
-                    resetDetailBC();
-                    JOptionPane.showMessageDialog(null, "Sách đã được xóa ra khỏi sách đã chọn!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Số lượng sách tối thiểu để mượn là 1");
-                }
-
-            } else {
-                if (btnThem.getText().equals("Thêm")) {
-                    if (checkExistTBSachDaChon(i) == false) {
-                        showChooseBooks();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Sách đã tồn tại trong sách đã chọn");
-                    }
-                } else {
-                    suaSoLuongSachDaChon(j, soLuong);
-                    txtTienCoc.setValue(tinhTienCoc());
-                }
-
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Borrow_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        bookBUS = new BookBUS();
+        readerBUS = new ReaderBUS();;
+        bookList = bookBUS.getAll();
+        showAvailableBooks();
+        loadAllReader();
+        readerBorrowNum = readerBUS.getNumOfBorrowBook(comboBox_reader.getSelectedItem().toString());
         
-    }//GEN-LAST:event_btnThemActionPerformed
-private void btnSoLuongActionPerformed(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException, IOException
-{
-   
-    if (tANameBook.getText().equals("") == false) {
-            int i = tbSachKhaDung.getSelectedRow();
-            int soLuong = Integer.parseInt(tASoLuong.getText());
-            int soLuongTon = bookBLL.getBookByISBN(tAISBN.getText()).getStoreNum();
-            if (soLuong < soLuongTon) {
-                soLuong = soLuong + 1;
-                tASoLuong.setText("" + soLuong);
-            }
-        }
-}
-private void btnTruSoLuongActionPerformed(java.awt.event.ActionEvent evt) throws ClassNotFoundException, SQLException, IOException
-{
-    if (tANameBook.getText().equals("") == false) {
-
-            int soLuong = Integer.parseInt(tASoLuong.getText());
-            int i = tbSachKhaDung.getSelectedRow();
-            int soLuongTon = bookBLL.getBookByISBN(tAISBN.getText()).getStoreNum();
-            if (soLuong > 0) {
-                soLuong = soLuong - 1;
-                tASoLuong.setText("" + soLuong);
-            }
-        }
-}
-private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) throws ClassNotFoundException, ClassNotFoundException, SQLException, IOException
-{
-     brSDialog = new BorrowSearch_Dialog(null,true);
-     brSDialog.setVisible(true);
-        getAllBookIntoList(bookBLL.getAllByCondition(brSDialog.getTenSach(), brSDialog.getTacGia(), brSDialog.getNhaXuatBan()));
-        showBooksByCondition();
-        
-}
-    private void showBooksByCondition() throws ClassNotFoundException, SQLException, IOException
-    {
-      ((DefaultTableModel) tbSachKhaDung.getModel()).setRowCount(0);
-        if (bookList!=null)
-        for (int i = 0; i < bookList.size(); i++) {
-            tbSachKhaDung.addRow(new Object[]{i + 1,bookList.get(i).getISBN(), bookList.get(i).getTenSach(), bookList.get(i).stringAuthor(), bookList.get(i).getPublisher(), bookList.get(i).getStoreNum()});
-        }
-    }
-    private void showAvalableBooks() throws ClassNotFoundException, SQLException, IOException
-{
-     ((DefaultTableModel) tbSachKhaDung.getModel()).setRowCount(0);
-        if (bookList!=null)
-        for (int i = 0; i < bookList.size(); i++) {
-            tbSachKhaDung.addRow(new Object[]{i + 1,bookList.get(i).getISBN(), bookList.get(i).getTenSach(), bookList.get(i).stringAuthor(), bookList.get(i).getPublisher(), bookList.get(i).getStoreNum()});
-        }
-}
-    private void showChooseBooks() throws ClassNotFoundException, SQLException, IOException{
-         int i = tbSachKhaDung.getSelectedRow();
-        if (i >= 0) {
-            int countTB = tbSachDaChon.getRowCount();
-            tbSachDaChon.addRow(new Object[]{countTB + 1, tAISBN.getText(), tANameBook.getText(), tANameAuthor.getText(), tAPublisher.getText(), tASoLuong.getText()});
-            tbSachKhaDung.clearSelection();
-            resetDetailBC();
-           txtTienCoc.setValue(tinhTienCoc());
-        }
-    }
-      private long tinhTongTienSach() throws ClassNotFoundException, SQLException, IOException {
-        long tongTien = 0;
-        int rowCount = tbSachDaChon.getRowCount();
-        for (int i = 0; i < rowCount; i++) {
-            tongTien = tongTien + bookBLL.getBookByISBN(tbSachDaChon.getValueAt(i, 1).toString()).getCost() * Integer.parseInt(tbSachDaChon.getValueAt(i, 5).toString());
-        }
-        return tongTien;
-    }
-      private long tinhTienCoc() throws ClassNotFoundException, SQLException, IOException
-    {
-        long tienCoc= tinhTongTienSach()/3;
-        long lamChan =tienCoc%1000;
-        if (lamChan==0)
-                return tienCoc;
-        else 
+        if(!(new RolePermissionBUS()).hasPerEdit(user.getRoleID(), 3))
         {
-            return tienCoc-lamChan;
+            btnBorrow.setEnabled(false);
+            btnAddBook.setEnabled(false);
+            btnAdd.setEnabled(false);
+            btnSubtract.setEnabled(false);
         }
-    }
-       private void AddDetailBC_SQL(int idBC) throws ClassNotFoundException, SQLException, IOException
-       {
-           int rowCount = tbSachDaChon.getRowCount();
-        for (int i = 0; i < rowCount; i++) {
-            detailBCBLL.addDetailBC(idBC, tbSachDaChon.getValueAt(i, 1).toString(), Integer.parseInt(tbSachDaChon.getValueAt(i, 5).toString()));
-             int storeNum=bookBLL.getBookByISBN(tbSachDaChon.getValueAt(i, 1).toString()).getStoreNum();
-            int borrowNum =bookBLL.getBookByISBN(tbSachDaChon.getValueAt(i, 1).toString()).getBorrowNum();
-            int storeNumUpdate=storeNum-Integer.parseInt(tbSachDaChon.getValueAt(i, 5).toString());
-            int borrowNumUpdate=Integer.parseInt(tbSachDaChon.getValueAt(i, 5).toString())+borrowNum;
-           
-           
-            bookBLL.updateStoreNumBooks(tbSachDaChon.getValueAt(i, 1).toString(), storeNumUpdate, borrowNumUpdate);
-        }
-       }
-       private void suaSoLuongSachDaChon(int selectedBook,int soLuong) throws ClassNotFoundException, SQLException, IOException
-       {
-           
-         tbSachDaChon.setValueAt(soLuong, selectedBook, 5);
-        JOptionPane.showMessageDialog(null, "Sửa số lượng sách thành công!");
-        tbSachDaChon.clearSelection();
-        resetDetailBC();
-        btnThem.setText("Thêm");
-       
-        
-       }
-    private boolean checkExistTBSachDaChon(int selectedRow)       
-    {
-      int rowCount = tbSachDaChon.getRowCount();
+	}
 
-        for (int i = 0; i < rowCount; i++) {
-            if (tbSachDaChon.getValueAt(i, 1).toString().equals(tbSachKhaDung.getValueAt(selectedRow, 1).toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
-private void tbSachKhaDungSelected() throws ClassNotFoundException, SQLException, IOException
-{
-    btnThem.setText("Thêm");
-    tbSachDaChon.clearSelection();
-    int i = tbSachKhaDung.getSelectedRow();
-    if (i>=0)
-    {
-    lbImageBook.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource(bookBLL.getBookByISBN(tbSachKhaDung.getValueAt(i, 1).toString()).getImg())).getImage().getScaledInstance(135, 192,Image.SCALE_SMOOTH)));
-    tANameBook.setLineWrap(true);
-    tANameBook.setWrapStyleWord(true);
-    tANameAuthor.setLineWrap(true);
-    tANameAuthor.setWrapStyleWord(true);
-    tAPublisher.setLineWrap(true);
-    tAPublisher.setWrapStyleWord(true);
-    tAISBN.setLineWrap(true); 
-    tANameBook.setText(tbSachKhaDung.getValueAt(i,2).toString());
-    tASoLuong.setText("0");
-    tANameAuthor.setText(tbSachKhaDung.getValueAt(i,3).toString());
-    tAPublisher.setText(tbSachKhaDung.getValueAt(i, 4).toString());
-    tAISBN.setText(tbSachKhaDung.getValueAt(i, 1).toString());
-    
-    }
-}
-private void tbSachDaChonSelected() throws ClassNotFoundException, SQLException, IOException
-{
-    btnThem.setText("Sửa");
-    tbSachKhaDung.clearSelection();
-    int i = tbSachDaChon.getSelectedRow();
-    if (i>=0)
-    {
-        tANameBook.setLineWrap(true);
-     tANameBook.setWrapStyleWord(true);
-     tANameAuthor.setLineWrap(true);
-     tANameAuthor.setWrapStyleWord(true);
-     tAPublisher.setLineWrap(true);
-     tAPublisher.setWrapStyleWord(true);
-     tAISBN.setLineWrap(true); 
-    lbImageBook.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource(bookBLL.getBookByISBN(tbSachDaChon.getValueAt(i, 1).toString()).getImg())).getImage().getScaledInstance(135, 192,Image.SCALE_SMOOTH)));
-    tANameBook.setText(tbSachDaChon.getValueAt(i,2).toString());
-    tASoLuong.setText(tbSachDaChon.getValueAt(i, 5).toString());
-    tANameAuthor.setText(tbSachDaChon.getValueAt(i,3).toString());
-     tAPublisher.setText(tbSachDaChon.getValueAt(i, 4).toString());
-    tAISBN.setText(tbSachDaChon.getValueAt(i, 1).toString());
-     
-    
-    }
-}
-private void comboboxDocGia() throws ClassNotFoundException, SQLException
-{
-    for (int i=0;i<readerBLL.getAll().size();i++)
-    {    
-        
-        cbDocGia.addItem(readerBLL.getAll().get(i).getName());
-    }
-}
-private void btnThemDocGia() throws ClassNotFoundException, SQLException
-{
-   BAReaderDialog = new BorrowAddReader_Dialog(new javax.swing.JFrame(), true);
-        BAReaderDialog.setVisible(true);
-        String nameReader = BAReaderDialog.getNameReader();
-        idDocGia = BAReaderDialog.getIDDocGia();
-         cbDocGia.removeAllItems();
-        cbDocGia.addItem(nameReader);
-}
-private void resetDetailBC()
-{
-       lbImageBook.setIcon(null);
-        tASoLuong.setText("0");
-        tANameBook.setText("");
-        tANameAuthor.setText("");
-        tAPublisher.setText("");
-        tAISBN.setText("");
-}
-private void resetBC() throws ClassNotFoundException, SQLException, IOException
-{
-     ((DefaultTableModel) tbSachDaChon.getModel()).setRowCount(0);
-        txtTienCoc.setValue(0);
-        cbDocGia.removeAllItems();
-        cbDocGia.addItem("Chọn Độc Giả");
-        idDocGia=-1;
-        Date expMinDate = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(expMinDate);
-        cal.add(Calendar.DATE, 1);
-        expMinDate = cal.getTime();
-        jCalendarComboBox1.setDate(expMinDate);
-        showAvalableBooks();
-    
-}
+	protected void borrowBook() throws ClassNotFoundException, SQLException, IOException {
+		if(tbSachDaChon.getRowCount() < 1)
+		{
+			JOptionPane.showMessageDialog(null, "Vui lòng chọn sách để tiến hành qui trình mượn.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		//Update borrow card info
+        Date startDate = new Date();
+        String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(startDate).trim();
+        String expReDateStr = new SimpleDateFormat("yyyy-MM-dd").format(dateChooser.getDate()).trim();
+        Vector<Reader> readers = new ReaderBUS().getReaderByName(comboBox_reader.getSelectedItem().toString());
+        int readerID = readers.get(0).getPersonID(); 
+        int idBC = new BorrowCardBUS().addTicket(startDateStr, expReDateStr, tiencoc, readerID, user.getPersonID());
+		
+		//Update book store number
+		DetailBCBUS detailBCBUS = new DetailBCBUS();
+		for(int i = 0; i < tbSachDaChon.getRowCount(); i++)
+		{
+			
+			String isbn = tbSachDaChon.getValueAt(i, 1).toString();
+			int readerBorrow = Integer.parseInt(tbSachDaChon.getValueAt(i, 5).toString());
+			Book1 book = bookBUS.getBookByISBN(isbn);
+			int storeNum = book.getStoreNum();
+			int borrowNum = book.getBorrowNum();
+			int updateStoreNum = storeNum - readerBorrow;
+			int updateBorrowNum = borrowNum + readerBorrow;
+			detailBCBUS.addDetailBC(idBC, isbn, readerBorrow);
+			bookBUS.updateStoreNumBooks(isbn, updateStoreNum, updateBorrowNum);
+		}
+		JOptionPane.showMessageDialog(null, "Thêm phiếu mượn thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		
+		//Reset value;
+		DefaultTableModel model = (DefaultTableModel)tbSachDaChon.getModel();
+		model.setRowCount(0);
+		tiencoc = 0;
+		tiencocTxt.setText(String.valueOf(tiencoc));
+		comboBox_reader.setSelectedIndex(0);
+		dateChooser.setDate(expMinDate);
+	}
 
-    private MyDesign.MyButton btnChoMuon;
-    private MyDesign.MyButton btnThem;
-    private javax.swing.JComboBox<String> cbDocGia;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel lbImageBook;
-    private javax.swing.JLabel lbLine;
-    private javax.swing.JLabel lbNameAuthor;
-    private javax.swing.JLabel lbNameBook;
-    private javax.swing.JLabel lbThemDocGia;
-    private MyDesign.PanelBorder panelBorder1;
-    private MyDesign.PanelBorder panelBorder2;
-    private MyDesign.PanelBorder_Basic panelBorder_Basic1;
-    private MyDesign.PanelBorder_Basic pnImageBook;
-    private javax.swing.JScrollPane spTable;
-    private javax.swing.JScrollPane spTable2;
-    private MyDesign.MyTable tbSachDaChon;
-    private MyDesign.MyTable tbSachKhaDung;
-    private java.awt.TextField textField2;
-    
-    private MyDesign.MyTextField_Basic txtNgayTra;
-    private MyDesign.MyTextField txtSoLuong;
-  
-    private MyDesign.SearchText txtTimKiem;
-    
-    private javax.swing.JTextArea tANameBook;
-    private javax.swing.JTextArea tANameAuthor;
-    private javax.swing.JTextArea tASoLuong;
-    private MyDesign.PanelBorder panelDetailBC;
-    private MyDesign.MyButton btnSoLuong;
-    private MyDesign.MyButton btnTruSoLuong;
-    private MyDesign.MyButton btnTimKiem;
-    private java.awt.Window parentWindow;
-    private java.awt.Frame parentFrame;
-    private javax.swing.JLabel lbISBN;
-    private javax.swing.JLabel lbPublisher;
-    private javax.swing.JTextArea tAISBN;
-    private javax.swing.JTextArea tAPublisher;
-    private MyDesign.MyButton btnThemDocGia;
-    private com.toedter.calendar.JDateChooser jCalendarComboBox1;
-    private javax.swing.JFormattedTextField txtTienCoc;
-    private int idDocGia;
+	protected void searchBook() {
+		String searchText = searchTxt.getText().toLowerCase();
+		//Clear table
+		DefaultTableModel model = (DefaultTableModel) tbSachKhaDung.getModel();
+		model.setRowCount(0);
+		
+		if(!searchText.isBlank())
+		{
+			for(int i = 0; i < bookList.size(); i++)
+			{
+				Book1 book = bookList.get(i);
+				String bookName = bookList.get(i).getTenSach().toLowerCase();
+				if(bookName.contains(searchText))
+					tbSachKhaDung.addRow(new Object[] {i+1,book.getISBN(),book.getTenSach(),book.stringAuthor(),book.getPublisher(),book.getStoreNum()} );
+			}
+		}
+		else
+			showAvailableBooks();
+	}
+
+	protected void modifyBook() throws ClassNotFoundException, SQLException, IOException {
+		tbSachKhaDung.clearSelection();
+	    int selectBook = tbSachDaChon.getSelectedRow();
+	    if (selectBook > -1)
+	    {
+			btnAddBook.setText("Sửa");
+	    	String isbn = tbSachDaChon.getValueAt(selectBook, 1).toString();
+	    	loadBookInfo(isbn);
+	    	String selectedNum = tbSachDaChon.getValueAt(selectBook, 5).toString();
+	    	textField_num.setText(selectedNum);
+	    	sl = Integer.parseInt(selectedNum);
+	    }
+	}
+
+	protected void addBook() throws ClassNotFoundException, SQLException, IOException {
+		if(sl == 0)
+		{
+    		JOptionPane.showMessageDialog(null,"Số lượng sách mượn không được dưới 1.","Lỗi",JOptionPane.ERROR_MESSAGE);
+    		return;
+		}
+		
+		if(readerBorrowNum >= 5)
+		{
+			JOptionPane.showMessageDialog(null, "Người đọc đã mượn quá số sách tối đa.\nVui lòng trả sách để được mượn thêm.","Lỗi",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		if(readerBorrowNum + sl > 5)
+		{
+			JOptionPane.showMessageDialog(null, "Số lượng sách mượn vượt quá số sách được mượn tối đa.\nVui lòng trả sách hoặc thay đổi số lượng sách mượn.","Lỗi",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		readerBorrowNum += sl;
+		
+		int selectedRow = tbSachKhaDung.getSelectedRow();
+		String isbn = tbSachKhaDung.getValueAt(selectedRow, 1).toString(); 
+		Book1 book = bookBUS.getBookByISBN(isbn);
+		
+		int rowIndex = checkExist(isbn);
+		if(rowIndex != -1)
+		{
+			String currentNum = tbSachDaChon.getValueAt(rowIndex,5).toString() ;
+			int updateNum = Integer.parseInt(currentNum) + sl;
+			tbSachDaChon.setValueAt(updateNum, rowIndex, 5);
+		}
+		else
+		{
+			int stt = tbSachDaChon.getModel().getRowCount() + 1;
+			tbSachDaChon.addRow(new Object[] {stt,isbn,book.getTenSach(),book.stringAuthor(),book.getPublisher(),sl});
+		}
+		
+		//Tien coc bang 1/3 gia tri sach
+		tiencoc += Math.ceil(book.getCost()/3)*sl;
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedNumber = decimalFormat.format(tiencoc);
+		tiencocTxt.setText(formattedNumber);
+		
+		//Reset value
+		tbSachKhaDung.clearSelection();
+		sl = 0;
+		max = 0;
+		textField_num.setText(String.valueOf(sl));
+		bookImage.setIcon(null);
+		info.setText(null);
+		dateChooser.setDate(expMinDate);
+	}
+	
+	protected void updateBook() throws ClassNotFoundException, SQLException, IOException
+	{
+		int selectBook = tbSachDaChon.getSelectedRow(); 
+		Book1 book = bookBUS.getBookByISBN(tbSachDaChon.getValueAt(selectBook, 1).toString());
+		int slBefore = Integer.parseInt(tbSachDaChon.getValueAt(selectBook,5).toString());
+		if(readerBorrowNum - slBefore + sl > 5)
+		{
+			JOptionPane.showMessageDialog(null, "Số lượng sách sau khi sửa vượt quá số lượng sách được mượn tối đa.", "Lỗi",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		readerBorrowNum -= slBefore;
+		tiencoc -= Math.ceil(book.getCost()/3)*slBefore;
+		if(sl == 0)
+		{
+			DefaultTableModel model = (DefaultTableModel) tbSachDaChon.getModel();
+			model.removeRow(selectBook);
+			JOptionPane.showMessageDialog(null,"Xóa sách thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		}
+		else
+		{
+			readerBorrowNum += sl;
+			tiencoc += Math.ceil(book.getCost()/3)*sl;
+			tbSachDaChon.setValueAt(sl, selectBook, 5);
+			JOptionPane.showMessageDialog(null,"Sửa số lượng sách thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		}
+		
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedNumber = decimalFormat.format(tiencoc);
+		tiencocTxt.setText(formattedNumber);
+		
+		//Reset value
+		tbSachDaChon.clearSelection();
+		sl = 0;
+		max = 0;
+		textField_num.setText(String.valueOf(sl));
+		bookImage.setIcon(null);
+		info.setText(null);
+		btnAddBook.setText("Thêm");
+	}
+	
+	private int checkExist(String isbn)
+	{
+		for(int i  = 0; i<tbSachDaChon.getRowCount();i++)
+			if(tbSachDaChon.getValueAt(i, 1).equals(isbn))
+				return i;
+		return -1;
+	}
+
+	private void loadAllReader() throws ClassNotFoundException, SQLException {
+		Vector<Reader> readers = readerBUS.getAllReaderCanBorrow();
+	    for (int i=0;i < readers.size();i++)
+	    	comboBox_reader.addItem(readers.get(i).getName());
+	}
+
+	private void showAvailableBooks() {
+		((DefaultTableModel) tbSachKhaDung.getModel()).setRowCount(0);
+        if (bookList!=null)
+        for (int i = 0; i < bookList.size(); i++) {
+            tbSachKhaDung.addRow(new Object[]{i + 1,bookList.get(i).getISBN(), bookList.get(i).getTenSach(), bookList.get(i).stringAuthor(), bookList.get(i).getPublisher(), bookList.get(i).getStoreNum()});
+        }
+		
+	}
+
+	protected void subtractNum() {
+		if(sl < 1) return;
+		sl--;
+		textField_num.setText(String.valueOf(sl));
+	}
+
+	protected void addNum() {
+		sl++;
+    	if(sl>max)
+    	{
+    		JOptionPane.showMessageDialog(null,"Số lượng mượn không được vượt quá số lượng sách còn lại.","Lỗi",JOptionPane.ERROR_MESSAGE);
+    		sl = max;
+    	}
+		textField_num.setText(String.valueOf(sl));
+	}
+
+	protected void handleInput(char c) {
+    	String str = textField_num.getText();
+    	
+        if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE)
+        {
+        	String replaceStr = str.substring(0,str.length()-1);
+        	textField_num.setText(replaceStr);
+        }
+        else
+        {
+        	if(textField_num.getText().isBlank()) 
+        		sl = 0;
+        	else
+        		sl = Integer.parseInt(str);
+        	if(sl>max)
+        	{
+        		JOptionPane.showMessageDialog(null,"Số lượng mượn không được vượt quá số lượng sách còn lại.","Lỗi",JOptionPane.WARNING_MESSAGE);
+        		sl = max;
+        	}
+        	textField_num.setText(String.valueOf(sl));
+        }
+	}
+	
+	private void chooseBook() throws ClassNotFoundException, SQLException, IOException
+	{
+		tbSachDaChon.clearSelection();
+	    int selectBook = tbSachKhaDung.getSelectedRow();
+	    if (selectBook > -1)
+	    {
+			btnAddBook.setText("Thêm");
+	    	String isbn = tbSachKhaDung.getValueAt(selectBook, 1).toString();
+	    	loadBookInfo(isbn);
+		    sl = 0;
+			textField_num.setText(String.valueOf(sl));
+	    }
+	}
+	
+	private void loadBookInfo(String isbn) throws ClassNotFoundException, SQLException, IOException
+	{
+		Book1 book = bookBUS.getBookByISBN(isbn);
+    	
+    	ImageIcon image = new ImageIcon(Borrow_GUI.class.getResource(book.getImg()));
+		Image resizedImage = image.getImage();
+		resizedImage = resizedImage.getScaledInstance(210, 250, Image.SCALE_SMOOTH);
+		image = new ImageIcon(resizedImage);
+		
+		bookImage.setIcon(image);
+	    max = book.getStoreNum();
+	    
+		String bookName = "<center><b>" + book.getTenSach()+"</b></center>";
+		String bookIsbn = "<b>ISBN: </b>"+isbn+"<br>";
+		String author = "<b>Tác giả: </b>";
+		Vector<String> allAuthor = book.getAuthor();
+		for(String str : allAuthor)
+			author += (str +"<br>");
+		String publisher = "<b>NXB: </b>"+book.getPublisher()+"<br>";
+		String edition = "<b>Tái bản: </b>"+book.getVersion();
+	
+		String bookInfo = "<html>" + bookName + bookIsbn + author + publisher + edition + "</html>";
+		
+		info.setText(bookInfo);
+	}
 }

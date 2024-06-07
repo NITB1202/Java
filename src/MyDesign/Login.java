@@ -27,12 +27,12 @@ public class Login extends JComponent{
             public void run() {
                 createImage();
                 repaint();
-            }
+            }	
         });
     }
 
     public Login() {
-        image = new ImageIcon(getClass().getResource("/Images/backgroundLogin.jpg"));
+        image = new ImageIcon("src/Images/backgroundLogin.jpg");
     }
     
     private void createImage(){
@@ -102,9 +102,6 @@ public class Login extends JComponent{
             }
         });
     }
-
-    
-    
     
     
     private Rectangle getAutoSize(Icon image) {

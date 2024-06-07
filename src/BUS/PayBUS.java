@@ -31,18 +31,15 @@ public class PayBUS {
          borrowCardDAO.RecoverBook(bc);
          
      } 
-    public void BooksLost(BorrowCard bc) throws ClassNotFoundException, SQLException, IOException{
-        
-    }
     
     public void BooksLost(BorrowCard bc, int lost, String ISBN) throws ClassNotFoundException, SQLException, IOException{
          borrowCardDAO = new BorrowCardDAO();
          borrowCardDAO.BooksLost(bc, lost, ISBN);
      }
      
-     public void getRealDate(int id, Date realDate) throws ClassNotFoundException, SQLException, IOException{
+     public void setRealReDate(int id, Date realDate) throws ClassNotFoundException, SQLException, IOException{
         borrowCardDAO = new BorrowCardDAO();
-        borrowCardDAO.getRealDate(id, (java.sql.Date) realDate);
+        borrowCardDAO.setRealReDate(id, (java.sql.Date) realDate);
      }
      
       public void banAcc(int id, Date fineDate) throws ClassNotFoundException, SQLException, IOException{
@@ -51,8 +48,19 @@ public class PayBUS {
      }
       
      public void UnlockAcc() throws ClassNotFoundException, SQLException, IOException{
-         borrowCardDAO = new BorrowCardDAO();
+        borrowCardDAO = new BorrowCardDAO();
         borrowCardDAO.UnlockAcc();
      }
-
+     
+     public void updatePenalty(int personID, int penalty) throws ClassNotFoundException, SQLException, IOException
+     {
+         borrowCardDAO = new BorrowCardDAO();
+         borrowCardDAO.updatePenalty(personID, penalty);
+     }
+     
+     public void updateDeposit(int bcID, int deposit) throws ClassNotFoundException, SQLException, IOException
+     {
+         borrowCardDAO = new BorrowCardDAO();
+         borrowCardDAO.updateDeposit(bcID, deposit);
+     }
 }

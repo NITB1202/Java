@@ -291,6 +291,7 @@ public class BorrowCardDAO{
                 PreparedStatement pst1 = ConnectDB.conn.prepareCall(sql1);
                 pst1.setInt(1, bc.getID());
                 pst1.executeUpdate();
+                
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -334,7 +335,7 @@ public void BooksLost(BorrowCard bc, int lost, String ISBN) throws ClassNotFound
 }
 
     
-    public void getRealDate(int id, java.sql.Date realDate) throws SQLException, ClassNotFoundException, IOException{
+    public void setRealReDate(int id, java.sql.Date realDate) throws SQLException, ClassNotFoundException, IOException{
         connectDB.connect();
         if(ConnectDB.conn != null){
         try {
@@ -393,5 +394,41 @@ public void BooksLost(BorrowCard bc, int lost, String ISBN) throws ClassNotFound
                connectDB.disconnect();
             }
         }
+    }
+    
+    public void updatePenalty(int personID, int penalty) throws SQLException
+    {
+    	 connectDB.connect();
+         if(ConnectDB.conn != null){
+             try {
+                 String sql = "UPDATE reader SET penalty = ? WHERE id = ?";                             
+                 PreparedStatement pst = ConnectDB.conn.prepareCall(sql);
+                 pst.setInt(1, penalty);
+                 pst.setInt(2, personID);
+                 pst.executeUpdate();
+             } catch (Exception e) {
+                 e.printStackTrace();
+             } finally {
+                connectDB.disconnect();
+             }
+         }    	
+    }
+    
+    public void updateDeposit(int bcID, int deposit) throws SQLException
+    {
+    	 connectDB.connect();
+         if(ConnectDB.conn != null){
+             try {
+                 String sql = "UPDATE borrow_card SET deposit = ? WHERE id = ?";                       
+                 PreparedStatement pst = ConnectDB.conn.prepareCall(sql);
+                 pst.setInt(1, deposit);
+                 pst.setInt(2, bcID);
+                 pst.executeUpdate();
+             } catch (Exception e) {
+                 e.printStackTrace();
+             } finally {
+                connectDB.disconnect();
+             }
+         } 
     }
 }
