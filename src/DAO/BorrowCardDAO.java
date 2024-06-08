@@ -110,34 +110,34 @@ public class BorrowCardDAO{
         return idBC;
        
     }
-    public Vector<BorrowCard> getByCondition(String condition) throws ClassNotFoundException, SQLException, IOException{
-        Vector<BorrowCard> list=new Vector<BorrowCard>();
-        connectDB.connect();
-        if(connectDB.conn!=null){
-            try{
-                String sql="SELECT borrow_card.*, reader.name AS Readername, staff.name AS Staffname FROM borrow_card, reader, staff WHERE borrow_card.readerID=reader.id AND borrow_card.staffID=staff.id AND "+condition;
-                PreparedStatement stmt=connectDB.conn.prepareStatement(sql);
-                ResultSet rs=stmt.executeQuery();
-                while(rs.next()){
-                    BorrowCard obj=new BorrowCard();
-                    obj.setID(rs.getInt("ID"));
-                    obj.setReadername(rs.getNString("Readername"));
-                    obj.setStaffname(rs.getNString("Staffname"));
-                    obj.setStartDate(rs.getDate("startDate"));
-                    obj.setExpReDate(rs.getDate("expReDate"));
-                    obj.setRealReDate(rs.getDate("realReDate"));
-                    obj.setdeposit(rs.getLong("deposit"));
-                    obj.setstatus(rs.getBoolean("isActive"));
-                    list.add(obj);
-                }
-            }catch(SQLException e){
-                System.out.println(e);
-            }finally{
-                connectDB.disconnect();
-            }
-        }
-        return list;
-    }
+	    public Vector<BorrowCard> getByCondition(String condition) throws ClassNotFoundException, SQLException, IOException{
+	        Vector<BorrowCard> list=new Vector<BorrowCard>();
+	        connectDB.connect();
+	        if(connectDB.conn!=null){
+	            try{
+	                String sql="SELECT borrow_card.*, reader.name AS Readername, staff.name AS Staffname FROM borrow_card, reader, staff WHERE borrow_card.readerID=reader.id AND borrow_card.staffID=staff.id AND "+condition;
+	                PreparedStatement stmt=connectDB.conn.prepareStatement(sql);
+	                ResultSet rs=stmt.executeQuery();
+	                while(rs.next()){
+	                    BorrowCard obj=new BorrowCard();
+	                    obj.setID(rs.getInt("ID"));
+	                    obj.setReadername(rs.getNString("Readername"));
+	                    obj.setStaffname(rs.getNString("Staffname"));
+	                    obj.setStartDate(rs.getDate("startDate"));
+	                    obj.setExpReDate(rs.getDate("expReDate"));
+	                    obj.setRealReDate(rs.getDate("realReDate"));
+	                    obj.setdeposit(rs.getLong("deposit"));
+	                    obj.setstatus(rs.getBoolean("isActive"));
+	                    list.add(obj);
+	                }
+	            }catch(SQLException e){
+	                System.out.println(e);
+	            }finally{
+	                connectDB.disconnect();
+	            }
+	        }
+	        return list;
+	    }
     
     public Vector<BorrowCard> getAll(int id) throws Exception{
     	Vector<BorrowCard> arr=new Vector<BorrowCard>();

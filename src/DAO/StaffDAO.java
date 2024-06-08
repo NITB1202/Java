@@ -6,6 +6,7 @@ import DTO.entities.Account;
 import connection.ConnectDB;
 import java.io.FileNotFoundException;
 import java.sql.Statement;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class StaffDAO {
     protected ArrayList<Staff> list = new ArrayList<>();
     protected Staff staff = new Staff();
     protected Account user = new Account();
-    private ConnectDB connectDB;
+    private static ConnectDB connectDB;
 
     public StaffDAO() throws ClassNotFoundException, SQLException, IOException {
         connectDB = new ConnectDB();
@@ -315,5 +316,29 @@ public class StaffDAO {
         }
     	return a;
     }
+    
+    public static String getStaffNameById(int id) {
+        String staffName = ""; // Tên của nhân viên
+
+        // Chuẩn bị câu lệnh SQL
+        String query = "SELECT name FROM Staff WHERE id = ?";
+
+        try {
+            Connection connection = connectDB.getConnection();
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, id); // Thiết lập tham số cho câu lệnh SQL
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        staffName = resultSet.getString("name"); // Lấy tên của nhân viên từ kết quả truy vấn
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return staffName;
+    }
+
     
 }

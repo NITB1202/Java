@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import BUS.PublisherBUS;
@@ -68,6 +69,11 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
         btnThemNhaXuatBan.setBorderColor(new java.awt.Color(22, 113, 221));
         btnThemNhaXuatBan.setColor(new java.awt.Color(22, 113, 221));
         btnThemNhaXuatBan.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
+        setIconImage(webIcon.getImage());
+        setTitle("Thêm nhà xuất bản");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
         
         btnThemNhaXuatBan.addActionListener(new ActionListener() {
             @Override
@@ -123,7 +129,7 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
                                 else {
                                    pub.saveInfo(p);
                                     String value = txtNhaXuatBan.getText();
-                                    whid.addToComboBox(value);
+//                                    whid.addToComboBox(value);
                                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             } catch (ClassNotFoundException e1) {

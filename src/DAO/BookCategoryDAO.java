@@ -3,7 +3,10 @@ package DAO;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import DTO.entities.BookAuthor;
 import DTO.entities.BookCategory;
@@ -47,4 +50,44 @@ public class BookCategoryDAO {
             e.printStackTrace();
         }
 	}
+    
+    public List<String> getCategoriesForBook(String bookName) throws SQLException {
+        List<String> categories = new ArrayList<>();
+        String query = "SELECT c.name AS category_name\r\n"
+        		+ "FROM book_category bc \r\n"
+        		+ "JOIN category c ON bc.categoryID = c.id \r\n"
+        		+ "JOIN cp_book cp ON bc.ISBN = cp.ISBN\r\n"
+        		+ "JOIN book b ON b.id = cp.bookID \r\n"
+        		+ "WHERE b.name COLLATE Latin1_General_CI_AI = ?";
+        connectDB.connect();
+        try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, bookName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                categories.add(rs.getString("category_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+    
+    public List<String> getEditionsForBook(String bookName) throws SQLException {
+        List<String> editions = new ArrayList<>();
+        String query = "SELECT cb.edition AS edition_name " +
+                       "FROM book b " +
+                       "JOIN cp_book cb ON cb.bookID = b.id " +
+                       "WHERE b.name = ?";
+        connectDB.connect();
+        try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, bookName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                editions.add(rs.getString("edition_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return editions;
+    }
 }

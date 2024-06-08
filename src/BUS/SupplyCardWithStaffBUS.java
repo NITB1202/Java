@@ -5,8 +5,10 @@
  */
 package BUS;
 
+import DAO.BorrowCardDAO;
 import DAO.StaffDAO;
 import DAO.SupplyCardDAO;
+import DTO.entities.BorrowCard;
 import DTO.entities.Staff;
 import DTO.entities.SupplyCard;
 import DTO.entities.SupplyCardWithStaff;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -41,6 +44,7 @@ public class SupplyCardWithStaffBUS {
         this.staffDAO = staffDAO;
     }
     
+    
     public List<SupplyCardWithStaff> getAllSupplyCardWithStaff() throws ClassNotFoundException, SQLException, IOException {
         List<SupplyCardWithStaff> supplyCardsWithStaff = new ArrayList<>();
         List<SupplyCard> supplyCards = supplyCardDAO.getAllSC(); // Gọi phương thức từ lớp DAO để lấy danh sách supply_Card
@@ -66,4 +70,6 @@ public class SupplyCardWithStaffBUS {
         }
         return null; 
     }
+
+    
 }

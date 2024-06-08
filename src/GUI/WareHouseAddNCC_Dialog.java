@@ -130,7 +130,7 @@ public class WareHouseAddNCC_Dialog extends javax.swing.JDialog {
                                 else {
                                     pub.saveInfo(p);
                                     String value = txtNhaCungCap.getText();
-                                    whid.addToComboBox(value);
+//                                    whid.addToComboBox(value);
                                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             } catch (ClassNotFoundException e1) {

@@ -3,53 +3,57 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package GUI;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.GroupLayout;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.table.DefaultTableModel;
 
-import DAO.SupplyCardDAO;
-import DTO.entities.Account;
-import DTO.entities.SupplyCardWithStaff;
-import connection.ConnectDB;
-
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import BUS.BorrowCardBUS;
+import DTO.entities.BorrowCard;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTextField;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import com.toedter.calendar.JTextFieldDateEditor;
 /**
  *
  * @author QUANG DIEN
  */
 public class WareHouseSearch_Dialog extends javax.swing.JDialog {
-    ConnectDB connectDB;
-    SupplyCardDAO supplyCardWithStaffDAO;
-    WareHouse_GUI whg;
-//    DefaultTableModel model = (DefaultTableModel) whg.tbLichSuNhapHang.getModel();
     /**
-     * Creates new form SearchBorrow_Dialog
+     * Creates new form TicketSearch_Dialog
      */
-    public WareHouseSearch_Dialog( java.awt.Frame parent, boolean modal) throws SQLException, IOException, ClassNotFoundException {
+    public WareHouseSearch_Dialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.whg = new WareHouse_GUI();
-        try {
-            this.supplyCardWithStaffDAO = new SupplyCardDAO(connectDB);
-            initComponents();
-        } catch (IOException ex) {
-            Logger.getLogger(WareHouseSearch_Dialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        initComponents();
     }
-
+    
+    //-----GET-----
+    public MyDesign.MyButton getbtnTimKiem(){
+        return btnTimKiem;
+    }
+    public String getDate(){
+        String Date;
+        if(jCalendarComboBox1.getDate()!=null){
+            Date date = jCalendarComboBox1.getDate();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date = formatter.format(date);
+        }else{
+            Date=null;
+        }
+        return Date;
+    }
+    public String getWarehouseStaff(){
+        return txtThuKho.getText();
+    }
+    public String getSupplierName(){
+        return txtNhaCungCap.getText();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,25 +63,140 @@ public class WareHouseSearch_Dialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnGroup = new javax.swing.ButtonGroup();
+        panelBorder_Statistic_Blue1 = new MyDesign.PanelBorder_Statistic_Blue();
+        panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtNhaCungCap = new MyDesign.MyTextField_Basic();
+        jLabel10 = new javax.swing.JLabel();
+        txtThuKho = new MyDesign.MyTextField_Basic();
+        btnTimKiem = new MyDesign.MyButton();
+        jCalendarComboBox1 = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
+        setIconImage(webIcon.getImage());
+        setTitle("Tìm kiếm");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
+
+        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel8.setText("Ngày nhập");
+
+        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel9.setText("Nhà cung cấp");
+
+        txtNhaCungCap.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+
+        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel10.setText("Thủ kho");
+
+        txtThuKho.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+
+        btnTimKiem.setBackground(new java.awt.Color(22, 113, 221));
+        btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search-white.png"))); // NOI18N
+        btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setBorderColor(new java.awt.Color(22, 113, 221));
+        btnTimKiem.setColorOver(new java.awt.Color(22, 113, 221));
+        btnTimKiem.setColor(new java.awt.Color(22, 113, 221));
+        btnTimKiem.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+
+        jCalendarComboBox1.setBackground(new java.awt.Color(255, 255, 255));
+        jCalendarComboBox1.setForeground(new java.awt.Color(255, 255, 255));
+        jCalendarComboBox1.setDate(null);
+        jCalendarComboBox1.setDateFormatString("yyyy-MM-dd");
+        JTextFieldDateEditor editor = (JTextFieldDateEditor) jCalendarComboBox1.getDateEditor();
+        editor.setEditable(false);
+
+        javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
+        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
+        panelBorder_Basic1Layout.setHorizontalGroup(
+            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+                                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNhaCungCap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jCalendarComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(txtThuKho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+                        .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))))
+        );
+        panelBorder_Basic1Layout.setVerticalGroup(
+            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(jCalendarComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(txtNhaCungCap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(txtThuKho, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
+        );
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search-white.png"))); // NOI18N
+        jLabel3.setText("Tìm kiếm");
+
+        javax.swing.GroupLayout panelBorder_Statistic_Blue1Layout = new javax.swing.GroupLayout(panelBorder_Statistic_Blue1);
+        panelBorder_Statistic_Blue1.setLayout(panelBorder_Statistic_Blue1Layout);
+        panelBorder_Statistic_Blue1Layout.setHorizontalGroup(
+            panelBorder_Statistic_Blue1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBorder_Statistic_Blue1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelBorder_Statistic_Blue1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        panelBorder_Statistic_Blue1Layout.setVerticalGroup(
+            panelBorder_Statistic_Blue1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBorder_Statistic_Blue1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 548, Short.MAX_VALUE)
+            .addComponent(panelBorder_Statistic_Blue1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
+            .addComponent(panelBorder_Statistic_Blue1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+//
     /**
      * @param args the command line arguments
      */
@@ -104,41 +223,32 @@ public class WareHouseSearch_Dialog extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(WareHouseSearch_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    WareHouseSearch_Dialog dialog = new WareHouseSearch_Dialog(new javax.swing.JFrame(), true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                } catch (SQLException ex) {
-                    Logger.getLogger(WareHouseSearch_Dialog.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(WareHouseSearch_Dialog.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(WareHouseSearch_Dialog.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                WareHouseSearch_Dialog dialog = new WareHouseSearch_Dialog(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
-    
-    public static boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
-    }
-    public static boolean isAlpha(String str) {
-        return str.matches("[a-zA-Z]+");
-    }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup btnGroup;
+    private MyDesign.MyButton btnTimKiem;
+    private com.toedter.calendar.JDateChooser jCalendarComboBox1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private MyDesign.PanelBorder_Basic panelBorder_Basic1;
+    private MyDesign.PanelBorder_Statistic_Blue panelBorder_Statistic_Blue1;
+    private MyDesign.MyTextField_Basic txtNhaCungCap;
+    private MyDesign.MyTextField_Basic txtThuKho;
     // End of variables declaration//GEN-END:variables
 }

@@ -21,6 +21,7 @@ import DTO.entities.Publisher;
 import javax.swing.JComboBox;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import MyDesign.MyButton;
 import java.awt.Color;
@@ -77,6 +78,11 @@ public class WareHouseAddTypeBook_Dialog extends javax.swing.JDialog {
         btnThemTheLoai.setColor(new java.awt.Color(22, 113, 221));
         btnThemTheLoai.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         
+        ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
+        setIconImage(webIcon.getImage());
+        setTitle("Thêm thể loại sách");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
         btnThemTheLoai.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,7 +115,7 @@ public class WareHouseAddTypeBook_Dialog extends javax.swing.JDialog {
 				// TODO Auto-generated method stub
 				String selectedValue = (String) cbCategory.getSelectedItem();
                 if (selectedValue != null) {
-                    whdialog.addToComboBox(selectedValue);
+//                    whdialog.addToComboBox(selectedValue);
                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm vào mục thành công!","Thông báo",JOptionPane.INFORMATION_MESSAGE);
                 }
 			}
@@ -220,7 +226,7 @@ public class WareHouseAddTypeBook_Dialog extends javax.swing.JDialog {
     	 String selectedValue = (String) cbCategory.getSelectedItem();
          // Kiểm tra nếu selectedValue không phải là null và không phải giá trị mặc định
          if (selectedValue != null && cbCategory.getSelectedIndex() > 0) {
-             whdialog.addToComboBoxCheckTl(selectedValue);
+//             whdialog.addToComboBoxCheckTl(selectedValue);
          }
          return selectedValue;
     }

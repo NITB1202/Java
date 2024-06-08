@@ -22,6 +22,7 @@ import DTO.entities.Author;
 import javax.swing.JComboBox;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import MyDesign.MyButton;
 import java.awt.Color;
@@ -79,6 +80,11 @@ public class WareHouseAddReader_Dialog extends javax.swing.JDialog {
         btnThemTacGia.setBorderColor(new java.awt.Color(22, 113, 221));
         btnThemTacGia.setColor(new java.awt.Color(22, 113, 221));
         btnThemTacGia.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
+        setIconImage(webIcon.getImage());
+        setTitle("Thêm tác giả");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
         
         btnThemTacGia.addActionListener(new ActionListener() {
             @Override
@@ -112,7 +118,7 @@ public class WareHouseAddReader_Dialog extends javax.swing.JDialog {
 				// TODO Auto-generated method stub
 				String selectedValue = (String) cbTgia.getSelectedItem();
                 if (selectedValue != null) {
-                    whdialog.addToComboBox(selectedValue);
+//                    whdialog.addToComboBox(selectedValue);
                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm vào mục thành công!","Thông báo",JOptionPane.INFORMATION_MESSAGE);
                 }
 			}
@@ -221,7 +227,7 @@ public class WareHouseAddReader_Dialog extends javax.swing.JDialog {
     	 String selectedValue = (String) cbTgia.getSelectedItem();
          // Kiểm tra nếu selectedValue không phải là null và không phải giá trị mặc định
          if (selectedValue != null && cbTgia.getSelectedIndex() > 0) {
-             whdialog.addToComboBoxCheckTl(selectedValue);
+//             whdialog.addToComboBoxCheckTl(selectedValue);
          }
          return selectedValue;
     }

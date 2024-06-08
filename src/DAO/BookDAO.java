@@ -245,7 +245,24 @@ public class BookDAO extends ConnectDB {
 
         return list;
     }
-    
+	    public String getISBNForBook(String bookName) throws SQLException {
+	        String isbns = null;
+	        String query = "SELECT ISBN AS isbn_name\r\n"
+	        		+ "FROM cp_book, book\r\n"
+	        		+ "WHERE bookID =id AND name COLLATE Latin1_General_CI_AI = ?";
+	        connectDB.connect();
+	        try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+	            stmt.setString(1, bookName);
+	            ResultSet rs = stmt.executeQuery();
+	            while (rs.next()) {
+	                isbns = rs.getString("isbn_name");
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return isbns;
+	    }
+
     public String getByNameBook(String name) {
         String status = null;
         String query = "SELECT name FROM book WHERE name COLLATE Latin1_General_CI_AI = ?";

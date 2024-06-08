@@ -6,8 +6,13 @@ package GUI;
 
 import MyDesign.ScrollBar;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+
 import DTO.entities.BorrowCard;
 import DTO.entities.DetailBC;
 import BUS.BorrowCardBUS;
@@ -23,10 +28,18 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.io.IOException;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import java.awt.Font;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 /**
  *
  * @author QUANG DIEN
@@ -57,16 +70,31 @@ public class Ticket_GUI extends javax.swing.JPanel {
         jScrollPane2.setVerticalScrollBar(new ScrollBar());
         jScrollPane2.getVerticalScrollBar().setBackground(Color.WHITE);
         jScrollPane2.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+
         loadTicketList(list);
         spTicketDetail2.setVerticalScrollBar(new ScrollBar());
+        setLayout(null);
+        add(panelBorder1);
+        panelBorder1.setLayout(null);
+        panelBorder1.add(jLabel5);
+        panelBorder1.add(myButton1);
+        panelBorder1.add(spTable);
+        add(spTicketDetail2);
+        add(panelBorder5);
         spTicketDetail2.getVerticalScrollBar().setBackground(Color.WHITE);
         spTicketDetail2.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTicketDetail2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        jScrollPane2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        
+        DefaultTableCellRenderer customRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row%4 == 0)
+                    comp.setFont(new Font("Segoe UI", Font.BOLD, 13));
+                return comp;
+            }
+        };
+        tbBook.getColumnModel().getColumn(0).setCellRenderer(customRenderer); 
     }
     
     
@@ -139,7 +167,7 @@ public class Ticket_GUI extends javax.swing.JPanel {
     
     //-----HIỆN THÔNG TIN LÊN BẢNG-----
     public void showinfo(int i) throws ClassNotFoundException, SQLException, IOException{
-        String idborrow="#LB"+String.valueOf(model.getValueAt(i,0));
+        String idborrow="#PM"+String.valueOf(model.getValueAt(i,0));
         lbMaPM.setText(idborrow);
         txtDocGia4.setText(model.getValueAt(i, 1).toString());
         txtNgayMuon2.setText(model.getValueAt(i, 2).toString());
@@ -152,47 +180,20 @@ public class Ticket_GUI extends javax.swing.JPanel {
         int dem=1;
         for(DetailBC obj:listBook){
             if(obj.getLost()==0){
-                    Object[] lost={"Sách "+dem+"                                         Còn sách"};
+                    Object[] lost={"Sách "+dem+"          Còn sách"};
                 Bookmodel.addRow(lost);
             }else{
-                Object[] lost={"Sách "+dem+"                                             Mất sách"};
+                Object[] lost={"Sách "+dem+"          Mất sách"};
                 Bookmodel.addRow(lost);
             }
             Object[] book={"Tên sách:        "+obj.getBookname()};
             Bookmodel.addRow(book);
-            Object[] author={"Tác giả:           "+obj.getAuthorname()};
+            Object[] author={"Tác giả:           "+obj.getAuthorname().get(0)};
             Bookmodel.addRow(author);
             Object[] num={"Số lượng:        "+obj.getNum()};
             Bookmodel.addRow(num);
             dem++;
         }
-//        DefaultComboBoxModel BookName = new DefaultComboBoxModel();
-//        BookName.addElement("Chọn sách");
-//        for(DetailBC obj : listBook){
-//            BookName.addElement(obj.getBookname());
-//        }
-//        lbBaoMat2.setText("");
-//        txtDocGia5.setText("");
-//        txtTacGia2.setText("");
-//        txtSoLuong2.setText("");
-//        jComboBox1.setModel(BookName);
-//        jComboBox1.addActionListener(new ActionListener(){
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                for(DetailBC obj : listBook){
-//                    if(jComboBox1.getSelectedItem().equals(obj.getBookname())){
-//                        if(obj.getLost()==0){
-//                            lbBaoMat2.setText("Còn sách");
-//                        }else{
-//                            lbBaoMat2.setText("Mất sách");
-//                        }
-//                        txtDocGia5.setText(obj.getBookname());
-//                        txtTacGia2.setText(obj.getAuthorname());
-//                        txtSoLuong2.setText(String.valueOf(obj.getNum()));
-//                    }
-//                }
-//            }
-//        });
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -204,16 +205,28 @@ public class Ticket_GUI extends javax.swing.JPanel {
     private void initComponents() {
 
         btnGroup = new javax.swing.ButtonGroup();
-        panelBorder1 = new MyDesign.PanelBorder();
+        panelBorder1 = new JPanel();
+        panelBorder1.setBackground(new Color(255, 255, 255));
+        panelBorder1.setBounds(0, 0, 484, 608);
         jLabel5 = new javax.swing.JLabel();
+        jLabel5.setBounds(10, 30, 140, 26);
         spTable = new javax.swing.JScrollPane();
+        spTable.setBounds(10, 80, 464, 504);
         tbPhieuMuon = new MyDesign.MyTable();
         myButton1 = new MyDesign.MyButton();
+        myButton1.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        myButton1.setBackground(new Color(22, 113, 221));
+        myButton1.setColorOver(new Color(22, 113, 221));
+        myButton1.setBounds(344, 20, 130, 45);
         spTicketDetail2 = new javax.swing.JScrollPane();
-        panelBorder4 = new MyDesign.PanelBorder();
+        spTicketDetail2.setBounds(500, 64, 278, 519);
+        panelBorder4 = new JPanel();
+        panelBorder4.setBorder(new LineBorder(new Color(128, 128, 128)));
+        panelBorder4.setBackground(new Color(255, 255, 255));
         lbMaPM = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel22.setFont(new Font("SansSerif", Font.PLAIN, 11));
         jLabel23 = new javax.swing.JLabel();
         txtDocGia4 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
@@ -230,34 +243,47 @@ public class Ticket_GUI extends javax.swing.JPanel {
         txtHanTra = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbBook = new MyDesign.MyTable();
-        panelBorder5 = new MyDesign.PanelBorder();
+        panelBorder5 = new JPanel();
+        panelBorder5.setForeground(new Color(128, 128, 128));
+        panelBorder5.setBorder(new LineBorder(new Color(128, 128, 128)));
+        panelBorder5.setBackground(new Color(215, 231, 255));
+        panelBorder5.setBounds(500, 20, 278, 48);
         cbDaTra = new javax.swing.JCheckBox();
+        cbDaTra.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         cbChuaTra = new javax.swing.JCheckBox();
+        cbChuaTra.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(127, 127, 127));
+        jLabel5.setFont(new Font("SansSerif", Font.BOLD, 20)); // NOI18N
+        jLabel5.setForeground(new Color(0, 0, 0));
         jLabel5.setText("Phiếu mượn");
 
         spTable.setBorder(null);
 
-        tbPhieuMuon.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        tbPhieuMuon.setModel(new DefaultTableModel(
+        	new Object[][] {
+        	},
+        	new String[] {
+        		"ID", "\u0110\u1ED9c gi\u1EA3", "Ng\u00E0y m\u01B0\u1EE3n", "Th\u1EE7 thư", "Tr\u1EA1ng th\u00E1i"
+        	}){
+                boolean[] canEdit = new boolean [] {
+                        false, false, false, false, false
+                    };
 
-            },
-            new String [] {
-                "STT", "Độc giả", "Ngày mượn", "Thủ kho", "Trạng thái"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                    public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return canEdit [columnIndex];
+                    }
+                });
+        tbPhieuMuon.getColumnModel().getColumn(0).setPreferredWidth(35);
+        tbPhieuMuon.getColumnModel().getColumn(0).setMinWidth(35);
+        tbPhieuMuon.getColumnModel().getColumn(1).setPreferredWidth(125);
+        tbPhieuMuon.getColumnModel().getColumn(1).setMinWidth(125);
+        tbPhieuMuon.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tbPhieuMuon.getColumnModel().getColumn(2).setMinWidth(80);
+        tbPhieuMuon.getColumnModel().getColumn(3).setPreferredWidth(125);
+        tbPhieuMuon.getColumnModel().getColumn(3).setMinWidth(125);
+        tbPhieuMuon.getColumnModel().getColumn(4).setMinWidth(75);
         tbPhieuMuon.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbPhieuMuon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -283,35 +309,6 @@ public class Ticket_GUI extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
-        panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(myButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(myButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         spTicketDetail2.setBackground(new java.awt.Color(246, 250, 255));
         spTicketDetail2.setBorder(null);
         spTicketDetail2.setOpaque(false);
@@ -329,7 +326,7 @@ public class Ticket_GUI extends javax.swing.JPanel {
         jLabel22.setForeground(new java.awt.Color(127, 127, 127));
         jLabel22.setText("Thông tin cơ bản");
 
-        jLabel23.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+        jLabel23.setFont(new Font("SansSerif", Font.PLAIN, 12)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(127, 127, 127));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel23.setText("MÃ PHIẾU MƯỢN");
@@ -390,102 +387,117 @@ public class Ticket_GUI extends javax.swing.JPanel {
         tbBook.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tbBook);
         tbBook.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                comp.setFont(new Font("Segoe UI", Font.BOLD, 13));
+                setHorizontalAlignment(SwingConstants.CENTER);
+                comp.setBackground(new Color(22, 113, 255));
+                comp.setForeground(Color.WHITE);
+                return comp;
+            }
+        };
+        tbBook.getColumnModel().getColumn(0).setHeaderRenderer(headerRenderer);
 
         javax.swing.GroupLayout panelBorder4Layout = new javax.swing.GroupLayout(panelBorder4);
-        panelBorder4.setLayout(panelBorder4Layout);
         panelBorder4Layout.setHorizontalGroup(
-            panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbLine2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panelBorder4Layout.createSequentialGroup()
-                        .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel26))
-                        .addGap(39, 39, 39)
-                        .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtThuKho2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTienCoc2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder4Layout.createSequentialGroup()
-                        .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel21)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel30))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNgayMuon2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDocGia4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtHanTra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(223, 223, 223)
-                        .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTacGia2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelBorder4Layout.createSequentialGroup()
-                                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSoLuong2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDocGia5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(6, 6, 6))))
-                    .addGroup(panelBorder4Layout.createSequentialGroup()
-                        .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panelBorder4Layout.createSequentialGroup()
-                                .addGap(73, 73, 73)
-                                .addComponent(jLabel22))
-                            .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(lbMaPM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+        	panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder4Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(jLabel25)
+        						.addComponent(jLabel26))
+        					.addGap(39)
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(txtThuKho2, GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+        						.addComponent(txtTienCoc2, GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)))
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(jLabel21)
+        						.addComponent(jLabel24)
+        						.addComponent(jLabel30))
+        					.addGap(18)
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(txtNgayMuon2, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+        						.addComponent(txtDocGia4, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+        						.addComponent(txtHanTra, GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+        						.addComponent(jLabel22)))
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING, false)
+        						.addComponent(lbMaPM, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        						.addComponent(jLabel23, GroupLayout.PREFERRED_SIZE, 265, GroupLayout.PREFERRED_SIZE))
+        					.addGap(0, 337, Short.MAX_VALUE))
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(lbLine2, GroupLayout.PREFERRED_SIZE, 253, GroupLayout.PREFERRED_SIZE)
+        						.addGroup(panelBorder4Layout.createSequentialGroup()
+        							.addGap(10)
+        							.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)))
+        					.addGap(205)
+        					.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(txtTacGia2, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+        						.addGroup(panelBorder4Layout.createSequentialGroup()
+        							.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(txtSoLuong2, GroupLayout.PREFERRED_SIZE, 138, GroupLayout.PREFERRED_SIZE)
+        								.addComponent(txtDocGia5, GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+        							.addGap(6)))))
+        			.addContainerGap())
         );
         panelBorder4Layout.setVerticalGroup(
-            panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel23)
-                .addGap(0, 0, 0)
-                .addComponent(lbMaPM)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(txtDocGia4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24)
-                    .addComponent(txtNgayMuon2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel30)
-                    .addComponent(txtHanTra))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(txtThuKho2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(txtTienCoc2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbLine2)
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder4Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(txtDocGia5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTacGia2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSoLuong2))
-                    .addGroup(panelBorder4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        	panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder4Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addComponent(jLabel23)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(lbMaPM)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(jLabel22)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel21)
+        				.addComponent(txtDocGia4))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel24)
+        				.addComponent(txtNgayMuon2))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel30)
+        				.addComponent(txtHanTra))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel25)
+        				.addComponent(txtThuKho2))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel26)
+        				.addComponent(txtTienCoc2))
+        			.addGap(7)
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addGap(40)
+        					.addComponent(txtDocGia5)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(txtTacGia2)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(txtSoLuong2))
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addGap(4)
+        					.addComponent(lbLine2, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap(21, Short.MAX_VALUE))
         );
+        panelBorder4.setLayout(panelBorder4Layout);
 
         spTicketDetail2.setViewportView(panelBorder4);
 
-        cbDaTra.setBackground(new java.awt.Color(246, 250, 255));
-        cbDaTra.setForeground(new java.awt.Color(127, 127, 127));
+        cbDaTra.setBackground(new Color(215, 231, 255));
+        cbDaTra.setForeground(new Color(0, 0, 0));
         cbDaTra.setText("Đã trả");
         cbDaTra.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -493,8 +505,8 @@ public class Ticket_GUI extends javax.swing.JPanel {
             }
         });
 
-        cbChuaTra.setBackground(new java.awt.Color(246, 250, 255));
-        cbChuaTra.setForeground(new java.awt.Color(127, 127, 127));
+        cbChuaTra.setBackground(new Color(215, 231, 255));
+        cbChuaTra.setForeground(new Color(0, 0, 0));
         cbChuaTra.setText("Chưa trả");
         cbChuaTra.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -503,50 +515,25 @@ public class Ticket_GUI extends javax.swing.JPanel {
         });
 
         javax.swing.GroupLayout panelBorder5Layout = new javax.swing.GroupLayout(panelBorder5);
-        panelBorder5.setLayout(panelBorder5Layout);
         panelBorder5Layout.setHorizontalGroup(
-            panelBorder5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cbDaTra)
-                .addGap(18, 18, 18)
-                .addComponent(cbChuaTra)
-                .addGap(1, 1, 1))
+        	panelBorder5Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder5Layout.createSequentialGroup()
+        			.addGap(126)
+        			.addComponent(cbDaTra)
+        			.addGap(18)
+        			.addComponent(cbChuaTra)
+        			.addContainerGap(13, Short.MAX_VALUE))
         );
         panelBorder5Layout.setVerticalGroup(
-            panelBorder5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelBorder5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbDaTra, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbChuaTra, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        	panelBorder5Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder5Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder5Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(cbDaTra, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(cbChuaTra, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+        			.addContainerGap(9, Short.MAX_VALUE))
         );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTicketDetail2, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                    .addComponent(panelBorder5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelBorder1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(panelBorder5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spTicketDetail2, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
+        panelBorder5.setLayout(panelBorder5Layout);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbPhieuMuonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPhieuMuonMouseClicked
@@ -574,7 +561,6 @@ public class Ticket_GUI extends javax.swing.JPanel {
     private void cbDaTraItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbDaTraItemStateChanged
         // TODO add your handling code here:
         //-----KIỂM TRA ĐÃ TRẢ-----
-        
         if(evt.getStateChange()==1){
             if(getcbChuaTra().isSelected()){
                 try {
@@ -605,7 +591,6 @@ public class Ticket_GUI extends javax.swing.JPanel {
     private void cbChuaTraItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbChuaTraItemStateChanged
         // TODO add your handling code here:
         //-----KIỂM TRA CHƯA TRẢ-----
-        
         if(evt.getStateChange()==1){
             if(getcbDaTra().isSelected()){
                 try {
@@ -730,9 +715,9 @@ public class Ticket_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel lbLine2;
     private javax.swing.JLabel lbMaPM;
     private MyDesign.MyButton myButton1;
-    private MyDesign.PanelBorder panelBorder1;
-    private MyDesign.PanelBorder panelBorder4;
-    private MyDesign.PanelBorder panelBorder5;
+    private JPanel panelBorder1;
+    private JPanel panelBorder4;
+    private JPanel panelBorder5;
     private javax.swing.JScrollPane spTable;
     private javax.swing.JScrollPane spTicketDetail2;
     private MyDesign.MyTable tbBook;
@@ -745,5 +730,4 @@ public class Ticket_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel txtTacGia2;
     private javax.swing.JLabel txtThuKho2;
     private javax.swing.JLabel txtTienCoc2;
-    // End of variables declaration//GEN-END:variables
 }

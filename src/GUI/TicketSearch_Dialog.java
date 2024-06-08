@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -70,8 +72,12 @@ public class TicketSearch_Dialog extends javax.swing.JDialog {
         jCalendarComboBox1 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
+       
+        ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
+        setIconImage(webIcon.getImage());
+        setTitle("Tìm kiếm");
+        setSize(300, 200);
+        setLocationRelativeTo(null);
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel8.setText("Ngày mượn");
@@ -99,6 +105,7 @@ public class TicketSearch_Dialog extends javax.swing.JDialog {
         jCalendarComboBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCalendarComboBox1.setDate(null);
         jCalendarComboBox1.setDateFormatString("yyyy-MM-dd");
+        (jCalendarComboBox1.getDateEditor()).setEnabled(false);
 
         javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
         panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);

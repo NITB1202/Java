@@ -87,13 +87,13 @@ public class SupplyCardDetailDAO {
 	        e.printStackTrace();
 	    }
     }
-    public List<SupplyCardDetail> getSupplyCardDetailsByDate(String ngayNhap) {
+    public List<SupplyCardDetail> getSupplyCardDetailsById(int id) {
     	List<SupplyCardDetail> supplyCardDetailList = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder();
                     queryBuilder.append("SELECT detail_supply_card.scID, detail_supply_card.ISBN, detail_supply_card.num ")
                                 .append("FROM supply_card ")
                                 .append("INNER JOIN detail_supply_card ON supply_card.id = detail_supply_card.scID ")
-                                .append("WHERE CAST(supply_card.supDate AS DATE) = ?");
+                                .append("WHERE supply_card.id = ?");
                     String query = queryBuilder.toString();
 
 
@@ -101,7 +101,7 @@ public class SupplyCardDetailDAO {
             connectDB.connect();
             Connection connection = connectDB.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, ngayNhap);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {

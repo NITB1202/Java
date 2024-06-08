@@ -85,6 +85,27 @@ public List<Publisher> getAllName() throws SQLException {
 
     return list;
 }
+
+public List<String> getPublisherForBook(String bookName) throws SQLException {
+    List<String> publishers = new ArrayList<>();
+    String query = "SELECT p.name AS publisher_name " +
+            "FROM book b " +
+            "JOIN cp_book cb ON b.id = cb.bookID " +
+            "JOIN publisher p ON cb.publisherID = p.id " +
+            "WHERE b.name = ?";
+    connectDB.connect();
+    try (Connection conn = connectDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+        stmt.setString(1, bookName);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            publishers.add(rs.getString("publisher_name"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return publishers;
+}
+
 public String getByIDPubName(String isbn) throws SQLException{
     String query = "SELECT publisher.name FROM cp_book INNER JOIN publisher ON cp_book.publisherID = publisher.id WHERE cp_book.ISBN COLLATE Latin1_General_BIN = ? COLLATE Latin1_General_BIN";
     String s = null;
