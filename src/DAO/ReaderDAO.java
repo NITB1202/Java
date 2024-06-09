@@ -159,7 +159,7 @@ public class ReaderDAO extends ConnectDB {
         connectDB.connect();
         if(connectDB.conn!=null){
             try{
-                String sql="Insert into reader(name,tel,address) values (?,?,?)";
+                String sql="Insert into reader(name,tel,address,penalty) values (?,?,?,0)";
                 PreparedStatement preparedStatement= connectDB.conn.prepareStatement(sql);
                 preparedStatement.setString(1, a.getName());
                 preparedStatement.setString(2, a.getTel());

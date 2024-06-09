@@ -330,7 +330,7 @@ public class Pay_GUI extends JPanel {
 	        panelPhieuMuon.setBounds(10, 11, 498, 606);
 	        panelPhieuMuon.setBackground(new Color(255, 255, 255));
 	        jLabel5 = new javax.swing.JLabel();
-	        jLabel5.setBounds(10, 41, 109, 24);
+	        jLabel5.setBounds(10, 41, 132, 24);
 	        spTable = new javax.swing.JScrollPane();
 	        spTable.setBounds(10, 86, 478, 486);
 	        tbPhieuMuon = new MyDesign.MyTable();

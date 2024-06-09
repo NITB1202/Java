@@ -27,6 +27,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/Webcam/webcam-capture-0.3.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xml-apis-1.0.b2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -137,7 +137,7 @@ public class Book_GUI extends JPanel {
         panelBorder1.setBackground(new Color(255, 255, 255));
         panelBorder1.setBounds(20, 20, 776, 568);
         jLabel5 = new javax.swing.JLabel();
-        jLabel5.setBounds(20, 27, 153, 26);
+        jLabel5.setBounds(20, 27, 180, 26);
         spTable = new javax.swing.JScrollPane();
         spTable.setBounds(20, 77, 725, 417);
         tbSach = new MyDesign.MyTable();

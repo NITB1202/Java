@@ -184,7 +184,7 @@ public class Reader_GUI extends JPanel {
         panel.setBounds(10, 11, 827, 606);
         panel.setBackground(new Color(255, 255, 255));
         jLabel5 = new javax.swing.JLabel();
-        jLabel5.setBounds(20, 33, 175, 26);
+        jLabel5.setBounds(20, 33, 206, 26);
         spTable = new javax.swing.JScrollPane();
         spTable.setBounds(20, 83, 738, 426);
         tbDanhSachDocGia = new MyDesign.MyTable();
