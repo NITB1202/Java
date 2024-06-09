@@ -166,6 +166,24 @@ public class CategoryDAO {
         } 
         return id;
     }
+    
+    public boolean updateCategoryName(String oldCategoryName, String newCategoryName) {
+		String query = "UPDATE category SET name = ? WHERE name = ?";
+        try {
+        	connectDB.connect();
+        	if(ConnectDB.conn != null){
+        		PreparedStatement stmt = ConnectDB.conn.prepareStatement(query);
+        		stmt.setString(1, newCategoryName);
+                stmt.setString(2, oldCategoryName);
+                int rowsUpdated = stmt.executeUpdate();
+                return rowsUpdated > 0;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     public void disconnect() {
             try {
                  connectDB.disconnect();

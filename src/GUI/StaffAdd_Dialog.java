@@ -24,6 +24,11 @@ import java.util.logging.Logger;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.GroupLayout;
+import java.awt.Toolkit;
+import java.awt.Color;
 /**
  *
  * @author QUANG DIEN
@@ -43,6 +48,8 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
      */
     public StaffAdd_Dialog(Account user, Frame parent, boolean modal,MyDesign.MyTable tab) throws IOException, ClassNotFoundException, SQLException {
         super(parent, modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(StaffAdd_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm nhân viên");
         this.user = user;
         this.tab = tab;
         personID = user.getPersonID();
@@ -56,9 +63,6 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         }
         initComponents();
         addRole(user.getRoleID());
-        if(rolePermissionBUS.hasPerCreate(roleID, 10))
-            lbChucVu.setEnabled(true);
-        else lbChucVu.setEnabled(false);
     }
     public boolean checkDataVal(String name,String tel,String address,String username,String password) throws HeadlessException, FileNotFoundException, ClassNotFoundException, IOException, SQLException {
     	if(name.equals("")) {
@@ -113,7 +117,7 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
     
     public void addDefaultAD(MyDesign.MyTable tab) throws Exception{
     	tab.setRowCount(0);
-        Vector<Account> arr= staffBUS.getAllAD();
+        Vector<Account> arr = staffBUS.getAllAD();
         for(int i=0;i<arr.size();i++){
             Account acc=arr.get(i);
             int id=acc.getPersonID();
@@ -129,7 +133,7 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         
         public void addDefaultQL(MyDesign.MyTable tab) throws Exception{
         	tab.setRowCount(0);
-            Vector<Account> arr= staffBUS.getAllQL();
+            Vector<Account> arr = staffBUS.getAllQL();
             for(int i=0;i<arr.size();i++){
             	 Account acc=arr.get(i);
                  int id=acc.getPersonID();
@@ -215,6 +219,7 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         txtDiaChi = new MyDesign.MyTextField_Basic();
         btnThemNhanVien = new MyDesign.MyButton();
+        btnThemNhanVien.setColorOver(new Color(22, 113, 221));
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -223,7 +228,6 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         txtMatKhau = new MyDesign.MyTextField_Basic();
         jLabel13 = new javax.swing.JLabel();
         cbChucVu = new javax.swing.JComboBox<>();
-        lbChucVu = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -282,90 +286,76 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         cbChucVu.setOpaque(true);
         cbChucVu.setPreferredSize(new java.awt.Dimension(77, 28));
 
-        lbChucVu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbChucVu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add.png"))); // NOI18N
-        lbChucVu.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
-        lbChucVu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbChucVuMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
-        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
         panelBorder_Basic1Layout.setHorizontalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel23)
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDiaChi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtSoDienThoai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel22)
-                    .addComponent(btnThemNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                                .addComponent(cbChucVu, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lbChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        	panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        			.addGap(7)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.TRAILING, false)
+        				.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        					.addComponent(jLabel11)
+        					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        					.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
+        				.addComponent(jLabel23)
+        				.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(jLabel8)
+        						.addComponent(jLabel9)
+        						.addComponent(jLabel10))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(txtDiaChi, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        						.addComponent(txtSoDienThoai, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        						.addComponent(txtTen, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        				.addComponent(jLabel22)
+        				.addComponent(btnThemNhanVien, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
+        				.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(jLabel13)
+        						.addComponent(jLabel12))
+        					.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+        					.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.LEADING, false)
+        						.addComponent(cbChucVu, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        						.addComponent(txtMatKhau, GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))))
+        			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorder_Basic1Layout.setVerticalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSoDienThoai, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13)
-                            .addComponent(lbChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnThemNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(cbChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+        	panelBorder_Basic1Layout.createParallelGroup(Alignment.TRAILING)
+        		.addGroup(panelBorder_Basic1Layout.createSequentialGroup()
+        			.addGap(11)
+        			.addComponent(jLabel22)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtTen, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel8))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtSoDienThoai, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel9))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtDiaChi, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel10))
+        			.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+        			.addComponent(jLabel23)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel11))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(txtMatKhau, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel12))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder_Basic1Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(cbChucVu, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jLabel13))
+        			.addGap(18)
+        			.addComponent(btnThemNhanVien, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        			.addGap(19))
         );
+        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -433,28 +423,6 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnThemNhanVienActionPerformed
 
-    private void lbChucVuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbChucVuMouseClicked
-        try {
-            if(roleID.equals("AD")){
-                StaffRole_Dialog srd = new StaffRole_Dialog(this.user,cbChucVu,new javax.swing.JFrame(), true);
-            srd.setVisible(true);
-            srd.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                }
-            });
-            }else{
-                JOptionPane.showMessageDialog(null,"Bạn không có quyền tạo chức vụ mới");
-            }   
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Admin_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Admin_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Admin_GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_lbChucVuMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -472,7 +440,6 @@ public class StaffAdd_Dialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lbChucVu;
     private MyDesign.PanelBorder_Basic panelBorder_Basic1;
     private MyDesign.PanelBorder_Statistic_Blue panelBorder_Statistic_Blue1;
     private MyDesign.MyTextField_Basic txtDiaChi;

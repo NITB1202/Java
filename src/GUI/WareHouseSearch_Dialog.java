@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JTextFieldDateEditor;
+import java.awt.Toolkit;
 /**
  *
  * @author QUANG DIEN
@@ -75,7 +76,7 @@ public class WareHouseSearch_Dialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
 
         ImageIcon webIcon =new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png")); 
-        setIconImage(webIcon.getImage());
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseSearch_Dialog.class.getResource("/Images/logo.png")));
         setTitle("Tìm kiếm");
         setSize(300, 200);
         setLocationRelativeTo(null);

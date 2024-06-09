@@ -62,6 +62,11 @@ public class SupplierBUS {
         ad.deleteByName(name);
         return true;
     }
+    
+    public boolean updateSupplierName(String oldName, String newName) throws SQLException {
+        return ad.updateSupplierName(oldName, newName);
+    }
+    
     public void disconnect() {
         ad.disconnect();
     }

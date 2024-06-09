@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,27 +21,40 @@ import DTO.entities.Supplier;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.Toolkit;
+import java.awt.Color;
 
 
 /**
  *
  * @author QUANG DIEN
  */
-public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
+public class WareHouseAddNewAuthor_Dialog extends javax.swing.JDialog {
     String nameFrame;
     Account user;
+    More_GUI parent;
     /**
      * Creates new form WareHouseAddReader_Dialog
      * @throws IOException
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public WareHouseAddNewReader_Dialog(java.awt.Frame parent,String nameFrame,Account user,boolean modal) throws ClassNotFoundException, SQLException, IOException {
+    public WareHouseAddNewAuthor_Dialog(java.awt.Frame parent,String nameFrame,Account user,boolean modal, More_GUI p) throws ClassNotFoundException, SQLException, IOException {
         super(parent,nameFrame, modal);
+        this.parent = p;
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNewAuthor_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm tác giả");
         this.nameFrame = nameFrame;
         this.user= user;
         setLocationRelativeTo(null);
         initComponents();
+        
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int x = ((int)screenSize.getWidth()- this.getWidth())/2;
+		int y = ((int)screenSize.getHeight() - this.getHeight())/2;
+		
+		setLocation(x,y);
     }
 
     /**
@@ -57,6 +71,7 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtTenTacGia = new MyDesign.MyTextField_Basic();
         btnThemTacGia = new MyDesign.MyButton();
+        btnThemTacGia.setColorOver(new Color(22, 113, 221));
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -93,17 +108,8 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
                             }
                             else {
                                 au.saveInfo(a);
+                                parent.initTableAuthor();
                                 JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);                                
-                                int stt = 1;
-                                List<Author> authors = au.getAllName();
-                                gui.authorsModel.setRowCount(0);
-                                for(Author item : authors)
-                                {
-                                    if(item.isStatus() == 1)
-                                        gui.authorsModel.addRow(new Object[]{stt++,item.getName()});
-                                }
-                                hide();
-                                gui.setVisible(true);
                                 
                             }
                         } catch (SQLException e1) {
@@ -113,7 +119,7 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }   catch (ClassNotFoundException ex) {
-                                Logger.getLogger(WareHouseAddNewReader_Dialog.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(WareHouseAddNewAuthor_Dialog.class.getName()).log(Level.SEVERE, null, ex);
                             }
                     }
                     else {
@@ -124,7 +130,6 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
                             }
                             else {
                                 au.saveInfo(a);
-                                whrd = new WareHouseAddReader_Dialog(null, nameFrame,"add", rootPaneCheckingEnabled);
                                 JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                             }
                         } catch (SQLException e1) {
@@ -133,10 +138,7 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
                         } catch (IOException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
-                        } catch (ClassNotFoundException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+                        }
                     }
                     
                     
@@ -229,22 +231,22 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WareHouseAddNewReader_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WareHouseAddNewAuthor_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WareHouseAddNewReader_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WareHouseAddNewAuthor_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WareHouseAddNewReader_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WareHouseAddNewAuthor_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WareHouseAddNewReader_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WareHouseAddNewAuthor_Dialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                WareHouseAddNewReader_Dialog dialog;
+                WareHouseAddNewAuthor_Dialog dialog;
                 try {
-                    dialog = new WareHouseAddNewReader_Dialog(new javax.swing.JFrame(), null,null ,true);
+                    dialog = new WareHouseAddNewAuthor_Dialog(new javax.swing.JFrame(), null,null ,true, new More_GUI());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                         @Override
                         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -278,6 +280,5 @@ public class WareHouseAddNewReader_Dialog extends javax.swing.JDialog {
     private MyDesign.PanelBorder_Statistic_Blue panelBorder_Statistic_Blue1;
     private MyDesign.MyTextField_Basic txtTenTacGia;
     private AuthorBUS au = new AuthorBUS();
-    private WareHouseAddReader_Dialog whrd = new WareHouseAddReader_Dialog(null, nameFrame, "add",rootPaneCheckingEnabled);
     // End of variables declaration//GEN-END:variables
 }

@@ -62,14 +62,12 @@ public class WareHouse_GUI extends JPanel {
     private SupplyCardWithStaffBUS supplyCardWithStaffBUS;
     private SupplyCardDetailDAO supplyCardDetailDAO;
     private WarehouseDAO warehouseDAO;
-    private WareHouseSearch_Dialog whSDialog ;
     private StaffDAO staffDAO ;
     SupplyCardBUS supplybll = new SupplyCardBUS();
     Vector<SupplyCard> list;
     private ConnectDB connectDB;
     // private SupplyCardDAO supplyCardDAO=new SupplyCardDAO(connectDB);
     private WareHouseImport_Dialog whid;
-    private WareHouseSearch_Dialog whsdc;
     // private WareHouseScanner_Dialog whscd;
     private SupplyCardWithStaffBUS scws;
     private List<SupplyCardWithStaff> supplyCardWithStaffList;

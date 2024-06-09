@@ -24,6 +24,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+import java.awt.Toolkit;
 
 /**
  *
@@ -40,42 +46,21 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
     private Account user;
     private Role newRole;
     javax.swing.JComboBox<String> cbChucVu;
-    /**
-     * Creates new form StaffRole_Dialog
-     */
-    public StaffRole_Dialog(Account user,javax.swing.JComboBox<String> cbChucVu,java.awt.Frame parent, boolean modal) throws ClassNotFoundException, SQLException, IOException {
-        super(parent, modal);
-        initComponents();
-        this.user = user;
-        this.rolePermissionBUS = new RolePermissionBUS();
-        this.pbus = new PermissionBUS();
-        this.roleBUS = new RoleBUS();
-        this.staffBUS=new StaffBUS();
-        this.cbChucVu=cbChucVu;
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable1.setVerticalScrollBar(new ScrollBar());
-        spTable1.getVerticalScrollBar().setBackground(Color.WHITE);
-        spTable1.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        initTable();
-    }
+    Admin_GUI parent;
     
-    public StaffRole_Dialog(Account user,java.awt.Frame parent, boolean modal) throws ClassNotFoundException, SQLException, IOException {
+    public StaffRole_Dialog(Account user,java.awt.Frame parent, boolean modal, Admin_GUI p) throws ClassNotFoundException, SQLException, IOException {
         super(parent, modal);
+        this.parent = p;
+        setIconImage(Toolkit.getDefaultToolkit().getImage(StaffRole_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm chức vụ");
         initComponents();
         this.user = user;
         this.rolePermissionBUS = new RolePermissionBUS();
         this.pbus = new PermissionBUS();
         this.roleBUS = new RoleBUS();
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
         spTable1.setVerticalScrollBar(new ScrollBar());
         spTable1.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable1.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
         initTable();
     }
     
@@ -121,11 +106,16 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
 
         panelBorder_Statistic_Blue1 = new MyDesign.PanelBorder_Statistic_Blue();
         panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
-        panelBorder2 = new MyDesign.PanelBorder();
+        panelBorder_Basic1.setBackground(new Color(255, 255, 255));
+        panelBorder2 = new JPanel();
+        panelBorder2.setBackground(new Color(255, 255, 255));
         jLabel6 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel22.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         jLabel8 = new javax.swing.JLabel();
         txtTenChucVu = new MyDesign.MyTextField_Basic();
+        txtTenChucVu.setForeground(new Color(0, 0, 0));
+        txtTenChucVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         jLabel9 = new javax.swing.JLabel();
         txtNguoiTao = new javax.swing.JLabel();
         spTable1 = new javax.swing.JScrollPane();
@@ -145,7 +135,7 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel8.setText("Tên chức vụ");
 
-        txtTenChucVu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+        txtTenChucVu.setBorder(new LineBorder(new Color(128, 128, 128)));
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel9.setText("Người tạo");
@@ -208,57 +198,56 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
         });
 
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
-        panelBorder2.setLayout(panelBorder2Layout);
         panelBorder2Layout.setHorizontalGroup(
-            panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabel6)
-                    .addGroup(panelBorder2Layout.createSequentialGroup()
-                        .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNguoiTao)
-                            .addComponent(txtTenChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(panelBorder2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(spTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(btnThemMoi, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
-                    .addContainerGap()))
+        	panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder2Layout.createSequentialGroup()
+        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(panelBorder2Layout.createSequentialGroup()
+        					.addGap(14)
+        					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(jLabel22)
+        						.addComponent(jLabel6)
+        						.addGroup(panelBorder2Layout.createSequentialGroup()
+        							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(jLabel8)
+        								.addComponent(jLabel9))
+        							.addGap(18)
+        							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(txtTenChucVu, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+        								.addComponent(txtNguoiTao))))
+        					.addGap(58))
+        				.addGroup(panelBorder2Layout.createSequentialGroup()
+        					.addContainerGap()
+        					.addComponent(spTable1, GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE))
+        				.addGroup(Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
+        					.addContainerGap()
+        					.addComponent(btnThemMoi, GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)))
+        			.addContainerGap())
         );
         panelBorder2Layout.setVerticalGroup(
-            panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTenChucVu, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtNguoiTao))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(spTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
-            .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-                    .addContainerGap(486, Short.MAX_VALUE)
-                    .addComponent(btnThemMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+        	panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder2Layout.createSequentialGroup()
+        			.addGap(14)
+        			.addComponent(jLabel6)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(jLabel22)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel8)
+        				.addComponent(txtTenChucVu, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(jLabel9)
+        				.addComponent(txtNguoiTao))
+        			.addPreferredGap(ComponentPlacement.UNRELATED)
+        			.addComponent(spTable1, GroupLayout.PREFERRED_SIZE, 348, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap(63, Short.MAX_VALUE))
+        		.addGroup(Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
+        			.addContainerGap(486, Short.MAX_VALUE)
+        			.addComponent(btnThemMoi, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap())
         );
+        panelBorder2.setLayout(panelBorder2Layout);
 
         javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
         panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
@@ -378,6 +367,7 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
                     roleBUS.addBrandNewRole(newRole);
                     rolePermissionBUS.savePermissions(dataList, ID);
                     this.setVisible(false);
+                    parent.initTableRoles();
                     if(cbChucVu!=null){
                         addRole(user.getRoleID());
                     }
@@ -406,7 +396,7 @@ public class StaffRole_Dialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private MyDesign.PanelBorder panelBorder2;
+    private JPanel panelBorder2;
     private MyDesign.PanelBorder_Basic panelBorder_Basic1;
     private MyDesign.PanelBorder_Statistic_Blue panelBorder_Statistic_Blue1;
     private javax.swing.JScrollPane spTable1;

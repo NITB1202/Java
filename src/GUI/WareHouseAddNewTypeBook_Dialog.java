@@ -4,7 +4,9 @@
  */
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import DTO.entities.Author;
 import DTO.entities.Category;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.Color;
 
 /**
  *
@@ -27,18 +30,28 @@ import java.util.logging.Logger;
 public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
     static String nameFrame;
     static Account user;
+    More_GUI parent;
     /**
      * Creates new form WareHouseAddReader_Dialog
      * @throws IOException
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public WareHouseAddNewTypeBook_Dialog(java.awt.Frame parent,String nameFrame,Account user ,boolean modal) throws ClassNotFoundException, SQLException, IOException {
+    public WareHouseAddNewTypeBook_Dialog(java.awt.Frame parent,String nameFrame,Account user ,boolean modal, More_GUI p) throws ClassNotFoundException, SQLException, IOException {
         super(parent,nameFrame ,modal);
+        this.parent = p;
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNewTypeBook_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm thể loại sách");
         WareHouseAddNewTypeBook_Dialog.nameFrame = nameFrame;
         WareHouseAddNewTypeBook_Dialog.user=user;
         setLocationRelativeTo(null);
         initComponents();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int x = ((int)screenSize.getWidth()- this.getWidth())/2;
+		int y = ((int)screenSize.getHeight() - this.getHeight())/2;
+		
+		setLocation(x,y);
     }
 
     /**
@@ -55,6 +68,7 @@ public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtTheLoaiSach = new MyDesign.MyTextField_Basic();
         btnThemTheLoai = new MyDesign.MyButton();
+        btnThemTheLoai.setColorOver(new Color(22, 113, 221));
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -93,17 +107,8 @@ public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
                                     }
                                     else {
                                         cate.saveInfo(c);
+                                        parent.initTableCategory();
                                         JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);                                
-                                        int stt = 1;
-                                        List<Category> categories = cate.getAll();
-                                        gui.categoriesModel.setRowCount(0);
-                                        for(Category item : categories)
-                                        {
-                                            if(item.isStatus() == 1)
-                                                gui.categoriesModel.addRow(new Object[]{stt++,item.getName()});
-                                        }
-                                        hide();
-                                        gui.setVisible(true);
                                         
                                     }
                                 } catch (ClassNotFoundException e1) {
@@ -252,7 +257,7 @@ public class WareHouseAddNewTypeBook_Dialog extends javax.swing.JDialog {
             public void run() {
                 WareHouseAddNewTypeBook_Dialog dialog;
                 try {
-                    dialog = new WareHouseAddNewTypeBook_Dialog(new javax.swing.JFrame(), nameFrame,null, true);
+                    dialog = new WareHouseAddNewTypeBook_Dialog(new javax.swing.JFrame(), nameFrame,null, true, new More_GUI());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -53,6 +53,7 @@ public class RolePermissionDAO {
                 rolePermission.setPerEdit(rs.getInt(6));
                 rolePermission.setPerDelete(rs.getInt(7));                
                 rolePermission.setIsDelete(rs.getInt(8));
+                
                 list.add(rolePermission);
             }
         } catch (SQLException ex) {

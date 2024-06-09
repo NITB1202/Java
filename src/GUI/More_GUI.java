@@ -1,8 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package GUI;
+ package GUI;
+
+import java.awt.Color;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 import BUS.AuthorBUS;
 import BUS.CategoryBUS;
@@ -11,30 +19,23 @@ import BUS.RolePermissionBUS;
 import BUS.SupplierBUS;
 import BUS.SupplyCardBUS;
 import DTO.entities.Account;
-import MyDesign.ScrollBar;
-import java.awt.Color;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import DTO.entities.Author;
 import DTO.entities.Category;
 import DTO.entities.Publisher;
 import DTO.entities.Supplier;
-import DTO.entities.SupplyCard;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import MyDesign.ScrollBar;
+import javax.swing.JLabel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 
-/**
- *
- * @author QUANG DIEN
- */
-public class More_GUI extends javax.swing.JPanel {
-    private Account user;
+public class More_GUI extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
+	private Account user;
     private AuthorBUS authorBUS;
     private SupplyCardBUS supplyCardBUS;
     private CategoryBUS categoryBUS;
@@ -83,25 +84,29 @@ public class More_GUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelBorder1 = new MyDesign.PanelBorder();
+        panelBorder1 = new JPanel();
+        panelBorder1.setBackground(new Color(255, 255, 255));
         jLabel5 = new javax.swing.JLabel();
         spTable = new javax.swing.JScrollPane();
         tbTacGia = new MyDesign.MyTable();
         lbXoaTacGia = new javax.swing.JLabel();
         lbThemTacGia = new javax.swing.JLabel();
-        panelBorder2 = new MyDesign.PanelBorder();
+        panelBorder2 = new JPanel();
+        panelBorder2.setBackground(new Color(255, 255, 255));
         jLabel6 = new javax.swing.JLabel();
         spTable1 = new javax.swing.JScrollPane();
         tbTheLoaiSach = new MyDesign.MyTable();
         lbXoaTheLoai = new javax.swing.JLabel();
         lbThemTheLoai = new javax.swing.JLabel();
-        panelBorder3 = new MyDesign.PanelBorder();
+        panelBorder3 = new JPanel();
+        panelBorder3.setBackground(new Color(255, 255, 255));
         jLabel7 = new javax.swing.JLabel();
         spTable2 = new javax.swing.JScrollPane();
         tbNhaXuatBan = new MyDesign.MyTable();
         lbXoaNXB = new javax.swing.JLabel();
         lbThemNXB = new javax.swing.JLabel();
-        panelBorder4 = new MyDesign.PanelBorder();
+        panelBorder4 = new JPanel();
+        panelBorder4.setBackground(new Color(255, 255, 255));
         jLabel8 = new javax.swing.JLabel();
         spTable3 = new javax.swing.JScrollPane();
         tbNhaCungCap = new MyDesign.MyTable();
@@ -148,38 +153,57 @@ public class More_GUI extends javax.swing.JPanel {
         lbThemTacGia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         lbThemTacGia.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbThemTacGiaMouseClicked(evt);
+                try {
+					lbThemTacGiaMouseClicked(evt);
+				} catch (ClassNotFoundException | SQLException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        });
+        
+        lbEditTacGia = new JLabel("");
+        lbEditTacGia.setIcon(new ImageIcon(More_GUI.class.getResource("/Images/edit.png")));
+        lbEditTacGia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+        lbEditTacGia.setHorizontalAlignment(SwingConstants.CENTER);
+        lbEditTacGia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbEditTacGiaMouseClicked(evt);
             }
         });
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbXoaTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbThemTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+        	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(spTable, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        				.addGroup(panelBorder1Layout.createSequentialGroup()
+        					.addComponent(jLabel5)
+        					.addPreferredGap(ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+        					.addComponent(lbEditTacGia, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbXoaTacGia, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbThemTacGia, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap())
         );
         panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(lbXoaTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbThemTacGia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+        	panelBorder1Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder1Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder1Layout.createParallelGroup(Alignment.LEADING)
+        				.addGroup(panelBorder1Layout.createParallelGroup(Alignment.LEADING, false)
+        					.addComponent(jLabel5, Alignment.TRAILING)
+        					.addComponent(lbThemTacGia, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        					.addComponent(lbXoaTacGia, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+        				.addComponent(lbEditTacGia, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(spTable, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+        			.addContainerGap())
         );
+        panelBorder1.setLayout(panelBorder1Layout);
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(127, 127, 127));
@@ -219,38 +243,57 @@ public class More_GUI extends javax.swing.JPanel {
         lbThemTheLoai.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         lbThemTheLoai.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbThemTheLoaiMouseClicked(evt);
+                try {
+					lbThemTheLoaiMouseClicked(evt);
+				} catch (ClassNotFoundException | SQLException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        });
+        
+        JLabel lbEditTheLoai = new JLabel("");
+        lbEditTheLoai.setIcon(new ImageIcon(More_GUI.class.getResource("/Images/edit.png")));
+        lbEditTheLoai.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+        lbEditTheLoai.setHorizontalAlignment(SwingConstants.CENTER);
+        lbEditTheLoai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbEditTheLoaiMouseClicked(evt);
             }
         });
 
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
-        panelBorder2.setLayout(panelBorder2Layout);
         panelBorder2Layout.setHorizontalGroup(
-            panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(panelBorder2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
-                        .addComponent(lbXoaTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbThemTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+        	panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder2Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(spTable1, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        				.addGroup(panelBorder2Layout.createSequentialGroup()
+        					.addComponent(jLabel6)
+        					.addPreferredGap(ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
+        					.addComponent(lbEditTheLoai, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbXoaTheLoai, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbThemTheLoai, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap())
         );
         panelBorder2Layout.setVerticalGroup(
-            panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
-                    .addComponent(lbXoaTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbThemTheLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                .addContainerGap())
+        	panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder2Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(lbEditTheLoai, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING, false)
+        					.addComponent(jLabel6, Alignment.TRAILING)
+        					.addComponent(lbThemTheLoai, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        					.addComponent(lbXoaTheLoai, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(spTable1, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+        			.addContainerGap())
         );
+        panelBorder2.setLayout(panelBorder2Layout);
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(127, 127, 127));
@@ -290,38 +333,56 @@ public class More_GUI extends javax.swing.JPanel {
         lbThemNXB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         lbThemNXB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbThemNXBMouseClicked(evt);
+                try {
+					lbThemNXBMouseClicked(evt);
+				} catch (ClassNotFoundException | SQLException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        });
+        
+        lbEditNXB = new JLabel("");
+        lbEditNXB.setIcon(new ImageIcon(More_GUI.class.getResource("/Images/edit.png")));
+        lbEditNXB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+        lbEditNXB.setHorizontalAlignment(SwingConstants.CENTER);
+        lbEditNXB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbEditNXBMouseClicked(evt);
             }
         });
 
         javax.swing.GroupLayout panelBorder3Layout = new javax.swing.GroupLayout(panelBorder3);
-        panelBorder3.setLayout(panelBorder3Layout);
         panelBorder3Layout.setHorizontalGroup(
-            panelBorder3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTable2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(panelBorder3Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbXoaNXB, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbThemNXB, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+        	panelBorder3Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(Alignment.TRAILING, panelBorder3Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder3Layout.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(spTable2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        				.addGroup(panelBorder3Layout.createSequentialGroup()
+        					.addComponent(jLabel7)
+        					.addPreferredGap(ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+        					.addComponent(lbEditNXB, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbXoaNXB, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbThemNXB, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap())
         );
         panelBorder3Layout.setVerticalGroup(
-            panelBorder3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
-                    .addComponent(lbXoaNXB, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbThemNXB, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+        	panelBorder3Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder3Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder3Layout.createParallelGroup(Alignment.LEADING, false)
+        				.addComponent(lbEditNXB, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addComponent(jLabel7, Alignment.TRAILING)
+        				.addComponent(lbThemNXB, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        				.addComponent(lbXoaNXB, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(spTable2, GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+        			.addContainerGap())
         );
+        panelBorder3.setLayout(panelBorder3Layout);
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(127, 127, 127));
@@ -352,7 +413,12 @@ public class More_GUI extends javax.swing.JPanel {
         lbThemNCC.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
         lbThemNCC.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbThemNCCMouseClicked(evt);
+                try {
+					lbThemNCCMouseClicked(evt);
+				} catch (ClassNotFoundException | SQLException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -364,35 +430,49 @@ public class More_GUI extends javax.swing.JPanel {
                 lbXoaNCCMouseClicked(evt);
             }
         });
+        
+        JLabel lbEditNCC = new JLabel("");
+        lbEditNCC.setIcon(new ImageIcon(More_GUI.class.getResource("/Images/edit.png")));
+        lbEditNCC.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(229, 229, 229)));
+        lbEditNCC.setHorizontalAlignment(SwingConstants.CENTER);
+        lbEditNCC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbEditNCCMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelBorder4Layout = new javax.swing.GroupLayout(panelBorder4);
-        panelBorder4.setLayout(panelBorder4Layout);
         panelBorder4Layout.setHorizontalGroup(
-            panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTable3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(panelBorder4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
-                        .addComponent(lbXoaNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lbThemNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+        	panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder4Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(spTable3, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        				.addGroup(panelBorder4Layout.createSequentialGroup()
+        					.addComponent(jLabel8)
+        					.addPreferredGap(ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+        					.addComponent(lbEditNCC, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(lbXoaNCC, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(lbThemNCC, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap())
         );
         panelBorder4Layout.setVerticalGroup(
-            panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
-                    .addComponent(lbXoaNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbThemNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable3, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                .addContainerGap())
+        	panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(panelBorder4Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(panelBorder4Layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(lbEditNCC, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        				.addGroup(panelBorder4Layout.createParallelGroup(Alignment.TRAILING, false)
+        					.addComponent(jLabel8)
+        					.addComponent(lbThemNCC, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        					.addComponent(lbXoaNCC, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)))
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addComponent(spTable3, GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+        			.addContainerGap())
         );
+        panelBorder4.setLayout(panelBorder4Layout);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -426,163 +506,112 @@ public class More_GUI extends javax.swing.JPanel {
     
     
 //    Group add
-    private void lbThemTacGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbThemTacGiaMouseClicked
-       if(evt.getClickCount()==1 || evt.getClickCount()==2)
-        {
-            setVisible(false);
-            WareHouseAddNewReader_Dialog r;
-           try { 
-               r = new WareHouseAddNewReader_Dialog(null,"more_gui",this.user, true);
-               r.setVisible(true);
-           } catch (SQLException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (IOException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (ClassNotFoundException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           }
-        }
+    private void lbThemTacGiaMouseClicked(java.awt.event.MouseEvent evt) throws ClassNotFoundException, SQLException, IOException {
+    	WareHouseAddNewAuthor_Dialog r = new WareHouseAddNewAuthor_Dialog(null,"more_gui",this.user, true, this);
+        r.setVisible(true);
     }//GEN-LAST:event_lbThemTacGiaMouseClicked
 
-    private void lbThemTheLoaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbThemTheLoaiMouseClicked
-        if(evt.getClickCount()==1 || evt.getClickCount()==2)
-        {
-            setVisible(false);
-            WareHouseAddNewTypeBook_Dialog r;
-           try { 
-               r = new WareHouseAddNewTypeBook_Dialog(null,"more_gui",this.user, true);
-               r.setVisible(true);
-           } catch (SQLException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (IOException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (ClassNotFoundException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           }
-        }
-    }//GEN-LAST:event_lbThemTheLoaiMouseClicked
+    private void lbThemTheLoaiMouseClicked(java.awt.event.MouseEvent evt) throws ClassNotFoundException, SQLException, IOException 
+    {
+    	WareHouseAddNewTypeBook_Dialog r = new WareHouseAddNewTypeBook_Dialog(null,"more_gui",this.user, true,this);
+        r.setVisible(true);
+    }
 
-    private void lbThemNCCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbThemNCCMouseClicked
+    private void lbThemNCCMouseClicked(java.awt.event.MouseEvent evt) throws ClassNotFoundException, SQLException, IOException {//GEN-FIRST:event_lbThemNCCMouseClicked
         if(evt.getClickCount()==1 || evt.getClickCount()==2)
         {
-            setVisible(false);
-            WareHouseAddNCC_Dialog r;
-           try { 
-               r = new WareHouseAddNCC_Dialog(null,"more_gui",this.user, true);
-               r.setVisible(true);
-           } catch (SQLException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (IOException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (ClassNotFoundException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           }
+        	WareHouseAddNCC_Dialog r = new WareHouseAddNCC_Dialog(null,"more_gui",this.user, true,this);
+            r.setVisible(true);
         }
     }//GEN-LAST:event_lbThemNCCMouseClicked
 
-    private void lbThemNXBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbThemNXBMouseClicked
+    private void lbThemNXBMouseClicked(java.awt.event.MouseEvent evt) throws ClassNotFoundException, SQLException, IOException {//GEN-FIRST:event_lbThemNXBMouseClicked
         if(evt.getClickCount()==1 || evt.getClickCount()==2)
         {
-            setVisible(false);
-            WareHouseAddNXB_Dialog r;
-           try { 
-               r = new WareHouseAddNXB_Dialog(null,"more_gui",this.user, true);
-               r.setVisible(true);
-           } catch (SQLException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (IOException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           } catch (ClassNotFoundException ex) {
-               Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-           }
+        	WareHouseAddNXB_Dialog r = new WareHouseAddNXB_Dialog(null,"more_gui",this.user, true, this);
+            r.setVisible(true);
         }
     }//GEN-LAST:event_lbThemNXBMouseClicked
 
 //    Group detele
     private void lbXoaTacGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbXoaTacGiaMouseClicked
-        if(evt.getClickCount()==1 || evt.getClickCount()==2){
-            int selectedRow = tbTacGia.getSelectedRow();
-            if (selectedRow != -1) {
-                String tacGia = tbTacGia.getValueAt(selectedRow, 1).toString();
-                int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa tác giả " + tacGia + "?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
-                    try {
-                        authorBUS = new AuthorBUS();
-                        boolean check = authorBUS.deteleByAuthorName(tacGia);
-                        if(check == true){
-                            JOptionPane.showMessageDialog(panelBorder1, "Đã xóa thành công", "Xác nhận xóa", HEIGHT);
-                            DefaultTableModel model = (DefaultTableModel) tbTacGia.getModel();
-                            model.setRowCount(0);
-                            initTableAuthor();
-                        }
-                        
-                    } catch (SQLException ex) {
-                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        }
+    	 int selectedRow = tbTacGia.getSelectedRow();
+         if (selectedRow != -1) {
+             String tacGia = tbTacGia.getValueAt(selectedRow, 1).toString();
+             int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa tác giả " + tacGia + "?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+             if (option == JOptionPane.YES_OPTION) {
+                 try {
+                     authorBUS = new AuthorBUS();
+                     boolean check = authorBUS.deteleByAuthorName(tacGia);
+                     if(check == true){
+                         JOptionPane.showMessageDialog(null, "Đã xóa thành công", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+                         DefaultTableModel model = (DefaultTableModel) tbTacGia.getModel();
+                         model.setRowCount(0);
+                         initTableAuthor();
+                     }
+                     
+                 } catch (SQLException ex) {
+                     Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                 } catch (IOException ex) {
+                     Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             }
+         }
     }//GEN-LAST:event_lbXoaTacGiaMouseClicked
 
     private void lbXoaTheLoaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbXoaTheLoaiMouseClicked
-        if(evt.getClickCount()==1 || evt.getClickCount()==2){
-            int selectedRow = tbTheLoaiSach.getSelectedRow();
-            if (selectedRow != -1) {
-                String theloai = tbTheLoaiSach.getValueAt(selectedRow, 1).toString();
-                int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa thể loại " + theloai + "?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
+    	int selectedRow = tbTheLoaiSach.getSelectedRow();
+        if (selectedRow != -1) {
+            String theloai = tbTheLoaiSach.getValueAt(selectedRow, 1).toString();
+            int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa thể loại " + theloai + "?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                try {
+                    categoryBUS = new CategoryBUS();
+                    boolean check;
                     try {
-                        categoryBUS = new CategoryBUS();
-                        boolean check;
-                        try {
-                            check = categoryBUS.deleteByCategoryName(theloai);
-                            if(check == true){
-                                JOptionPane.showMessageDialog(panelBorder1, "Đã xóa thành công", "Xác nhận xóa", HEIGHT);
-                                DefaultTableModel model = (DefaultTableModel) tbTheLoaiSach.getModel();
-                                model.setRowCount(0);
-                                initTableCategory();
-                            }
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                        check = categoryBUS.deleteByCategoryName(theloai);
+                        if(check == true){
+                        	JOptionPane.showMessageDialog(null, "Đã xóa thành công", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+                            DefaultTableModel model = (DefaultTableModel) tbTheLoaiSach.getModel();
+                            model.setRowCount(0);
+                            initTableCategory();
                         }
-                        
-                        
-                    } catch (SQLException ex) {
-                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
+                    } catch (ClassNotFoundException ex) {
                         Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
     }//GEN-LAST:event_lbXoaTheLoaiMouseClicked
 
     private void lbXoaNCCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbXoaNCCMouseClicked
-        if(evt.getClickCount()==1 || evt.getClickCount()==2){
-            int selectedRow = tbNhaCungCap.getSelectedRow();
-            if (selectedRow != -1) {
-                String supplier = tbNhaCungCap.getValueAt(selectedRow, 1).toString();
-                int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa thể loại " + supplier + "?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
-                    try {
-                        supplierBUS = new SupplierBUS();
-                        boolean check;
-                        check = supplierBUS.deteleBySupplierName(supplier);
-                        if(check == true){
-                            JOptionPane.showMessageDialog(panelBorder1, "Đã xóa thành công", "Xác nhận xóa", HEIGHT);
-                            DefaultTableModel model = (DefaultTableModel) tbNhaCungCap.getModel();
-                            model.setRowCount(0);
-                            initTableCategory();
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+    	int selectedRow = tbNhaCungCap.getSelectedRow();
+        if (selectedRow >= 0) {
+            String supplier = tbNhaCungCap.getValueAt(selectedRow, 1).toString();
+            int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa thể loại " + supplier + "?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
+                try {
+                    supplierBUS = new SupplierBUS();
+                    boolean check;
+                    check = supplierBUS.deteleBySupplierName(supplier);
+                    if(check == true){
+                        JOptionPane.showMessageDialog(null, "Đã xóa thành công", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+                        DefaultTableModel model = (DefaultTableModel) tbNhaCungCap.getModel();
+                        model.setRowCount(0);
+                        initTableCategory();
                     }
+                } catch (SQLException ex) {
+                    Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -600,7 +629,7 @@ public class More_GUI extends javax.swing.JPanel {
                         boolean check;
                         check = publisherBUS.deleteByPublisherName(nhaxuatban);
                         if(check == true){
-                            JOptionPane.showMessageDialog(panelBorder1, "Đã xóa thành công", "Xác nhận xóa", HEIGHT);
+                            JOptionPane.showMessageDialog(null, "Đã xóa thành công", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
                             DefaultTableModel model = (DefaultTableModel) tbNhaXuatBan.getModel();
                             model.setRowCount(0);
                             initTablePublisher();
@@ -614,10 +643,175 @@ public class More_GUI extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_lbXoaNXBMouseClicked
+    
+    private void lbEditTacGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbSuaTacGiaMouseClicked
+    	 int selectedRow = tbTacGia.getSelectedRow();
+         if (selectedRow != -1) {
+             String tacGia = tbTacGia.getValueAt(selectedRow, 1).toString();
+             String newAuthorName = JOptionPane.showInputDialog(this, "Nhập tên tác giả mới:", "Nhập tác giả", JOptionPane.PLAIN_MESSAGE, null, null, tacGia).toString();
+             if (newAuthorName != null && !newAuthorName.trim().isEmpty()) {
+                 int option = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn sửa tên tác giả từ " + tacGia + " thành " + newAuthorName + "?", "Xác nhận sửa", JOptionPane.YES_NO_OPTION);
+                 if (option == JOptionPane.YES_OPTION) {
+                     try {
+                         authorBUS = new AuthorBUS();
+                         boolean check = authorBUS.updateAuthorName(tacGia, newAuthorName);
+                         if (check) {
+                             JOptionPane.showMessageDialog(null, "Đã sửa thành công", "Xác nhận sửa",JOptionPane.INFORMATION_MESSAGE);
+                             DefaultTableModel model = (DefaultTableModel) tbTacGia.getModel();
+                             model.setRowCount(0);
+                             initTableAuthor();
+                         } else {
+                             JOptionPane.showMessageDialog(null, "Sửa không thành công", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                         }
+                     } catch (SQLException ex) {
+                         Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                     } catch (IOException ex) {
+                         Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                 }
+             }
+         }
+    }
+//GEN-LAST:event_lbSuaTacGiaMouseClicked
+
+    
+    private void lbEditTheLoaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbEditTheLoaiMouseClicked
+    	int selectedRow = tbTheLoaiSach.getSelectedRow();
+        if (selectedRow != -1) {
+            String oldCategoryName = tbTheLoaiSach.getValueAt(selectedRow, 1).toString();
+            String newCategoryName = (String) JOptionPane.showInputDialog(
+                this, 
+                "Nhập tên thể loại mới:", 
+                "Sửa thể loại sách", 
+                JOptionPane.PLAIN_MESSAGE, 
+                null, 
+                null, 
+                oldCategoryName
+            );
+            if (newCategoryName != null && !newCategoryName.trim().isEmpty()) {
+                int option = JOptionPane.showConfirmDialog(
+                    this, 
+                    "Bạn có chắc chắn muốn sửa tên thể loại từ " + oldCategoryName + " thành " + newCategoryName + "?", 
+                    "Xác nhận sửa", 
+                    JOptionPane.YES_NO_OPTION
+                );
+                if (option == JOptionPane.YES_OPTION) {
+                    try {
+                        categoryBUS = new CategoryBUS();
+                        boolean check = categoryBUS.updateCategoryName(oldCategoryName, newCategoryName);
+                        if (check) {
+                            JOptionPane.showMessageDialog(null, "Đã sửa thành công", "Xác nhận sửa",JOptionPane.INFORMATION_MESSAGE);
+                            DefaultTableModel model = (DefaultTableModel) tbTheLoaiSach.getModel();
+                            model.setRowCount(0);
+                            initTableCategory();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Sửa không thành công", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }
+    //GEN-LAST:event_lbEditTheLoaiMouseClicked
+
+    
+    private void lbEditNCCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbEditNCCMouseClicked
+    	int selectedRow = tbNhaCungCap.getSelectedRow();
+        if (selectedRow != -1) {
+            String oldSupplierName = tbNhaCungCap.getValueAt(selectedRow, 1).toString();
+            String newSupplierName = (String) JOptionPane.showInputDialog(
+                this, 
+                "Nhập tên nhà cung cấp mới:", 
+                "Sửa nhà cung cấp", 
+                JOptionPane.PLAIN_MESSAGE, 
+                null, 
+                null, 
+                oldSupplierName
+            );
+            if (newSupplierName != null && !newSupplierName.trim().isEmpty()) {
+                int option = JOptionPane.showConfirmDialog(
+                    this, 
+                    "Bạn có chắc chắn muốn sửa tên nhà cung cấp từ " + oldSupplierName + " thành " + newSupplierName + "?", 
+                    "Xác nhận sửa", 
+                    JOptionPane.YES_NO_OPTION
+                );
+                if (option == JOptionPane.YES_OPTION) {
+                    try {
+                        supplierBUS = new SupplierBUS();
+                        boolean check = supplierBUS.updateSupplierName(oldSupplierName, newSupplierName);
+                        if (check) {
+                            JOptionPane.showMessageDialog(null, "Đã sửa thành công", "Xác nhận sửa",JOptionPane.INFORMATION_MESSAGE);
+                            DefaultTableModel model = (DefaultTableModel) tbNhaCungCap.getModel();
+                            model.setRowCount(0);
+                            initTableSupplier();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Sửa không thành công", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_lbEditNCCMouseClicked
+
+    
+    private void lbEditNXBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbEditNXBMouseClicked
+    	int selectedRow = tbNhaXuatBan.getSelectedRow();
+        if (selectedRow != -1) {
+            String oldPublisherName = tbNhaXuatBan.getValueAt(selectedRow, 1).toString();
+            String newPublisherName = (String) JOptionPane.showInputDialog(
+                this, 
+                "Nhập tên nhà xuất bản mới:", 
+                "Sửa nhà xuất bản", 
+                JOptionPane.PLAIN_MESSAGE, 
+                null, 
+                null, 
+                oldPublisherName
+            );
+            if (newPublisherName != null && !newPublisherName.trim().isEmpty()) {
+                int option = JOptionPane.showConfirmDialog(
+                    this, 
+                    "Bạn có chắc chắn muốn sửa tên nhà xuất bản từ " + oldPublisherName + " thành " + newPublisherName + "?", 
+                    "Xác nhận sửa", 
+                    JOptionPane.YES_NO_OPTION
+                );
+                if (option == JOptionPane.YES_OPTION) {
+                    try {
+                        publisherBUS = new PublisherBUS();
+                        boolean check = publisherBUS.updatePublisherName(oldPublisherName, newPublisherName);
+                        if (check) {
+                            JOptionPane.showMessageDialog(null, "Đã sửa thành công", "Xác nhận sửa",JOptionPane.INFORMATION_MESSAGE);
+                            DefaultTableModel model = (DefaultTableModel) tbNhaXuatBan.getModel();
+                            model.setRowCount(0);
+                            initTablePublisher();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Sửa không thành công", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(More_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_lbEditNXBMouseClicked
+
+    
     public void initTableAuthor() throws SQLException, IOException{
         authorBUS = new AuthorBUS();
         listAuthor = authorBUS.getAllName();
         authorsModel = (DefaultTableModel) tbTacGia.getModel();
+        authorsModel.setRowCount(0);
         String authorName;
         int stt = 1;
         for (Author author : listAuthor){
@@ -628,10 +822,12 @@ public class More_GUI extends javax.swing.JPanel {
             
         }
     }
+    
     public void initTableCategory() throws SQLException, IOException{
         categoryBUS = new CategoryBUS();
         listCategory = categoryBUS.getAll();
         categoriesModel = (DefaultTableModel) tbTheLoaiSach.getModel();
+        categoriesModel.setRowCount(0);
         String categoryName;
         int stt = 1;
         for(Category category : listCategory){
@@ -648,6 +844,7 @@ public class More_GUI extends javax.swing.JPanel {
         publisherBUS = new PublisherBUS();
         listPublisher = publisherBUS.getAllName();
         publishersModel = (DefaultTableModel) tbNhaXuatBan.getModel();
+        publishersModel.setRowCount(0);
         String publisherName;
         int stt = 1;
         for(Publisher publisher : listPublisher){
@@ -663,6 +860,7 @@ public class More_GUI extends javax.swing.JPanel {
         supplierBUS = new SupplierBUS();
         listSupplier = supplierBUS.getAllName();
         suppliersModel = (DefaultTableModel) tbNhaCungCap.getModel();
+        suppliersModel.setRowCount(0);
         String supplierName;
         int stt = 1;
         for(Supplier supplier : listSupplier){
@@ -674,58 +872,69 @@ public class More_GUI extends javax.swing.JPanel {
     }
     
     
-    public void styles(){
+    public void styles() {
+        // Configuring spTable
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p1 = new JPanel();
+        p1.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p1);
         
+        // Configuring spTable1
         spTable1.setVerticalScrollBar(new ScrollBar());
         spTable1.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable1.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p2 = new JPanel();
+        p2.setBackground(Color.WHITE);
+        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p2);
         
+        // Configuring spTable2
         spTable2.setVerticalScrollBar(new ScrollBar());
         spTable2.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable2.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p3 = new JPanel();
+        p3.setBackground(Color.WHITE);
+        spTable2.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p3);
         
+        // Configuring spTable3
         spTable3.setVerticalScrollBar(new ScrollBar());
         spTable3.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable3.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        spTable3.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p4 = new JPanel();
+        p4.setBackground(Color.WHITE);
+        spTable3.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p4);
+
         System.out.println(user.getRoleID());
-        if(rolePermissionBUS.hasPerCreate(user.getRoleID(), 8)){
+
+        // Checking and setting permissions for creating entities
+        if (rolePermissionBUS.hasPerCreate(user.getRoleID(), 8)) {
             lbThemNCC.setEnabled(true);
             lbThemNXB.setEnabled(true);
             lbThemTacGia.setEnabled(true);
             lbThemTheLoai.setEnabled(true);
-        }
-        else{
+        } else {
             lbThemNCC.setEnabled(false);
             lbThemNXB.setEnabled(false);
             lbThemTacGia.setEnabled(false);
             lbThemTheLoai.setEnabled(false);
         }
-        if(rolePermissionBUS.hasPerDelete(user.getRoleID(), 8)){
+
+        // Checking and setting permissions for deleting entities
+        if (rolePermissionBUS.hasPerDelete(user.getRoleID(), 8)) {
             lbXoaNCC.setEnabled(true);
             lbXoaNXB.setEnabled(true);
             lbXoaTacGia.setEnabled(true);
             lbXoaTheLoai.setEnabled(true);
-        }
-        else{
+        } else {
             lbXoaNCC.setEnabled(false);
             lbXoaNXB.setEnabled(false);
             lbXoaTacGia.setEnabled(false);
             lbXoaTheLoai.setEnabled(false);
         }
-        
     }
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel5;
@@ -740,10 +949,10 @@ public class More_GUI extends javax.swing.JPanel {
     private javax.swing.JLabel lbXoaNXB;
     private javax.swing.JLabel lbXoaTacGia;
     private javax.swing.JLabel lbXoaTheLoai;
-    private MyDesign.PanelBorder panelBorder1;
-    private MyDesign.PanelBorder panelBorder2;
-    private MyDesign.PanelBorder panelBorder3;
-    private MyDesign.PanelBorder panelBorder4;
+    private JPanel panelBorder1;
+    private JPanel panelBorder2;
+    private JPanel panelBorder3;
+    private JPanel panelBorder4;
     private javax.swing.JScrollPane spTable;
     private javax.swing.JScrollPane spTable1;
     private javax.swing.JScrollPane spTable2;
@@ -752,5 +961,6 @@ public class More_GUI extends javax.swing.JPanel {
     private MyDesign.MyTable tbNhaXuatBan;
     MyDesign.MyTable tbTacGia;
     private MyDesign.MyTable tbTheLoaiSach;
-    // End of variables declaration//GEN-END:variables
+    private JLabel lbEditTacGia;
+    private JLabel lbEditNXB;
 }

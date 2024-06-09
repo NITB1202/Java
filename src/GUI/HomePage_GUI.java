@@ -123,7 +123,7 @@ public class HomePage_GUI extends JFrame {
     	  Menu.addEventMenuSelected(new EventMenuSelected() {
               @Override
               public void selected(int index) {
-              	System.out.println("Select index: "+index);
+              	System.out.println("User role ID: "+user.getRoleID());
                   if (index == 0 && homePageBUS.hasPerAccess(user.getRoleID(), 1)) {
                       try {
                           setForm(new Statistic_GUI(user));
@@ -170,7 +170,7 @@ public class HomePage_GUI extends JFrame {
                           Logger.getLogger(HomePage_GUI.class.getName()).log(Level.SEVERE, null, ex);
                       }
                   }
-                  else if (index == 4 && homePageBUS.hasPerAccess(user.getRoleID(), 7)) {
+                  else if (index == 4 && homePageBUS.hasPerAccess(user.getRoleID(), 6)) {
                       try {
                           setForm(new Ticket_GUI(user));
                       } catch (ClassNotFoundException ex) {
@@ -181,14 +181,14 @@ public class HomePage_GUI extends JFrame {
                           Logger.getLogger(HomePage_GUI.class.getName()).log(Level.SEVERE, null, ex);
                       }
                   } 
-                  else if (index == 6 && homePageBUS.hasPerAccess(user.getRoleID(), 6)) {
+                  else if (index == 6 && homePageBUS.hasPerAccess(user.getRoleID(), 5)) {
                       try {
                           setForm(new Reader_GUI(user));
                       } catch (Exception ex) {
                           Logger.getLogger(HomePage_GUI.class.getName()).log(Level.SEVERE, null, ex);
                       }
                   } 
-                  else if (index == 5 && homePageBUS.hasPerAccess(user.getRoleID(), 5)) {
+                  else if (index == 5 && homePageBUS.hasPerAccess(user.getRoleID(), 7)) {
                       try {
                           setForm(new Book_GUI(user));
                       } catch (SQLException ex) {
@@ -250,7 +250,7 @@ public class HomePage_GUI extends JFrame {
               }
           });
     	  try {
-			setForm(new Reader_GUI(user));
+			setForm(new Statistic_GUI(user));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

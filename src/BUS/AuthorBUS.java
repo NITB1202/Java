@@ -51,6 +51,9 @@ public class AuthorBUS {
             ad.saveAuthor(a);
 
     }
+    public boolean updateAuthorName(String tacGia, String newTacGia) throws SQLException {	
+		return ad.updateAuthorName(tacGia, newTacGia);
+	}
     public boolean deteleByAuthorName(String name) throws  SQLException, IOException{
         ad = new AuthorDAO(connectDB);
         ad.deleteByName(name);

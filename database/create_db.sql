@@ -232,6 +232,7 @@ GO
         [address] [nvarchar](50) NULL,
         [fineDate] [date] NULL,
         [isActive] [bit] NOT NULL,
+		[penalty] [int] NOT NULL,
         PRIMARY KEY CLUSTERED ([id] ASC) WITH (
             PAD_INDEX = OFF,
             STATISTICS_NORECOMPUTE = OFF,

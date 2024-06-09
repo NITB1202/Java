@@ -116,6 +116,7 @@ public class RolePermissionBUS {
     public boolean hasPerAccess(String roleID, int action_ID){
         for(RolePermission permission : list){
             if(permission.getRoleID().equals(roleID) && permission.getPermissionID() == (action_ID)){
+            	System.out.println(permission.getPerAccess());
                 return permission.getPerAccess() == 1;
             }
         }

@@ -73,6 +73,11 @@ public class CategoryBUS {
     public Vector<String> getCategoryByISBN(String ISBN){
         return cdao.getCategoryByISBN(ISBN);
     }
+	
+    public boolean updateCategoryName(String oldCategoryName, String newCategoryName) {
+		return cdao.updateCategoryName(oldCategoryName, newCategoryName);
+	}
+
     
     public void disconnect() {
             cdao.disconnect();

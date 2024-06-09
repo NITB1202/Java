@@ -1122,7 +1122,6 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     protected BookBUS bB = new BookBUS();
     protected SupplierBUS spB = new SupplierBUS();
     protected WareHouseScanner_Dialog whs;
-    protected WareHouseAddReader_Dialog whr;
     private MyDesign.MyTextField_Basic txtTheLoai;
     private MyDesign.MyTextField_Basic txtNXB;
     private MyDesign.MyTextField_Basic txtTacGia;

@@ -4,7 +4,9 @@
  */
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import DTO.entities.Category;
 import DTO.entities.Publisher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.Color;
 
 /**
  *
@@ -29,15 +32,24 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
     static String nameFrame;
     static String action;
     static Account user;
+    More_GUI parent;
     /**
      * Creates new form WareHouseAddReader_Dialog
      */
-    public WareHouseAddNXB_Dialog(java.awt.Frame parent, String nameFrame,Account user,boolean modal) throws SQLException, IOException, ClassNotFoundException {
+    public WareHouseAddNXB_Dialog(java.awt.Frame parent, String nameFrame,Account user,boolean modal, More_GUI p) throws SQLException, IOException, ClassNotFoundException {
         super(parent, modal);
+        this.parent = p;
         WareHouseAddNXB_Dialog.nameFrame = nameFrame;        
         WareHouseAddNXB_Dialog.user = user;
 
         initComponents();
+        
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int x = ((int)screenSize.getWidth()- this.getWidth())/2;
+		int y = ((int)screenSize.getHeight() - this.getHeight())/2;
+		
+		setLocation(x,y);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +65,7 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtNhaXuatBan = new MyDesign.MyTextField_Basic();
         btnThemNhaXuatBan = new MyDesign.MyButton();
+        btnThemNhaXuatBan.setColorOver(new Color(22, 113, 221));
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -130,6 +143,7 @@ public class WareHouseAddNXB_Dialog extends javax.swing.JDialog {
                                    pub.saveInfo(p);
                                     String value = txtNhaXuatBan.getText();
 //                                    whid.addToComboBox(value);
+                                    parent.initTablePublisher();
                                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             } catch (ClassNotFoundException e1) {

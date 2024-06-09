@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.Toolkit;
+import java.awt.Color;
 
 /**
  *
@@ -29,19 +32,24 @@ import java.util.logging.Logger;
 public class WareHouseAddNCC_Dialog extends javax.swing.JDialog {
     static String nameFrame;
     static Account user;
+    More_GUI parent;
     /**
      * Creates new form WareHouseAddReader_Dialog
      */
-    public WareHouseAddNCC_Dialog(java.awt.Frame parent,String nameFrame,Account user, boolean modal) throws SQLException, IOException, ClassNotFoundException {
+    public WareHouseAddNCC_Dialog(java.awt.Frame parent,String nameFrame,Account user, boolean modal, More_GUI p) throws SQLException, IOException, ClassNotFoundException {
         super(parent,nameFrame ,modal);
+        this.parent = p;
+        setIconImage(Toolkit.getDefaultToolkit().getImage(WareHouseAddNCC_Dialog.class.getResource("/Images/logo.png")));
+        setTitle("Thêm nhà cung cấp");
         WareHouseAddNCC_Dialog.nameFrame = nameFrame;        
         WareHouseAddNCC_Dialog.user = user;
-
-        try {
-            initComponents();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(WareHouseAddNCC_Dialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        initComponents();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int x = ((int)screenSize.getWidth()- this.getWidth())/2;
+		int y = ((int)screenSize.getHeight() - this.getHeight())/2;
+		
+		setLocation(x,y);
     }
 
     /**
@@ -58,6 +66,7 @@ public class WareHouseAddNCC_Dialog extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtNhaCungCap = new MyDesign.MyTextField_Basic();
         btnThemNhaCungCap = new MyDesign.MyButton();
+        btnThemNhaCungCap.setColorOver(new Color(22, 113, 221));
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -130,7 +139,7 @@ public class WareHouseAddNCC_Dialog extends javax.swing.JDialog {
                                 else {
                                     pub.saveInfo(p);
                                     String value = txtNhaCungCap.getText();
-//                                    whid.addToComboBox(value);
+                                    parent.initTableSupplier();
                                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Thêm Thành Công!", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             } catch (ClassNotFoundException e1) {
