@@ -98,11 +98,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import java.awt.event.KeyAdapter;
+import MyDesign.MyTextField_Basic;
 
-/**
- *
- * @author QUANG DIEN
- */
 public class WareHouseImport_Dialog extends javax.swing.JDialog {
 
     /**
@@ -171,14 +168,6 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         txtISBN.setShadowColor(new Color(128, 128, 128));
         txtISBN.setEnabled(false);
         txtISBN.setEditable(false);
-        txtGia = new MyDesign.MyTextField_Basic();
-        txtGia.setForeground(new Color(0, 0, 0));
-        txtGia.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyReleased(KeyEvent e) {
-        		handleInput(e.getKeyChar(),txtGia);
-        	}
-        });
         txtSoLuong = new MyDesign.MyTextField_Basic();
         txtSoLuong.setForeground(new Color(0, 0, 0));
         txtSoLuong.addKeyListener(new KeyAdapter() {
@@ -286,13 +275,12 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 				
 				String selectedValue = String.valueOf(cbSach.getSelectedItem());
                 if (selectedValue != null) {
-					String img = null, isbn = null, edition = null, cost = null, tacgia = null, theloai = null, nxb = null;
+					String img = null, isbn = null, edition = null, tacgia = null, theloai = null, nxb = null;
 					
 					try {
 						img = supplyCard.getByImg(selectedValue);
 						isbn = supplyCard.getByISBN(selectedValue);
 						edition = supplyCard.getByEdition(selectedValue);
-						cost = String.valueOf(supplyCard.getByCost(selectedValue));
 						tacgia = author.getByName(isbn);
 						theloai = category.getByName(isbn);
 						nxb = publisher.getByIDPubName(isbn);
@@ -344,6 +332,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
 					}
+					
 			    	ImageIcon image = new ImageIcon(WareHouseImport_Dialog.class.getResource(img));
 					Image resizedImage = image.getImage();
 					resizedImage = resizedImage.getScaledInstance(170, 190, Image.SCALE_SMOOTH);
@@ -351,6 +340,7 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
 					lbImageBook.setIcon(image);
 					cbEdition.setSelectedIndex(-1);
 					txtISBN.setText(null);
+					txtGia.setText(null);
                 }
 			}
 		});
@@ -363,15 +353,18 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
                     	String bookName = String.valueOf(cbSach.getSelectedItem());
                         // Loại bỏ dấu phân cách ở cuối và đặt giá trị vào JTextField
                         txtISBN.setText(isbnDao.getISBNForBook(bookName));
+        				String selectedValue = String.valueOf(cbSach.getSelectedItem());
+						String cost = String.valueOf(supplyCard.getByCost(selectedValue));
+						txtGia.setText(cost);
                     } catch (SQLException ex) {
                         ex.printStackTrace();
-                    }
+                    } catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                 }
             }
         });
-
-        txtGia.setBorder(new LineBorder(new Color(128, 128, 128)));
-        txtGia.setFont(new java.awt.Font("SansSerif", 1, 13));
         
      
         
@@ -384,8 +377,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         cbEdition.setOpaque(true);
         cbEdition.setPreferredSize(new java.awt.Dimension(77, 28));
         
-        jLabel8_1.setText("Edition");
-        jLabel8_1.setFont(new java.awt.Font("SansSerif", 1, 13));
+        jLabel8_1.setText("Phiên bản");
+        jLabel8_1.setFont(new Font("SansSerif", Font.BOLD, 13));
         
         jLabel8_2.setText("ISBN");
         jLabel8_2.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
@@ -416,6 +409,14 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         txtTacGia.setFont(new Font("SansSerif", Font.BOLD, 13));
         txtTacGia.setBorder(new LineBorder(new Color(128, 128, 128)));
         
+        txtGia = new MyTextField_Basic();
+        txtGia.setShadowColor(new Color(0, 0, 0));
+        txtGia.setForeground(Color.BLACK);
+        txtGia.setFont(new Font("SansSerif", Font.BOLD, 13));
+        txtGia.setEnabled(false);
+        txtGia.setEditable(false);
+        txtGia.setColumns(10);
+        txtGia.setBorder(new LineBorder(new Color(128, 128, 128)));
               
         
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
@@ -427,32 +428,38 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         					.addContainerGap()
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
         						.addGroup(panelBorder2Layout.createSequentialGroup()
-        							.addComponent(jLabel8_1, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-        							.addGap(18)
-        							.addComponent(cbEdition, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
-        							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        						.addGroup(panelBorder2Layout.createSequentialGroup()
         							.addComponent(jLabel8_2, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
         							.addGap(18)
-        							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        								.addComponent(pnImageBook, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-        								.addComponent(txtISBN, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)))
+        							.addComponent(pnImageBook, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE))
         						.addGroup(panelBorder2Layout.createSequentialGroup()
         							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        								.addComponent(jLabel2)
-        								.addComponent(jLabel4)
-        								.addComponent(jLabel5)
-        								.addComponent(jLabel6)
-        								.addComponent(jLabel8)
-        								.addComponent(jLabel7))
-        							.addGap(16)
+        								.addGroup(panelBorder2Layout.createSequentialGroup()
+        									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
+        										.addComponent(jLabel2)
+        										.addComponent(jLabel4)
+        										.addComponent(jLabel5)
+        										.addComponent(jLabel6)
+        										.addComponent(jLabel8)
+        										.addComponent(jLabel7))
+        									.addGap(16))
+        								.addGroup(panelBorder2Layout.createSequentialGroup()
+        									.addComponent(jLabel8_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        									.addGap(25)))
         							.addGroup(panelBorder2Layout.createParallelGroup(Alignment.LEADING)
-        								.addComponent(txtTheLoai, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-        								.addComponent(txtNXB, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-        								.addComponent(txtTacGia, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-        								.addComponent(cbSach, 0, 204, Short.MAX_VALUE)
-        								.addComponent(txtGia, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-        								.addComponent(txtSoLuong, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))))
+        								.addComponent(txtTheLoai, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+        								.addComponent(txtNXB, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+        								.addComponent(txtTacGia, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+        								.addComponent(cbSach, Alignment.TRAILING, 0, 172, Short.MAX_VALUE)
+        								.addComponent(txtSoLuong, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+        								.addGroup(Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
+        									.addGroup(panelBorder2Layout.createParallelGroup(Alignment.TRAILING)
+        										.addGroup(panelBorder2Layout.createSequentialGroup()
+        											.addPreferredGap(ComponentPlacement.RELATED)
+        											.addComponent(txtISBN, GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
+        										.addComponent(cbEdition, 0, 172, Short.MAX_VALUE))
+        									.addPreferredGap(ComponentPlacement.RELATED))
+        								.addComponent(txtGia, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))))
         					.addGap(37))
         				.addGroup(panelBorder2Layout.createSequentialGroup()
         					.addGap(25)
@@ -469,18 +476,18 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         				.addGroup(panelBorder2Layout.createSequentialGroup()
         					.addGap(18)
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
-        						.addComponent(txtISBN, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-        						.addComponent(jLabel8_2, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
+        						.addComponent(jLabel8_2, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(txtISBN, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
         					.addPreferredGap(ComponentPlacement.UNRELATED)
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
-        						.addComponent(jLabel8_1, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(jLabel8_1)
         						.addComponent(cbEdition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
         				.addGroup(panelBorder2Layout.createSequentialGroup()
         					.addGap(102)
         					.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
         						.addComponent(jLabel8)
         						.addComponent(cbSach, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))))
-        			.addPreferredGap(ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+        			.addPreferredGap(ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
         			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
         				.addComponent(jLabel6)
         				.addComponent(txtNXB, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
@@ -490,8 +497,8 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
         				.addComponent(txtTheLoai, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
         			.addGap(13)
         			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
-        				.addComponent(txtGia, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(jLabel4))
+        				.addComponent(jLabel4)
+        				.addComponent(txtGia, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
         			.addGap(18)
         			.addGroup(panelBorder2Layout.createParallelGroup(Alignment.BASELINE)
         				.addComponent(txtSoLuong, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
@@ -1091,7 +1098,6 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     private PublisherDAO publisherDao;
     private BookCategoryDAO editionDao;
     private BookDAO isbnDao;
-    protected MyDesign.MyTextField_Basic txtGia;
     protected MyDesign.MyTextField_Basic txtSoLuong;
     private javax.swing.JLabel txtTongChi;
     protected AuthorBUS author;
@@ -1120,4 +1126,5 @@ public class WareHouseImport_Dialog extends javax.swing.JDialog {
     private MyDesign.MyTextField_Basic txtTheLoai;
     private MyDesign.MyTextField_Basic txtNXB;
     private MyDesign.MyTextField_Basic txtTacGia;
+    private MyTextField_Basic txtGia;
 }

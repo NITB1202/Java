@@ -33,6 +33,7 @@ import DTO.entities.Book;
 import DTO.entities.Book1;
 import DTO.entities.DetailBC;
 import java.util.Date;
+import java.awt.Toolkit;
 
 /**
  *
@@ -46,6 +47,9 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
      */
     public ReaderHistoryDone_Dialog(java.awt.Frame parent, boolean modal,int id) {
         super(parent, modal);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ReaderHistoryDone_Dialog.class.getResource("/Images/logo.png")));
+        setResizable(false);
+        setTitle("Lịch sử mượn sách");
         initComponents(id);
         try {
             sbc=new BorrowCardBUS();
@@ -56,15 +60,11 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
         
         sp.setVerticalScrollBar(new ScrollBar());
         sp.getVerticalScrollBar().setBackground(Color.WHITE);
         sp.getViewport().setBackground(Color.WHITE);
-        p.setBackground(Color.WHITE);
-        sp.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        
         clickFirstRow();
         rbTatCa.setSelected(true);
     }
@@ -169,11 +169,13 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
         btnGroup = new javax.swing.ButtonGroup();
         panelBorder_Statistic_Blue1 = new MyDesign.PanelBorder_Statistic_Blue();
         panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
-        panelBorder1 = new MyDesign.PanelBorder();
+        panelBorder1 = new JPanel();
+        panelBorder1.setBackground(new Color(255, 255, 255));
         jLabel5 = new javax.swing.JLabel();
         spTable = new javax.swing.JScrollPane();
         tbPhieuMuon = new MyDesign.MyTable();
-        panelBorder_Basic2 = new MyDesign.PanelBorder_Basic();
+        panelBorder_Basic2 = new JPanel();
+        panelBorder_Basic2.setBackground(new Color(255, 255, 255));
         rbTatCa = new javax.swing.JRadioButton();
         rbDaTra = new javax.swing.JRadioButton();
         rbChuaTra = new javax.swing.JRadioButton();
@@ -187,8 +189,8 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(127, 127, 127));
+        jLabel5.setFont(new Font("SansSerif", Font.BOLD, 20)); // NOI18N
+        jLabel5.setForeground(new Color(0, 0, 0));
         jLabel5.setText("Phiếu mượn");
 
         spTable.setBorder(null);
@@ -216,7 +218,7 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
                     int row = tbPhieuMuon.getSelectedRow();
                     if (row >= 0) {
                     	BorrowCard tmp =a.get(row);
-                    	lbMaPM.setText("#"+tmp.getID());
+                    	lbMaPM.setText("#PM"+tmp.getID());
                         addValTab(row);
                         if(tmp.getRealReDate()==null) {
                         	lbTrangThai.setText("Chưa trả");
@@ -247,7 +249,7 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
 
         btnGroup.add(rbTatCa);
         rbTatCa.setText("Tất cả");
-        rbTatCa.setBackground(Color.WHITE);
+        rbTatCa.setBackground(new Color(255, 255, 255));
         rbTatCa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,7 +265,7 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
         
         btnGroup.add(rbDaTra);
         rbDaTra.setText("Đã trả");
-        rbDaTra.setBackground(Color.WHITE);
+        rbDaTra.setBackground(new Color(255, 255, 255));
         rbDaTra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -279,7 +281,7 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
 
         btnGroup.add(rbChuaTra);
         rbChuaTra.setText("Chưa trả");
-        rbChuaTra.setBackground(Color.WHITE);
+        rbChuaTra.setBackground(new Color(255, 255, 255));
         rbChuaTra.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -557,10 +559,10 @@ public class ReaderHistoryDone_Dialog extends javax.swing.JDialog {
     private javax.swing.JLabel lbMaPM;
     private javax.swing.JLabel lbTrangThai;
     private MyDesign.MyTable myTable1;
-    private MyDesign.PanelBorder panelBorder1;
+    private JPanel panelBorder1;
     private MyDesign.PanelBorder panelBorder5;
     private MyDesign.PanelBorder_Basic panelBorder_Basic1;
-    private MyDesign.PanelBorder_Basic panelBorder_Basic2;
+    private JPanel panelBorder_Basic2;
     private MyDesign.PanelBorder_Statistic_Blue panelBorder_Statistic_Blue1;
     private javax.swing.JRadioButton rbChuaTra;
     private javax.swing.JRadioButton rbDaTra;

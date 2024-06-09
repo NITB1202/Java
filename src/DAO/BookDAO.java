@@ -337,4 +337,120 @@ public class BookDAO extends ConnectDB {
         }
         return flag;
     }
+    
+    public void updateBook(String oldName, String newName, String oldIsbn, String newIsbn, String edition, String img, int publisherID, int authorID, int categoryID, int cost) throws SQLException
+    {
+    	String query1 = "UPDATE book SET name = ? WHERE name COLLATE Latin1_General_CI_AI = ?";
+    	String query2 = "UPDATE cp_book SET edition = ?, publisherID = ?, img = ?, cost = ? WHERE ISBN = ?";
+    	String query3 = "UPDATE book_author SET authorID = ? WHERE ISBN = ?";
+    	String query4 = "UPDATE book_category SET categoryID = ? WHERE ISBN = ?";
+    	String query5 = "UPDATE cp_book SET ISBN = ? WHERE ISBN = ?";
+    	
+        connectDB.connect();
+        
+        if(connectDB.conn!=null)
+        {
+        	PreparedStatement ps = connectDB.conn.prepareStatement(query1);
+        	ps.setString(1, newName);
+        	ps.setString(2, oldName);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 1 update successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query2);
+        	ps.setString(1, edition);
+        	ps.setInt(2,publisherID);
+        	ps.setString(3,img);
+        	ps.setInt(4, cost);
+        	ps.setString(5, oldIsbn);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 2 update successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query3);
+        	ps.setInt(1, authorID);
+        	ps.setString(2,oldIsbn);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 3 update successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query4);
+        	ps.setInt(1, categoryID);
+        	ps.setString(2, oldIsbn);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 4 update successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query5);
+        	ps.setString(1,newIsbn);
+        	ps.setString(2, oldIsbn);
+        	
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 5 update successful");
+        	
+        	ps.close();
+        }
+        
+        connectDB.disconnect();
+    }
+    
+    public void insertBook(String name, String isbn,String edition,int publisherID,int cost,String img, int authorID, int categoryID ) throws SQLException
+    {
+    	String query1 = "INSERT INTO book(name) VALUES (?)"; 
+    	String query2 = "SELECT id FROM book WHERE name COLLATE Latin1_General_CI_AI = ?";
+    	String query3 = "INSERT INTO cp_book VALUES(?,?,0,0,?,?,1,?,?)";
+    	String query4 = "INSERT INTO book_author VALUES(?,?)";
+    	String query5 = "INSERT INTO book_category VALUES(?,?)";
+    	
+        connectDB.connect();
+        
+        if(connectDB.conn!=null)
+        {
+        	PreparedStatement ps = connectDB.conn.prepareStatement(query1);
+        	ps.setString(1,name);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 1 insert successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query2);
+        	ps.setString(1,name);
+        	ResultSet rs = ps.executeQuery();
+        	int id = -1;
+        	if(rs.next())
+        		id = Integer.parseInt(rs.getString("id"));
+        	
+        	if(id == -1)
+        	{
+        		System.out.println("can't get id");
+        		rs.close();
+        		connectDB.disconnect();
+        		return;
+        	}
+        	else
+        		System.out.println("query 2 select successful");
+        	
+        	rs.close();
+        	
+        	ps = connectDB.conn.prepareStatement(query3);
+        	ps.setString(1,isbn);
+        	ps.setInt(2, id);
+        	ps.setString(3,edition);
+        	ps.setInt(4,publisherID);
+        	ps.setInt(5,cost);
+        	ps.setString(6, img);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 3 insert successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query4);
+        	ps.setInt(1,authorID);
+        	ps.setString(2, isbn);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 4 insert successful");
+        	
+        	ps = connectDB.conn.prepareStatement(query5);
+        	ps.setInt(1,categoryID);
+        	ps.setString(2, isbn);
+        	if(ps.executeUpdate()>0)
+        		System.out.println("query 5 insert successful");
+        	
+        	rs.close();
+        	connectDB.disconnect();
+        }
+    	
+    }
 }

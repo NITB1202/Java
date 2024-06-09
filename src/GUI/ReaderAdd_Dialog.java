@@ -13,10 +13,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import java.awt.Color;
+import java.awt.Toolkit;
 /**
  *
  * @author QUANG DIEN
@@ -24,15 +27,19 @@ import javax.swing.JOptionPane;
 public class ReaderAdd_Dialog extends javax.swing.JDialog {
     ReaderBUS readerBUS;    
     MyDesign.MyTable tab;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     /**
      * Creates new form TicketSearch_Dialog
      */
     public ReaderAdd_Dialog(java.awt.Frame parent, boolean modal,MyDesign.MyTable tab) throws ClassNotFoundException, SQLException {
         super(parent, modal);
+        setTitle("Thêm độc giả");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ReaderAdd_Dialog.class.getResource("/Images/logo.png")));
         readerBUS = new ReaderBUS();
         this.tab = tab;
         initComponents();
     }
+    
     public void addDefault(MyDesign.MyTable tab) throws Exception{
     	tab.setRowCount(0);
         Vector<Reader> arr=readerBUS.getAll();
@@ -43,17 +50,10 @@ public class ReaderAdd_Dialog extends javax.swing.JDialog {
             String tel=acc.getTel();
             String address=acc.getAddress();
             LocalDate fineDate=acc.getFineDate();
-            Integer isLocked= acc.getStatus();
-            String isL="Mở";
-            if(isLocked == 1){
-                isL="Khoá";
-            }
-            long daysBetween=0; 
-            if(fineDate!=null) {
-	            LocalDate cuDate=LocalDate.now();
-	            daysBetween = ChronoUnit.DAYS.between(cuDate, fineDate);
-            }        
-            Object row[] = {i+1,id,name,tel,address,daysBetween,isL};
+            String formatDate = "Không có";
+            if(fineDate != null)
+            		formatDate = fineDate.format(formatter);  
+            Object row[] = {i+1,id,name,tel,address,formatDate};
             tab.addRow(row);
         }
     }
@@ -75,6 +75,7 @@ public class ReaderAdd_Dialog extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         txtDiaChi = new MyDesign.MyTextField_Basic();
         btnThemDocGia = new MyDesign.MyButton();
+        btnThemDocGia.setColorOver(new Color(22, 113, 221));
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -231,7 +232,7 @@ public class ReaderAdd_Dialog extends javax.swing.JDialog {
         String address=txtDiaChi.getText().trim();
         try {
             if(checkDataVal(name,tel,address)) {
-                    JOptionPane.showMessageDialog(null,readerBUS.addReader(new Reader(name,tel,address)));
+                    JOptionPane.showMessageDialog(null,readerBUS.addReader(new Reader(name,tel,address)),"Thông báo",JOptionPane.INFORMATION_MESSAGE);
                     addDefault(tab);
                     dispose();
             }

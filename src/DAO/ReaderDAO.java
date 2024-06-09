@@ -52,6 +52,7 @@ public class ReaderDAO extends ConnectDB {
                     	u.setFineDate(lDate.toLocalDate());
                     }
                     result.add(u);
+                    u.setPenalty(rs.getInt(7));
                 }
             } catch (SQLException ex) {
                 //Logger.getLogger(ChiTietPhieuNhapDAL.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,7 +142,8 @@ public class ReaderDAO extends ConnectDB {
                     reader.setTel(rs.getString(3));
                     reader.setAddress(rs.getString(4));
                     Date lDate = rs.getDate(5);
-                    reader.setFineDate(lDate.toLocalDate());
+                    if(lDate != null)
+                    	reader.setFineDate(lDate.toLocalDate());
                     result.add(reader);
                 }
             } catch (SQLException ex) {
@@ -206,6 +208,10 @@ public class ReaderDAO extends ConnectDB {
                 	a.setName(rs.getString(2));
                 	a.setTel(rs.getString(3));
                     a.setAddress(rs.getString(4));
+                    Date lDate = rs.getDate(5);
+                    if(lDate != null)
+                    	a.setFineDate(lDate.toLocalDate());
+                    a.setPenalty(rs.getInt(7));
                 }
             }catch(SQLException ex){
                 ex.printStackTrace();
@@ -383,6 +389,21 @@ public class ReaderDAO extends ConnectDB {
             connectDB.disconnect();
         }
         return penalty;
+    }
+    
+    public void payPenalty(int readerID) throws SQLException
+    {
+    	String query = "UPDATE reader SET fineDate = NULL, penalty = 0 WHERE id = ?";
+    	connectDB.connect();
+        if(connectDB.conn!=null)
+        {
+        	PreparedStatement preparedStatement = connectDB.conn.prepareStatement(query);
+            preparedStatement.setInt(1,readerID);
+            if(preparedStatement.executeUpdate()>0)
+            	System.out.println("Update tien phat thanh cong");
+            preparedStatement.close();
+        }
+        connectDB.disconnect();
     }
     
 //    public LocalDate getFineDate(String readerName)

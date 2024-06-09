@@ -15,6 +15,7 @@ public abstract class Person {
     protected String tel;
     protected String address;
     protected int status;
+    protected int penalty;
 
     public Person(int personID, String name, String tel, String address, int status) {
         this.personID = personID;
@@ -80,6 +81,16 @@ public abstract class Person {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+    
+    public void setPenalty(int penalty)
+    {
+    	this.penalty = penalty;
+    }
+    
+    public int getPenalty()
+    {
+    	return penalty;
     }
     
 }

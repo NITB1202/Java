@@ -261,8 +261,7 @@ public class WareHouse_GUI extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				WareHouseImport_Dialog whid;
+				if(whid != null && whid.isVisible()) return;
                 try {
                     whid = new WareHouseImport_Dialog(null, getFocusTraversalKeysEnabled());
                     whid.setVisible(true);

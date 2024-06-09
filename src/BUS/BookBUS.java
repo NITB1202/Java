@@ -16,7 +16,7 @@ import java.util.List;
  * @author ADMIN
  */
 public class BookBUS {
-    protected static BookDAO bookDAO ;
+    protected static BookDAO bookDAO;
         private ArrayList<Book1> listAll= new ArrayList<>();
         private ConnectDB connectDB;//THEM CAI NAY
     public BookBUS() throws ClassNotFoundException, SQLException, IOException {
@@ -136,4 +136,31 @@ public class BookBUS {
             return "Xoá sách không thành công";
         }
     }
+    public void addBook(Book1 book) throws ClassNotFoundException, SQLException, IOException {
+        // Check if the book already exists
+        if (getBookByISBN(book.getISBN()) != null) {
+            // Book already exists, you may choose to handle this case differently
+            // For example, by throwing an exception or displaying a message to the user
+            System.out.println("Book with ISBN " + book.getISBN() + " already exists.");
+            return;
+        }
+        
+        // Add the book to the database
+        bookDAO.saveInfo(book);
+        // Assuming saveInfo method handles the insertion of the book into the database
+    }
+
+    public void updateBook(String oldName, String newName, String oldIsbn, String newIsbn, String edition, String img, int publisherID, int authorID, int categoryID, int cost) throws SQLException, ClassNotFoundException, IOException
+    {
+        bookDAO = new BookDAO();
+    	bookDAO.updateBook(oldName, newName, oldIsbn, newIsbn, edition, img, publisherID, authorID, categoryID, cost);
+    }
+    
+    public void insertBook(String name, String isbn,String edition,int publisherID,int cost,String img, int authorID, int categoryID ) throws SQLException, ClassNotFoundException, IOException
+    {
+    	bookDAO = new BookDAO();
+    	bookDAO.insertBook(name, isbn, edition, publisherID, cost, img, authorID, categoryID);
+    	
+    }
 }
+

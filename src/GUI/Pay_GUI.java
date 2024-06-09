@@ -524,7 +524,7 @@ public class Pay_GUI extends JPanel {
 					BorrowCard bc = BCList.get(i);
 					String readerName = bc.getReadername().toLowerCase();
 					if(readerName.contains(searchText))
-						tbPhieuMuon.addRow(new Object[] {i+1,bc.getReadername(),bc.getStartDate(),bc.getExpReDate(),bc.getStaffname()} );
+						tbPhieuMuon.addRow(new Object[] {bc.getID(),bc.getReadername(),bc.getStartDate(),bc.getExpReDate(),bc.getStaffname()} );
 				}
 			}
 			else

@@ -249,6 +249,11 @@ public class HomePage_GUI extends JFrame {
                   else JOptionPane.showMessageDialog(HomePage_GUI.this, "Bạn không được phép truy cập vào chức năng này.", "Thông báo", JOptionPane.INFORMATION_MESSAGE); 
               }
           });
-    	  setForm(new Statistic_GUI(user));
+    	  try {
+			setForm(new Reader_GUI(user));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

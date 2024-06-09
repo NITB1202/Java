@@ -1,5 +1,4 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package GUI;
@@ -11,20 +10,33 @@ import javax.swing.JScrollPane;
 import BUS.ReaderBUS;
 import BUS.RolePermissionBUS;
 import DTO.entities.Account;
+import DTO.entities.BorrowCard;
 import DTO.entities.Reader;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JOptionPane;
-/**
- *
- * @author QUANG DIEN
- */
-public class Reader_GUI extends javax.swing.JPanel {
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import MyDesign.MyButton;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Reader_GUI extends JPanel {
     ReaderBUS readerBUS;
     Account user;
     private RolePermissionBUS rolePermissionBUS ;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private Vector<Reader> readerList;
     /**
      * Creates new form Reader_GUI
      */
@@ -43,151 +55,202 @@ public class Reader_GUI extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null,ex.getMessage());
         }
         addDefault();
+        setLayout(null);
+        panel.setLayout(null);
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        panel.add(spTable);
+        panel.add(jLabel5);
+        panel.add(panelBorder_Basic1);
+        panelBorder_Basic1.setLayout(null);
+        panelBorder_Basic1.add(txtTimKiem);
+        panelBorder_Basic1.add(jLabel8);
+        panel.add(btnDocGiaMoi);
+        add(panel);
+        
+        btnThanhToan = new MyButton();
+        btnThanhToan.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+					thanhToan();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
+        btnThanhToan.setIcon(new ImageIcon(Reader_GUI.class.getResource("/Images/borrow-white.png")));
+        btnThanhToan.setToolTipText("");
+        btnThanhToan.setText("Thanh toán tiền phạt");
+        btnThanhToan.setForeground(Color.WHITE);
+        btnThanhToan.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnThanhToan.setColorOver(new Color(133, 232, 115));
+        btnThanhToan.setColorClick(new Color(64, 217, 36));
+        btnThanhToan.setColor(new Color(133, 232, 115));
+        btnThanhToan.setBorderColor(new Color(133, 232, 115));
+        btnThanhToan.setBackground(new Color(133, 232, 115));
+        btnThanhToan.setBounds(374, 525, 212, 45);
+        panel.add(btnThanhToan);
         if(rolePermissionBUS.hasPerCreate(user.getRoleID(), 6))
             btnDocGiaMoi.setEnabled(true);
         else btnDocGiaMoi.setEnabled(false);
     }
-    public void addDefault() throws Exception{
-        Vector<Reader> arr= readerBUS.getAll();
-        for(int i=0;i<arr.size();i++){
-            Reader acc=arr.get(i);
+    protected void thanhToan() throws NumberFormatException, Exception {
+		int selectedRow = tbDanhSachDocGia.getSelectedRow();
+		if(selectedRow < 0)
+		{
+			JOptionPane.showMessageDialog(null, "Vui lòng chọn độc giả để thanh toán tiền phạt", "Lỗi",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		else
+		{
+			Reader reader = readerBUS.findbyID(Integer.parseInt(tbDanhSachDocGia.getValueAt(selectedRow, 1).toString()));
+			
+			if(reader.getPenalty() == 0)
+			{
+				JOptionPane.showMessageDialog(null, "Độc giả này không có tiền phạt cần thanh toán", "Lỗi",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			LocalDate homnay = LocalDate.now();
+			if(reader.getFineDate().isBefore(homnay))
+			{
+				JOptionPane.showMessageDialog(null, "Đã quá hạn thanh toán. Tài khoản độc giả này sẽ bị khóa vĩnh viễn.", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			
+			readerBUS.payPenalty(reader.getPersonID());
+			JOptionPane.showMessageDialog(null, "Thanh toán thành công. Đã mở khóa tài khoản.", "Thông báo",JOptionPane.INFORMATION_MESSAGE);
+			addDefault();
+		}
+		
+	}
+    
+    
+	public void addDefault() throws Exception{
+        readerList = readerBUS.getAll();
+        for(int i=0;i<readerList.size();i++){
+            Reader acc = readerList.get(i);
             int id=acc.getPersonID();
             String name=acc.getName();
             String tel=acc.getTel();
             String address=acc.getAddress();
             LocalDate fineDate=acc.getFineDate();
-            Integer isLocked=acc.getStatus();
-            String isL="Mở";
-            if(isLocked == 1){
-                isL="Khoá";
-            }
-            long daysBetween=0; 
-            if(fineDate!=null) {
-                LocalDate cuDate=LocalDate.now();
-                daysBetween = ChronoUnit.DAYS.between(cuDate, fineDate);
-            }        
-            Object row[] = {i+1,id,name,tel,address,daysBetween,isL};
+            String formatDate = "Không có";
+            if(fineDate != null)
+            		formatDate = fineDate.format(formatter);      
+            Object row[] = {i+1,id,name,tel,address,formatDate};
             tbDanhSachDocGia.addRow(row);
         }
     }
     
-    public void findVal(String str) throws Exception {
-    	Vector<Reader> arr=readerBUS.allOutSearch(str);
-    	if(arr.size()==0) {
-    		JOptionPane.showMessageDialog(null,"Không tìm thấy độc giả theo yêu cầu");
-    		return;
-    	}
-    	tbDanhSachDocGia.setRowCount(0);
-    	for(int i=0;i<arr.size();i++){
-            Reader acc=arr.get(i);
-            int id=acc.getPersonID();
-            String name=acc.getName();
-            String tel=acc.getTel();
-            String address=acc.getAddress();
-            LocalDate fineDate=acc.getFineDate();
-            Integer isLocked=acc.getStatus();
-            String isL="Mở";
-            if(isLocked == 1){
-                isL="Khoá";
-            }
-            long daysBetween=0; 
-            if(fineDate!=null) {
-	            LocalDate cuDate=LocalDate.now();
-	            daysBetween = ChronoUnit.DAYS.between(cuDate, fineDate);
-            }        
-            Object row[] = {i+1,id,name,tel,address,daysBetween,isL};
-            tbDanhSachDocGia.addRow(row);
-        }
+    public void search() throws Exception
+    {
+		String searchText = txtTimKiem.getText().toLowerCase();
+		//Clear table
+		DefaultTableModel model = (DefaultTableModel) tbDanhSachDocGia.getModel();
+		model.setRowCount(0);
+		
+		if(!searchText.isBlank())
+		{
+			for(int i = 0; i < readerList.size(); i++)
+			{
+				Reader reader = readerList.get(i);
+				String readerName = reader.getName().toLowerCase();
+				if(readerName.contains(searchText))
+				{
+					int id=reader.getPersonID();
+		            String name=reader.getName();
+		            String tel=reader.getTel();
+		            String address=reader.getAddress();
+		            LocalDate fineDate=reader.getFineDate();
+		            String formatDate = "Không có";
+		            if(fineDate != null)
+		            		formatDate = fineDate.format(formatter);
+		            Object row[] = {i+1,id,name,tel,address,formatDate};
+		            tbDanhSachDocGia.addRow(row);
+				}
+			}
+		}
+		else
+			addDefault();
     }
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelBorder1 = new MyDesign.PanelBorder();
+        panel = new JPanel();
+        panel.setBounds(10, 11, 827, 606);
+        panel.setBackground(new Color(255, 255, 255));
         jLabel5 = new javax.swing.JLabel();
+        jLabel5.setBounds(20, 33, 175, 26);
         spTable = new javax.swing.JScrollPane();
+        spTable.setBounds(20, 83, 738, 426);
         tbDanhSachDocGia = new MyDesign.MyTable();
-        panelBorder_Basic1 = new MyDesign.PanelBorder_Basic();
+        panelBorder_Basic1 = new JPanel();
+        panelBorder_Basic1.setBorder(new LineBorder(new Color(128, 128, 128)));
+        panelBorder_Basic1.setBackground(new Color(255, 255, 255));
+        panelBorder_Basic1.setBounds(483, 23, 275, 36);
         jLabel8 = new javax.swing.JLabel();
+        jLabel8.setBounds(245, 3, 24, 28);
         txtTimKiem = new MyDesign.SearchText();
+        txtTimKiem.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        		try {
+					search();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+        	}
+        });
+        txtTimKiem.setHint("Tìm tên độc giả...");
+        txtTimKiem.setBounds(10, 5, 234, 28);
+        txtTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         btnDocGiaMoi = new MyDesign.MyButton();
+        btnDocGiaMoi.setBounds(612, 525, 145, 45);
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(127, 127, 127));
+        jLabel5.setFont(new Font("SansSerif", Font.BOLD, 20)); // NOI18N
+        jLabel5.setForeground(new Color(0, 0, 0));
         jLabel5.setText("Danh sách độc giả");
 
         spTable.setBorder(null);
 
-        tbDanhSachDocGia.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "STT", "Mã độc giả", "Tên độc giả", "Số điện thoại", "Địa chỉ", "Số ngày phạt", "Trạng thái"
-            }
-        ) {
+        tbDanhSachDocGia.setModel(new DefaultTableModel(
+        	new Object[][] {
+        	},
+        	new String[] {
+        		"STT", "M\u00E3 \u0111\u1ED9c gi\u1EA3", "T\u00EAn \u0111\u1ED9c gi\u1EA3", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i", "\u0110\u1ECBa ch\u1EC9", "Hạn nộp phạt"
+        	}        ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true
-            };
+                    false, false, false, false, false, false
+                };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+        tbDanhSachDocGia.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tbDanhSachDocGia.getColumnModel().getColumn(0).setMinWidth(30);
+        tbDanhSachDocGia.getColumnModel().getColumn(1).setPreferredWidth(62);
+        tbDanhSachDocGia.getColumnModel().getColumn(1).setMinWidth(62);
+        tbDanhSachDocGia.getColumnModel().getColumn(2).setPreferredWidth(90);
+        tbDanhSachDocGia.getColumnModel().getColumn(2).setMinWidth(90);
+        tbDanhSachDocGia.getColumnModel().getColumn(3).setMinWidth(75);
+        tbDanhSachDocGia.getColumnModel().getColumn(4).setPreferredWidth(190);
+        tbDanhSachDocGia.getColumnModel().getColumn(4).setMinWidth(190);
         tbDanhSachDocGia.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbDanhSachDocGiaMouseClicked(evt);
             }
         });
         spTable.setViewportView(tbDanhSachDocGia);
-        if (tbDanhSachDocGia.getColumnModel().getColumnCount() > 0) {
-            tbDanhSachDocGia.getColumnModel().getColumn(0).setMinWidth(40);
-            tbDanhSachDocGia.getColumnModel().getColumn(0).setMaxWidth(50);
-            tbDanhSachDocGia.getColumnModel().getColumn(5).setMinWidth(50);
-            tbDanhSachDocGia.getColumnModel().getColumn(5).setMaxWidth(70);
-            tbDanhSachDocGia.getColumnModel().getColumn(6).setMinWidth(50);
-            tbDanhSachDocGia.getColumnModel().getColumn(6).setMaxWidth(70);
-        }
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
-
-        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTimKiemActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelBorder_Basic1Layout = new javax.swing.GroupLayout(panelBorder_Basic1);
-        panelBorder_Basic1.setLayout(panelBorder_Basic1Layout);
-        panelBorder_Basic1Layout.setHorizontalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder_Basic1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        panelBorder_Basic1Layout.setVerticalGroup(
-            panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorder_Basic1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBorder_Basic1Layout.createSequentialGroup()
-                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
 
         btnDocGiaMoi.setBackground(new java.awt.Color(22, 113, 221));
         btnDocGiaMoi.setForeground(new java.awt.Color(255, 255, 255));
@@ -198,62 +261,15 @@ public class Reader_GUI extends javax.swing.JPanel {
         btnDocGiaMoi.setColor(new java.awt.Color(22, 113, 221));
         btnDocGiaMoi.setColorClick(new java.awt.Color(153, 204, 255));
         btnDocGiaMoi.setColorOver(new java.awt.Color(22, 113, 221));
-        btnDocGiaMoi.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnDocGiaMoi.setFont(new Font("Segoe UI", Font.BOLD, 15)); // NOI18N
         btnDocGiaMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDocGiaMoiActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
-        panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(panelBorder1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnDocGiaMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-        panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelBorder_Basic1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDocGiaMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbDanhSachDocGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDanhSachDocGiaMouseClicked
+    private void tbDanhSachDocGiaMouseClicked(java.awt.event.MouseEvent evt) {
         if (evt.getClickCount() == 2 && rolePermissionBUS.hasPerView(this.user.getRoleID(), 6)) {
             int row = tbDanhSachDocGia.getSelectedRow();
             if (row >= 0) {
@@ -267,17 +283,8 @@ public class Reader_GUI extends javax.swing.JPanel {
                 }
             }
         }
-    }//GEN-LAST:event_tbDanhSachDocGiaMouseClicked
+    }
 
-    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
-        String text = txtTimKiem.getText().trim();
-        try {
-            findVal(text);
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            JOptionPane.showMessageDialog(null,e1.getMessage());
-        }
-    }//GEN-LAST:event_txtTimKiemActionPerformed
 
     private void btnDocGiaMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocGiaMoiActionPerformed
         try {
@@ -293,10 +300,10 @@ public class Reader_GUI extends javax.swing.JPanel {
     private MyDesign.MyButton btnDocGiaMoi;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
-    private MyDesign.PanelBorder panelBorder1;
-    private MyDesign.PanelBorder_Basic panelBorder_Basic1;
+    private JPanel panel;
+    private JPanel panelBorder_Basic1;
     private javax.swing.JScrollPane spTable;
     private MyDesign.MyTable tbDanhSachDocGia;
     private MyDesign.SearchText txtTimKiem;
-    // End of variables declaration//GEN-END:variables
+    private MyButton btnThanhToan;
 }

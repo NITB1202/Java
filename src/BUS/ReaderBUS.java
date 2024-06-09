@@ -119,4 +119,10 @@ public class ReaderBUS {
         readerDAO = new ReaderDAO();
     	return readerDAO.getPenalty(readerName);
     }
+    
+    public void payPenalty(int readerID) throws ClassNotFoundException, SQLException, IOException
+    {
+        readerDAO = new ReaderDAO();
+        readerDAO.payPenalty(readerID);
+    }
 }
